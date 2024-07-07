@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
 import 'package:masjid_noor_customer/presentation/theme/app_theme.dart';
@@ -32,15 +33,21 @@ class AnNoorApp extends GetView<AppController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp.router(
-      theme: AppTheme.defaultTheme,
-      routeInformationParser: goRouter.routeInformationParser,
-      routeInformationProvider: goRouter.routeInformationProvider,
-      routerDelegate: goRouter.routerDelegate,
-      backButtonDispatcher: goRouter.backButtonDispatcher,
-      builder: (context, child) {
-        return botToastBuilder(context, child);
-      },
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      builder: (_, child) => SafeArea(
+        child: GetMaterialApp.router(
+          theme: AppTheme.defaultTheme,
+          routeInformationParser: goRouter.routeInformationParser,
+          routeInformationProvider: goRouter.routeInformationProvider,
+          routerDelegate: goRouter.routerDelegate,
+          backButtonDispatcher: goRouter.backButtonDispatcher,
+          builder: (context, child) {
+            return botToastBuilder(context, child);
+          },
+        ),
+      ),
     );
   }
 }

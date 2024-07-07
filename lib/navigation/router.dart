@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
-import 'package:masjid_noor_customer/presentation/pages/user/login_page.dart';
 
 import '../mgr/dependency/supabase_dep.dart';
 import '../presentation/pages/all_export.dart';

@@ -9,6 +9,7 @@ export 'package:masjid_noor_customer/presentation/pages/user/profile_page.dart';
 
 export 'package:get/get.dart';
 export 'package:get/get_core/src/get_main.dart';
+export 'package:flutter_screenutil/flutter_screenutil.dart';
 
 export 'package:flutter/material.dart';
 

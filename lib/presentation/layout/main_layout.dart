@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
@@ -45,31 +46,17 @@ class _MainLayoutState extends State<MainLayout> {
     if (loggedIn) {
       return Scaffold(
         key: drawerKey,
-        drawer: MediaQuery.of(context).size.width > 800
-            ? null
-            : const MainSidebar(),
+        drawer: const MainSidebar(),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
+          padding: EdgeInsets.all(10.w),
+          child: Column(
             children: [
-              MediaQuery.of(context).size.width > 800
-                  ? const MainSidebar()
-                  : const SizedBox.shrink(),
-              Flexible(
-                child: Column(
-                  children: [
-                    Header(name: currentRoute.split('/').last.capitalize ?? ''),
-                    Expanded(
-                      child: widget.child,
-                    ),
-                  ],
-                ),
+              Header(name: currentRoute.split('/').last.capitalize ?? ''),
+              Expanded(
+                child: widget.child,
               ),
             ],
           ),
-          // child: Expanded(
-          //   child: widget.child,
-          // ),
         ),
       );
     } else {
