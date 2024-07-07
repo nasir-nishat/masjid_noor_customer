@@ -67,6 +67,9 @@ class _MainLayoutState extends State<MainLayout> {
               ),
             ],
           ),
+          // child: Expanded(
+          //   child: widget.child,
+          // ),
         ),
       );
     } else {

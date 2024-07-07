@@ -1,10 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
+import 'package:masjid_noor_customer/presentation/pages/user/login_page.dart';
 
 import '../mgr/dependency/supabase_dep.dart';
 import '../presentation/pages/all_export.dart';
-import '../presentation/pages/profile/login_page.dart';
 import '../presentation/utills/extensions.dart';
 
 class AuthenticationNotifier {
@@ -36,20 +36,47 @@ class AuthenticationNotifier {
 }
 
 final GoRouter goRouter = GoRouter(
-  initialLocation: Routes.login,
+  initialLocation: Routes.home,
   debugLogDiagnostics: true,
   observers: [
     BotToastNavigatorObserver(),
   ],
   redirect: (context, state) async {
     final bool isLoggedIn = AuthenticationNotifier.instance.isLoggedIn;
-    return isLoggedIn ? null : Routes.login;
+    return isLoggedIn ? null : Routes.home;
   },
   routes: <RouteBase>[
     GoRoute(
       path: "/",
-      redirect: (_, __) => Routes.login,
+      redirect: (_, __) => Routes.home,
     ),
+    ShellRoute(
+        builder: (context, state, child) {
+          return MainLayout(child: child);
+        },
+        routes: [
+          GoRoute(
+              path: Routes.home,
+              pageBuilder: (context, state) {
+                return defaultTransition(
+                    child: const HomePage(), routeName: Routes.home);
+              }),
+          GoRoute(
+            path: Routes.product,
+            pageBuilder: (context, state) {
+              return defaultTransition(
+                  child: const ProductListPage(), routeName: Routes.product);
+            },
+          ),
+          GoRoute(
+            path: Routes.productDetails,
+            pageBuilder: (context, state) {
+              return defaultTransition(
+                  child: const ProductDetailsPage(),
+                  routeName: Routes.productDetails);
+            },
+          ),
+        ]),
     ShellRoute(
       builder: (context, state, child) {
         return AuthenticationLayout(child: child);
@@ -84,7 +111,7 @@ final GoRouter goRouter = GoRouter(
               // }
 
               return AuthenticationNotifier.instance.isLoggedIn
-                  ? Routes.home
+                  ? Routes.profile
                   : null;
             },
             pageBuilder: (context, state) {
@@ -92,51 +119,31 @@ final GoRouter goRouter = GoRouter(
             }),
       ],
     ),
-    ShellRoute(
-      builder: (context, state, child) {
-        return MainLayout(child: child);
-      },
-      routes: <GoRoute>[
-        // GoRoute(
-        //     path: Routes.home,
-        //     pageBuilder: (context, state) {
-        //       return defaultTransition(
-        //           child: DashboardPage(), routeName: Routes.home);
-        //     }),
-        // GoRoute(
-        //   path: Routes.category,
-        //   pageBuilder: (context, state) {
-        //     return defaultTransition(
-        //         child: const CategoryList(), routeName: Routes.category);
-        //   },
-        // ),
-        // GoRoute(
-        //   path: Routes.product,
-        //   pageBuilder: (context, state) {
-        //     return defaultTransition(
-        //         child: ProductList(), routeName: Routes.product);
-        //   },
-        // ),
-        // GoRoute(
-        //     path: Routes.order,
-        //     pageBuilder: (context, state) {
-        //       return defaultTransition(
-        //           child: const OrderList(), routeName: Routes.order);
-        //     }),
-        // GoRoute(
-        //     path: Routes.inventory,
-        //     pageBuilder: (context, state) {
-        //       return defaultTransition(
-        //           child: const InventoryList(), routeName: Routes.inventory);
-        //     }),
-        // GoRoute(
-        //     path: Routes.payment,
-        //     pageBuilder: (context, state) {
-        //       return defaultTransition(
-        //           child: const PaymentList(), routeName: Routes.payment);
-        //     }),
-      ],
-    ),
+    // ShellRoute(
+    //   builder: (context, state, child) {
+    //     return MainLayout(child: child);
+    //   },
+    //   routes: <GoRoute>[
+    //     // GoRoute(
+    //     //     path: Routes.order,
+    //     //     pageBuilder: (context, state) {
+    //     //       return defaultTransition(
+    //     //           child: const OrderList(), routeName: Routes.order);
+    //     //     }),
+    //     // GoRoute(
+    //     //     path: Routes.inventory,
+    //     //     pageBuilder: (context, state) {
+    //     //       return defaultTransition(
+    //     //           child: const InventoryList(), routeName: Routes.inventory);
+    //     //     }),
+    //     // GoRoute(
+    //     //     path: Routes.payment,
+    //     //     pageBuilder: (context, state) {
+    //     //       return defaultTransition(
+    //     //           child: const PaymentList(), routeName: Routes.payment);
+    //     //     }),
+    //   ],
+    // ),
   ],
 );
 
@@ -161,6 +168,7 @@ abstract class Routes {
   static const order = '/order';
   static const payment = '/payment';
   static const inventory = '/inventory';
+  static const profile = '/profile';
 
   static const productCreate = '/create';
   static const forgotPassword = '/forgot-password';
@@ -175,6 +183,7 @@ abstract class Routes {
     payment,
     productCreate,
     forgotPassword,
+    profile,
   };
 
   static void goToHomePage(BuildContext context) {

@@ -1,0 +1,1 @@
+import 'package:masjid_noor_customer/presentation/pages/all_export.dart';import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';class ProfilePage extends GetView<UserController> {  const ProfilePage({super.key});  @override  Widget build(BuildContext context) {    return const Placeholder();  }}

@@ -1,11 +1,11 @@
-// export 'package:masjid_noor_customer/presentation/admin_pages/customer/customer_list.dart';
-// export 'package:masjid_noor_customer/presentation/admin_pages/inventory/inventory_list.dart';
-// export 'package:masjid_noor_customer/presentation/admin_pages/order/order_list.dart';
-// export 'package:masjid_noor_customer/presentation/admin_pages/payment/payment_list.dart';
-// export 'package:masjid_noor_customer/presentation/admin_pages/product/product_list.dart';
-// export 'package:masjid_noor_customer/presentation/admin_pages/revision/revision_list.dart';
-// export 'package:masjid_noor_customer/presentation/admin_pages/profile/admin_profile_page.dart';
-// export 'package:masjid_noor_customer/presentation/admin_pages/dashboard/dashboard.dart';
+export 'package:masjid_noor_customer/presentation/pages/cart/cart_page.dart';
+export 'package:masjid_noor_customer/presentation/pages/home/home_page.dart';
+export 'package:masjid_noor_customer/presentation/pages/order/my_orders_page.dart';
+export 'package:masjid_noor_customer/presentation/pages/order/order_details_page.dart';
+export 'package:masjid_noor_customer/presentation/pages/product/product_details_page.dart';
+export 'package:masjid_noor_customer/presentation/pages/product/product_list_page.dart';
+export 'package:masjid_noor_customer/presentation/pages/user/login_page.dart';
+export 'package:masjid_noor_customer/presentation/pages/user/profile_page.dart';
 
 export 'package:get/get.dart';
 export 'package:get/get_core/src/get_main.dart';
