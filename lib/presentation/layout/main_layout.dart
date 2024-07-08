@@ -19,22 +19,22 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final currentUser = SupabaseDep.impl.auth.currentUser;
-      if (currentUser != null) {
-        try {
-          setState(() {
-            loggedIn = true;
-          });
-        } catch (e) {
-          await AuthenticationNotifier.instance.logout();
-        }
-      }
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+  //     final currentUser = SupabaseDep.impl.auth.currentUser;
+  //     if (currentUser != null) {
+  //       try {
+  //         setState(() {
+  //           loggedIn = true;
+  //         });
+  //       } catch (e) {
+  //         await AuthenticationNotifier.instance.logout();
+  //       }
+  //     }
+  //   });
+  // }
 
   bool loggedIn = true;
 

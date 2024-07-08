@@ -38,7 +38,7 @@ class _MainSidebarState extends State<MainSidebar> {
   final List<_MainNavItem> navItems = [
     const _MainNavItem(title: "Home", route: Routes.home),
     const _MainNavItem(title: "Category", route: Routes.category),
-    const _MainNavItem(title: "Products", route: Routes.product),
+    const _MainNavItem(title: "Products", route: Routes.products),
     const _MainNavItem(title: "Inventory", route: Routes.inventory),
     const _MainNavItem(title: "Order", route: Routes.order),
     // const _MainNavItem(title: "Payment", route: Routes.payment),

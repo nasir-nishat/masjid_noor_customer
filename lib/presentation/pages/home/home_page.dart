@@ -49,7 +49,9 @@ class HomePage extends StatelessWidget {
             children: [
               Text(title, style: context.textTheme.labelMedium),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.go(Routes.products);
+                  },
                   child: Text(
                     'See All',
                     style: context.textTheme.labelSmall
@@ -65,11 +67,8 @@ class HomePage extends StatelessWidget {
             itemCount: products.length,
             itemBuilder: (context, index) {
               return ProductItem(
-                  product: products[index],
-                  productOnTap: () {
-                    context.go(Routes.productDetails,
-                        extra: {'id': products[index].id});
-                  });
+                product: products[index],
+              );
             },
             separatorBuilder: (context, index) => SizedBox(width: 10.w),
           ),

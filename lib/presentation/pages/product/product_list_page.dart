@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
-import 'package:masjid_noor_customer/presentation/widgets/product_item.dart';
 
 class ProductListPage extends GetView<ProductController> {
   final ProductController prodController = Get.find<ProductController>();
@@ -47,14 +46,7 @@ class ProductListPage extends GetView<ProductController> {
                   ),
                   itemCount: prodController.products.length,
                   itemBuilder: (context, index) {
-                    return ProductItem(
-                      product: prodController.products[index],
-                      productOnTap: () {
-                        //TODO: SET URL AND Go to details of the item
-                        context.go(Routes.productDetails,
-                            extra: {'id': prodController.products[index].id});
-                      },
-                    );
+                    return ProductItem(product: prodController.products[index]);
                   },
                 ),
               );

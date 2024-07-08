@@ -40,113 +40,59 @@ final GoRouter goRouter = GoRouter(
   observers: [
     BotToastNavigatorObserver(),
   ],
-  redirect: (context, state) async {
-    final bool isLoggedIn = AuthenticationNotifier.instance.isLoggedIn;
-    return isLoggedIn ? null : Routes.home;
-  },
   routes: <RouteBase>[
     GoRoute(
       path: "/",
       redirect: (_, __) => Routes.home,
     ),
     ShellRoute(
-        builder: (context, state, child) {
-          return MainLayout(child: child);
-        },
-        routes: [
-          GoRoute(
-              path: Routes.home,
-              pageBuilder: (context, state) {
-                return defaultTransition(
-                    child: HomePage(), routeName: Routes.home);
-              }),
-          GoRoute(
-            path: Routes.product,
-            pageBuilder: (context, state) {
-              return defaultTransition(
-                  child: ProductListPage(), routeName: Routes.product);
-            },
-          ),
-          GoRoute(
-            path: Routes.productDetails,
-            // pageBuilder: (context, state) {
-            //   return defaultTransition(
-            //       child: const ProductDetailsPage(),
-            //       routeName: Routes.productDetails);
-            // },
-            builder: (context, state) {
-              return ProductDetailsPage(
-                  id: state.uri.queryParameters['id'].toString());
-            },
-          ),
-        ]),
+      builder: (context, state, child) {
+        return MainLayout(child: child);
+      },
+      routes: [
+        GoRoute(
+          path: Routes.home,
+          pageBuilder: (context, state) {
+            return defaultTransition(child: HomePage(), routeName: Routes.home);
+          },
+        ),
+        GoRoute(
+          path: Routes.products,
+          pageBuilder: (context, state) {
+            return NoTransitionPage(
+              child: ProductListPage(),
+            );
+          },
+        ),
+        GoRoute(
+          path: "${Routes.productDetails}/:id",
+          pageBuilder: (context, state) {
+            Map ext = state.extra as Map;
+            return NoTransitionPage(
+              child: ProductDetailsPage(id: ext['id']),
+            );
+          },
+        )
+      ],
+    ),
     ShellRoute(
       builder: (context, state, child) {
         return AuthenticationLayout(child: child);
       },
       routes: [
         GoRoute(
-            path: Routes.login,
-            redirect: (_, __) async {
-              // String? userEmail =
-              //     SupabaseDep.impl.currentUser?.email.toString();
-              // String userId = SupabaseDep.impl.currentUser?.id.toString() ?? "";
-              // String userName =
-              //     SupabaseDep.impl.currentUser?.userMetadata?["name"] ?? "";
-
-              // //if the user is logged in with social, update the profile
-              // if (userEmail != null && userEmail.isNotEmpty) {
-              //   await Supabase.instance.client
-              //       .from('profiles')
-              //       .select()
-              //       .eq('email', userEmail)
-              //       .then((value) {
-              //     if (value.isEmpty) {
-              //       Supabase.instance.client.from('profiles').upsert([
-              //         {'id': userId, 'username': userName, 'email': userEmail}
-              //       ]).then((value) {
-              //         return AuthenticationNotifier.instance.isLoggedIn
-              //             ? Routes.home
-              //             : null;
-              //       });
-              //     }
-              //   });
-              // }
-
-              return AuthenticationNotifier.instance.isLoggedIn
-                  ? Routes.profile
-                  : null;
-            },
-            pageBuilder: (context, state) {
-              return const NoTransitionPage(child: LoginPage());
-            }),
+          path: Routes.login,
+          redirect: (_, __) async {
+            return AuthenticationNotifier.instance.isLoggedIn
+                ? Routes.profile
+                : null;
+          },
+          pageBuilder: (context, state) {
+            return const NoTransitionPage(child: LoginPage());
+          },
+        ),
       ],
     ),
-    // ShellRoute(
-    //   builder: (context, state, child) {
-    //     return MainLayout(child: child);
-    //   },
-    //   routes: <GoRoute>[
-    //     // GoRoute(
-    //     //     path: Routes.order,
-    //     //     pageBuilder: (context, state) {
-    //     //       return defaultTransition(
-    //     //           child: const OrderList(), routeName: Routes.order);
-    //     //     }),
-    //     // GoRoute(
-    //     //     path: Routes.inventory,
-    //     //     pageBuilder: (context, state) {
-    //     //       return defaultTransition(
-    //     //           child: const InventoryList(), routeName: Routes.inventory);
-    //     //     }),
-    //     // GoRoute(
-    //     //     path: Routes.payment,
-    //     //     pageBuilder: (context, state) {
-    //     //       return defaultTransition(
-    //     //           child: const PaymentList(), routeName: Routes.payment);
-    //     //     }),
-    //   ],
-    // ),
   ],
 );
 
@@ -166,8 +112,8 @@ abstract class Routes {
   static const login = '/login';
   static const home = '/home';
   static const category = '/category';
-  static const product = '/product';
-  static const productDetails = '/details';
+  static const products = '/products';
+  static const productDetails = '/product/details';
   static const order = '/order';
   static const payment = '/payment';
   static const inventory = '/inventory';
@@ -181,7 +127,7 @@ abstract class Routes {
     inventory,
     order,
     home,
-    product,
+    products,
     productDetails,
     payment,
     productCreate,
