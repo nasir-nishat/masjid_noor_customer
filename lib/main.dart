@@ -18,11 +18,7 @@ void main() async {
   setPathUrlStrategy();
 
   await SupabaseDep.impl.initialize();
-  await windowManager.ensureInitialized();
-  if (Platform.isWindows) {
-    WindowManager.instance.setMinimumSize(const Size(375, 812));
-    WindowManager.instance.setMaximumSize(const Size(375, 812));
-  }
+
   // Get.lazyPut(() => DashboardController());
   // Get.lazyPut(() => AppController());
   // Get.lazyPut(() => CategoryController());

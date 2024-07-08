@@ -19,23 +19,6 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-  //     final currentUser = SupabaseDep.impl.auth.currentUser;
-  //     if (currentUser != null) {
-  //       try {
-  //         setState(() {
-  //           loggedIn = true;
-  //         });
-  //       } catch (e) {
-  //         await AuthenticationNotifier.instance.logout();
-  //       }
-  //     }
-  //   });
-  // }
-
   bool loggedIn = true;
 
   String get currentRoute =>
@@ -43,24 +26,72 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    if (loggedIn) {
-      return Scaffold(
-        key: drawerKey,
-        drawer: const MainSidebar(),
-        body: Padding(
+    return Scaffold(
+      body: Padding(
           padding: EdgeInsets.all(10.w),
-          child: Column(
-            children: [
-              Header(name: currentRoute),
-              Expanded(
-                child: widget.child,
-              ),
-            ],
+          child: Column(children: [
+            Header(name: currentRoute),
+            Expanded(
+              child: widget.child,
+            )
+          ])),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _getSelectedIndex(context),
+        onTap: (index) {
+          _onItemTapped(index, context);
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-        ),
-      );
-    } else {
-      return const Material(child: SizedBox());
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+
+  int _getSelectedIndex(BuildContext context) {
+    final String location = currentRoute;
+    if (location.startsWith(Routes.search)) {
+      return 1;
+    }
+    if (location.startsWith(Routes.cart)) {
+      return 2;
+    }
+    if (location.startsWith(Routes.profile)) {
+      return 3;
+    }
+    return 0;
+  }
+
+  void _onItemTapped(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        // context.go(Routes.home);
+        print("Clearing and navigating to home");
+        clearAndNavigate(Routes.home);
+        break;
+      case 1:
+        context.go(Routes.search);
+        break;
+      case 2:
+        context.go(Routes.cart);
+        break;
+      case 3:
+        context.go(Routes.profile);
+        break;
     }
   }
 }

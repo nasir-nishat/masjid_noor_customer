@@ -1,0 +1,1 @@
+import 'package:masjid_noor_customer/presentation/pages/all_export.dart';class SearchPage extends StatelessWidget {  const SearchPage({super.key});  @override  Widget build(BuildContext context) {    return const Placeholder();  }}

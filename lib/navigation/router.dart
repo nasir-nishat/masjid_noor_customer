@@ -34,9 +34,16 @@ class AuthenticationNotifier {
   }
 }
 
+GoRouter? globalGoRouter;
+
+GoRouter getGoRouter() {
+  return globalGoRouter ??= goRouter;
+}
+
 final GoRouter goRouter = GoRouter(
   initialLocation: Routes.home,
   debugLogDiagnostics: true,
+  routerNeglect: true,
   observers: [
     BotToastNavigatorObserver(),
   ],
@@ -72,7 +79,28 @@ final GoRouter goRouter = GoRouter(
               child: ProductDetailsPage(id: ext['id']),
             );
           },
-        )
+        ),
+        GoRoute(
+            path: Routes.cart,
+            pageBuilder: (context, state) {
+              return const NoTransitionPage(
+                child: CartPage(),
+              );
+            }),
+        GoRoute(
+            path: Routes.search,
+            pageBuilder: (context, state) {
+              return const NoTransitionPage(
+                child: SearchPage(),
+              );
+            }),
+        GoRoute(
+            path: Routes.profile,
+            pageBuilder: (context, state) {
+              return const NoTransitionPage(
+                child: ProfilePage(),
+              );
+            }),
       ],
     ),
     ShellRoute(
@@ -121,6 +149,9 @@ abstract class Routes {
 
   static const productCreate = '/create';
   static const forgotPassword = '/forgot-password';
+
+  static const cart = '/cart';
+  static const search = '/search';
 
   static const all = {
     login,
@@ -181,4 +212,11 @@ void showSnackBar(BuildContext context, String message,
       duration: duration,
     ),
   );
+}
+
+void clearAndNavigate(String path) {
+  while (getGoRouter().canPop() == true) {
+    getGoRouter().pop();
+  }
+  getGoRouter().pushReplacement(path);
 }
