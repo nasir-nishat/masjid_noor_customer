@@ -4,7 +4,7 @@ class ProductMd extends Equatable {
   int? id;
   int? categoryId;
   String name;
-  double? sellPrice;
+  double sellPrice;
   String? description;
   int? stockQty;
   List? images;

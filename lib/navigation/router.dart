@@ -58,21 +58,25 @@ final GoRouter goRouter = GoRouter(
               path: Routes.home,
               pageBuilder: (context, state) {
                 return defaultTransition(
-                    child: const HomePage(), routeName: Routes.home);
+                    child: HomePage(), routeName: Routes.home);
               }),
           GoRoute(
             path: Routes.product,
             pageBuilder: (context, state) {
               return defaultTransition(
-                  child: const ProductListPage(), routeName: Routes.product);
+                  child: ProductListPage(), routeName: Routes.product);
             },
           ),
           GoRoute(
             path: Routes.productDetails,
-            pageBuilder: (context, state) {
-              return defaultTransition(
-                  child: const ProductDetailsPage(),
-                  routeName: Routes.productDetails);
+            // pageBuilder: (context, state) {
+            //   return defaultTransition(
+            //       child: const ProductDetailsPage(),
+            //       routeName: Routes.productDetails);
+            // },
+            builder: (context, state) {
+              return ProductDetailsPage(
+                  id: state.uri.queryParameters['id'].toString());
             },
           ),
         ]),

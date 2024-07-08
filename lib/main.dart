@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,12 +11,18 @@ import 'package:url_strategy/url_strategy.dart';
 import 'mgr/dependency/supabase_dep.dart';
 import 'navigation/router.dart';
 
+import 'package:window_manager/window_manager.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setPathUrlStrategy();
 
   await SupabaseDep.impl.initialize();
-
+  await windowManager.ensureInitialized();
+  if (Platform.isWindows) {
+    WindowManager.instance.setMinimumSize(const Size(375, 812));
+    WindowManager.instance.setMaximumSize(const Size(375, 812));
+  }
   // Get.lazyPut(() => DashboardController());
   // Get.lazyPut(() => AppController());
   // Get.lazyPut(() => CategoryController());

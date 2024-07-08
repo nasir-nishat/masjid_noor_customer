@@ -104,11 +104,19 @@ class ApiService {
     });
   }
 
-  Future<List<ProductMd>> fetchProducts(
-      {required int from, required int to}) async {
+  Future<List<ProductMd>> getProducts(
+      {required int from, required int to, Filter? filter}) async {
     return _handleRequest(() async {
-      final response =
-          await _supabaseClient.from('products').select("*").range(from, to);
+      debugPrint("From $from To $to");
+      debugPrint("Filter: ${filter?.type} ${filter?.value}");
+
+      final response = (filter != null && filter.type.isNotEmpty)
+          ? await _supabaseClient
+              .from('products')
+              .select("*")
+              .eq(filter.type, filter.value)
+              .range(from, to)
+          : await _supabaseClient.from('products').select("*").range(from, to);
 
       return (response as List)
           .map((product) => ProductMd.fromJson(product))
@@ -127,26 +135,6 @@ class ApiService {
           .select("*")
           .eq(filterType, filterValue)
           .range(from, to);
-
-      return (response as List)
-          .map((product) => ProductMd.fromJson(product))
-          .toList();
-    });
-  }
-
-  Future<List<ProductMd>> getProducts(
-      {required int from, required int to, Filter? filter}) async {
-    return _handleRequest(() async {
-      debugPrint("From $from To $to");
-      debugPrint("Filter: ${filter?.type} ${filter?.value}");
-
-      final response = (filter != null && filter.type.isNotEmpty)
-          ? await _supabaseClient
-              .from('products')
-              .select("*")
-              .eq(filter.type, filter.value)
-              .range(from, to)
-          : await _supabaseClient.from('products').select("*").range(from, to);
 
       return (response as List)
           .map((product) => ProductMd.fromJson(product))
