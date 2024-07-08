@@ -3,9 +3,7 @@ import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 
 class ProductListPage extends GetView<ProductController> {
-  final ProductController prodController = Get.find<ProductController>();
-
-  ProductListPage({super.key});
+  const ProductListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,25 +13,26 @@ class ProductListPage extends GetView<ProductController> {
           height: 50.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: prodController.categories.length,
+            itemCount: controller.categories.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Chip(label: Text(prodController.categories[index])),
+                child: Chip(label: Text(controller.categories[index])),
               );
             },
           ),
         ),
+        SizedBox(height: 10.h),
         Expanded(
           child: Obx(() {
-            if (prodController.isLoading.value) {
+            if (controller.isLoading.value) {
               return const Center(child: CircularProgressIndicator());
             } else {
               return NotificationListener<ScrollNotification>(
                 onNotification: (scrollNotification) {
                   if (scrollNotification.metrics.pixels ==
                       scrollNotification.metrics.maxScrollExtent) {
-                    prodController.fetchProducts();
+                    controller.fetchProducts();
                   }
                   return false;
                 },
@@ -44,9 +43,11 @@ class ProductListPage extends GetView<ProductController> {
                     mainAxisSpacing: 10.h,
                     childAspectRatio: 0.8,
                   ),
-                  itemCount: prodController.products.length,
+                  itemCount: controller.products.length,
                   itemBuilder: (context, index) {
-                    return ProductItem(product: prodController.products[index]);
+                    return ProductItem(
+                        product: controller.products[index],
+                        parentRoute: Routes.products);
                   },
                 ),
               );

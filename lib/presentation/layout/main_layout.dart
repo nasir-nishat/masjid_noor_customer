@@ -35,30 +35,32 @@ class _MainLayoutState extends State<MainLayout> {
               child: widget.child,
             )
           ])),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _getSelectedIndex(context),
-        onTap: (index) {
-          _onItemTapped(index, context);
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      bottomNavigationBar: currentRoute.contains(Routes.productDetails)
+          ? null
+          : BottomNavigationBar(
+              currentIndex: _getSelectedIndex(context),
+              onTap: (index) {
+                _onItemTapped(index, context);
+              },
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  label: 'Search',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_cart),
+                  label: 'Cart',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
+            ),
     );
   }
 
@@ -79,18 +81,24 @@ class _MainLayoutState extends State<MainLayout> {
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
-        // context.go(Routes.home);
-        print("Clearing and navigating to home");
-        clearAndNavigate(Routes.home);
+        if (currentRoute != Routes.home) {
+          context.go(Routes.home);
+        }
         break;
       case 1:
-        context.go(Routes.search);
+        if (currentRoute != Routes.search) {
+          context.go(Routes.search);
+        }
         break;
       case 2:
-        context.go(Routes.cart);
+        if (currentRoute != Routes.cart) {
+          context.go(Routes.cart);
+        }
         break;
       case 3:
-        context.go(Routes.profile);
+        if (currentRoute != Routes.profile) {
+          context.go(Routes.profile);
+        }
         break;
     }
   }

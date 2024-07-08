@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 
 class ProductDetailsPage extends GetView<ProductController> {
   final String id;
-  const ProductDetailsPage({super.key, required this.id});
+  final String parentRoute;
+  const ProductDetailsPage(
+      {super.key, required this.id, required this.parentRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +22,21 @@ class ProductDetailsPage extends GetView<ProductController> {
             minimumSize: Size(double.infinity, 50.h),
           ),
           child: const Text("Add to Cart"),
-          onPressed: () {
-            // Add to Cart functionality
-          },
+          onPressed: () {},
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                  onPressed: () {
+                    context.go(parentRoute);
+                  },
+                  icon: const Icon(Icons.close)),
+            ),
+            SizedBox(height: 20.h),
             Image.network(
               prod.images?.firstOrNull ??
                   'https://picsum.photos/id/230/200/200',
@@ -63,7 +73,7 @@ class ProductDetailsPage extends GetView<ProductController> {
                     SizedBox(
                       width: 700.w,
                       child: Text(
-                        prod.description!,
+                        prod.description ?? "",
                         softWrap: true,
                         style: context.textTheme.bodyLarge,
                       ),

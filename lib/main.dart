@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
+import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 import 'package:masjid_noor_customer/presentation/theme/app_theme.dart';
 import 'package:url_strategy/url_strategy.dart';
 
@@ -19,7 +20,7 @@ void main() async {
 
   await SupabaseDep.impl.initialize();
 
-  // Get.lazyPut(() => DashboardController());
+  Get.lazyPut(() => ProductController());
   // Get.lazyPut(() => AppController());
   // Get.lazyPut(() => CategoryController());
   // Get.lazyPut(() => ProductController());

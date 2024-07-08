@@ -34,12 +34,6 @@ class AuthenticationNotifier {
   }
 }
 
-GoRouter? globalGoRouter;
-
-GoRouter getGoRouter() {
-  return globalGoRouter ??= goRouter;
-}
-
 final GoRouter goRouter = GoRouter(
   initialLocation: Routes.home,
   debugLogDiagnostics: true,
@@ -66,7 +60,7 @@ final GoRouter goRouter = GoRouter(
         GoRoute(
           path: Routes.products,
           pageBuilder: (context, state) {
-            return NoTransitionPage(
+            return const NoTransitionPage(
               child: ProductListPage(),
             );
           },
@@ -76,7 +70,7 @@ final GoRouter goRouter = GoRouter(
           pageBuilder: (context, state) {
             Map ext = state.extra as Map;
             return NoTransitionPage(
-              child: ProductDetailsPage(id: ext['id']),
+              child: ProductDetailsPage(id: ext['id'], parentRoute: ext['parentRoute']),
             );
           },
         ),
@@ -212,11 +206,4 @@ void showSnackBar(BuildContext context, String message,
       duration: duration,
     ),
   );
-}
-
-void clearAndNavigate(String path) {
-  while (getGoRouter().canPop() == true) {
-    getGoRouter().pop();
-  }
-  getGoRouter().pushReplacement(path);
 }

@@ -22,14 +22,9 @@ class HomePage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-
           SizedBox(height: 20.h),
-
-          // Top Products Section
           _buildProductSection(
               'Top Products', productController.topProducts, context),
-
-          // Popular Products Section
           _buildProductSection(
               'Popular Products', productController.popularProducts, context),
         ],
@@ -60,6 +55,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
+        SizedBox(height: 10.h),
         SizedBox(
           height: 200.h,
           child: ListView.separated(
@@ -68,6 +64,7 @@ class HomePage extends StatelessWidget {
             itemBuilder: (context, index) {
               return ProductItem(
                 product: products[index],
+                parentRoute: Routes.home,
               );
             },
             separatorBuilder: (context, index) => SizedBox(width: 10.w),

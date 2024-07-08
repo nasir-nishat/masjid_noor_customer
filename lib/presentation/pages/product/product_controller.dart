@@ -62,7 +62,7 @@ class ProductController extends GetxController {
     // var fetchedProducts = await ApiService().fetchPopularProducts();
     // popularProducts.value = fetchedProducts;
 
-    topProducts.value = [
+    popularProducts.value = [
       ProductMd(
         id: 1,
         name: 'Product 1',
