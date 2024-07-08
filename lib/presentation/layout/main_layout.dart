@@ -51,7 +51,7 @@ class _MainLayoutState extends State<MainLayout> {
           padding: EdgeInsets.all(10.w),
           child: Column(
             children: [
-              Header(name: currentRoute.split('/').last.capitalize ?? ''),
+              Header(name: currentRoute),
               Expanded(
                 child: widget.child,
               ),
