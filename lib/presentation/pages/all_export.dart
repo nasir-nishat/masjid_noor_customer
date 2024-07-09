@@ -25,4 +25,4 @@ export 'package:masjid_noor_customer/presentation/constants.dart';
 export 'package:supabase_flutter/supabase_flutter.dart';
 
 export 'package:masjid_noor_customer/navigation/router.dart';
-export 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
+export 'package:masjid_noor_customer/presentation/widgets/spaced_row.dart';

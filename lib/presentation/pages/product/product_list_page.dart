@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 
 import '../../../navigation/router.dart';
@@ -66,8 +67,9 @@ class ProductListPage extends GetView<ProductController> {
                             itemCount: controller.products.length,
                             itemBuilder: (context, index) {
                               return ProductItem(
-                                  product: controller.products[index],
-                                  parentRoute: Routes.products);
+                                product: controller.products[index],
+                                parentRoute: Routes.products,
+                              );
                             },
                           ),
                   );

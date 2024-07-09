@@ -106,12 +106,40 @@ class ProductMd extends Equatable {
   }
 
   ProductMd copyWith({
+    int? id,
+    int? categoryId,
+    String? name,
+    String? description,
+    int? stockQty,
+    List? images,
+    double? sellPrice,
+    double? purchasePrice,
+    String? barcode,
+    // double? discount,
+    // DateTime? startDate,
+    // DateTime? endDate,
+    bool? isNew,
+    bool? isPopular,
+    int? suppId,
     int? cartQty,
   }) {
     return ProductMd(
-        id: id,
-        cartQty: cartQty ?? this.cartQty,
-        name: name,
-        sellPrice: sellPrice);
+      id: id ?? this.id,
+      categoryId: categoryId ?? this.categoryId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      stockQty: stockQty ?? this.stockQty,
+      images: images ?? this.images,
+      sellPrice: sellPrice ?? this.sellPrice,
+      purchasePrice: purchasePrice ?? this.purchasePrice,
+      barcode: barcode ?? this.barcode,
+      // discount: discount ?? this.discount,
+      // startDate: startDate ?? this.startDate,
+      // endDate: endDate ?? this.endDate,
+      isNew: isNew ?? this.isNew,
+      isPopular: isPopular ?? this.isPopular,
+      suppId: suppId ?? this.suppId,
+      cartQty: cartQty ?? this.cartQty,
+    );
   }
 }
