@@ -4,6 +4,8 @@ import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 
 import '../mgr/dependency/supabase_dep.dart';
 import '../presentation/pages/all_export.dart';
+import '../presentation/pages/user/forgot_pass_page.dart';
+import '../presentation/pages/user/sign_up_page.dart';
 import '../presentation/utills/extensions.dart';
 
 class AuthenticationNotifier {
@@ -37,7 +39,6 @@ class AuthenticationNotifier {
 final GoRouter goRouter = GoRouter(
   initialLocation: Routes.home,
   debugLogDiagnostics: true,
-  routerNeglect: true,
   observers: [
     BotToastNavigatorObserver(),
   ],
@@ -58,45 +59,64 @@ final GoRouter goRouter = GoRouter(
           },
         ),
         GoRoute(
-          path: Routes.products,
+          path: Routes.search,
           pageBuilder: (context, state) {
             return const NoTransitionPage(
-              child: ProductListPage(),
+              child: SearchPage(),
             );
           },
         ),
         GoRoute(
-          path: "${Routes.productDetails}/:id",
+          path: Routes.profile,
           pageBuilder: (context, state) {
-            Map ext = state.extra as Map;
-            return NoTransitionPage(
-              child: ProductDetailsPage(
-                  id: ext['id'], parentRoute: ext['parentRoute']),
+            return const NoTransitionPage(
+              child: ProfilePage(),
             );
           },
         ),
-        GoRoute(
-            path: Routes.cart,
-            pageBuilder: (context, state) {
-              return const NoTransitionPage(
-                child: CartPage(),
-              );
-            }),
-        GoRoute(
-            path: Routes.search,
-            pageBuilder: (context, state) {
-              return const NoTransitionPage(
-                child: SearchPage(),
-              );
-            }),
-        GoRoute(
-            path: Routes.profile,
-            pageBuilder: (context, state) {
-              return const NoTransitionPage(
-                child: ProfilePage(),
-              );
-            }),
       ],
+    ),
+    GoRoute(
+      path: Routes.cart,
+      pageBuilder: (context, state) {
+        return const NoTransitionPage(
+          child: CartPage(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.products,
+      pageBuilder: (context, state) {
+        return const NoTransitionPage(
+          child: ProductListPage(),
+        );
+      },
+    ),
+    GoRoute(
+      path: "${Routes.productDetails}/:id",
+      pageBuilder: (context, state) {
+        Map ext = state.extra as Map;
+        return NoTransitionPage(
+          child: ProductDetailsPage(
+              id: ext['id'], parentRoute: ext['parentRoute']),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.signup,
+      pageBuilder: (context, state) {
+        return NoTransitionPage(
+          child: SignupPage(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.forgotPassword,
+      pageBuilder: (context, state) {
+        return NoTransitionPage(
+          child: ForgotPasswordPage(),
+        );
+      },
     ),
     ShellRoute(
       builder: (context, state, child) {
@@ -111,7 +131,8 @@ final GoRouter goRouter = GoRouter(
                 : null;
           },
           pageBuilder: (context, state) {
-            return const NoTransitionPage(child: LoginPage());
+            return defaultTransition(
+                child: LoginPage(), routeName: Routes.login);
           },
         ),
       ],
@@ -157,6 +178,7 @@ abstract class Routes {
 
   static const cart = '/cart';
   static const search = '/search';
+  static const signup = '/sign-up';
 
   static const all = {
     login,
@@ -169,6 +191,9 @@ abstract class Routes {
     productCreate,
     forgotPassword,
     profile,
+    cart,
+    search,
+    signup,
   };
 
   static void goToHomePage(BuildContext context) {

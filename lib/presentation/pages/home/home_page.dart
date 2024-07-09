@@ -11,6 +11,22 @@ class HomePage extends GetView<ProductController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Home',
+                    style: context.textTheme.labelMedium,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      context.push(Routes.cart);
+                    },
+                    icon: const Icon(Icons.shopping_cart_outlined),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20.h),
               ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(10.r)),
                 child: Image.network(
@@ -45,7 +61,7 @@ class HomePage extends GetView<ProductController> {
               TextButton(
                   onPressed: () {
                     controller.getCategories();
-                    context.go(Routes.products);
+                    context.push(Routes.products);
                   },
                   child: Text(
                     'See All',

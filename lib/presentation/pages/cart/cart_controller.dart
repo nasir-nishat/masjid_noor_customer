@@ -26,6 +26,11 @@ class CartController extends GetxController {
     }
   }
 
+  void clearCart() {
+    cartItems.clear();
+    cartItems.refresh();
+  }
+
   void removeFromCart(CartMd cartItem) {
     cartItems.remove(cartItem);
   }

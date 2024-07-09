@@ -19,25 +19,18 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  bool loggedIn = true;
+  bool loggedIn = false;
 
   String get currentRoute =>
       GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
 
   @override
   Widget build(BuildContext context) {
+    print(currentRoute);
     return Scaffold(
-      body: Padding(
-          padding: EdgeInsets.all(10.w),
-          child: Column(children: [
-            Header(name: currentRoute),
-            Expanded(
-              child: widget.child,
-            )
-          ])),
-      bottomNavigationBar: currentRoute.contains(Routes.productDetails)
-          ? null
-          : BottomNavigationBar(
+      body: Padding(padding: EdgeInsets.all(10.w), child: widget.child),
+      bottomNavigationBar: showBottomNav()
+          ? BottomNavigationBar(
               currentIndex: _getSelectedIndex(context),
               onTap: (index) {
                 _onItemTapped(index, context);
@@ -52,15 +45,12 @@ class _MainLayoutState extends State<MainLayout> {
                   label: 'Search',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart),
-                  label: 'Cart',
-                ),
-                BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   label: 'Profile',
                 ),
               ],
-            ),
+            )
+          : null,
     );
   }
 
@@ -69,11 +59,9 @@ class _MainLayoutState extends State<MainLayout> {
     if (location.startsWith(Routes.search)) {
       return 1;
     }
-    if (location.startsWith(Routes.cart)) {
-      return 2;
-    }
     if (location.startsWith(Routes.profile)) {
-      return 3;
+      // return 3;
+      return 2;
     }
     return 0;
   }
@@ -92,16 +80,27 @@ class _MainLayoutState extends State<MainLayout> {
         }
         break;
       case 2:
-        if (currentRoute != Routes.cart) {
-          context.go(Routes.cart);
-        }
-        break;
-      case 3:
         if (currentRoute != Routes.profile) {
-          context.go(Routes.profile);
+          // context.go(Routes.profile);
+          if (loggedIn) {
+            context.go(Routes.profile);
+          } else {
+            context.push(Routes.login);
+          }
         }
         break;
     }
     // });
+  }
+
+  bool showBottomNav() {
+    if (currentRoute.contains(Routes.home)) {
+      return true;
+    } else if (currentRoute.contains(Routes.search)) {
+      return true;
+    } else if (currentRoute.contains(Routes.profile)) {
+      return true;
+    }
+    return false;
   }
 }

@@ -32,4 +32,19 @@ class UserController extends GetxController {
     userEmail.value = email;
     userPhone.value = phone;
   }
+
+  Future<void> signup(
+      String name, String email, String password, String phone) async {
+    // Call API to register user
+    // Simulating with dummy data
+    userName.value = name;
+    userEmail.value = email;
+    userPhone.value = phone;
+    // Handle response and errors
+  }
+
+  Future<void> resetPassword(String email) async {
+    // Call API to send password reset email
+    // Handle response and errors
+  }
 }

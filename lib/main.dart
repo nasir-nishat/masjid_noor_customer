@@ -4,6 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/order_controller.dart';
@@ -20,7 +21,7 @@ import 'package:window_manager/window_manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setPathUrlStrategy();
-
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   await SupabaseDep.impl.initialize();
   await windowManager.ensureInitialized();
   if (Platform.isWindows) {
