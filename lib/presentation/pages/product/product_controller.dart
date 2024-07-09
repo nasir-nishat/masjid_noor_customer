@@ -117,7 +117,7 @@ class ProductController extends GetxController {
     products.clear();
 
     // Set a timer to turn off isLoading after 10 seconds if it hasn't already
-    Timer(Duration(seconds: 10), () {
+    Timer(const Duration(seconds: 10), () {
       if (isLoading.value) {
         isLoading.value = false;
       }
