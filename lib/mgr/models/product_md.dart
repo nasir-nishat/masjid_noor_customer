@@ -15,6 +15,7 @@ class ProductMd extends Equatable {
   // DateTime? startDate;
   // DateTime? endDate;
   bool? isNew;
+  bool? isPopular;
   int? suppId;
   int? cartQty;
 
@@ -32,6 +33,7 @@ class ProductMd extends Equatable {
     // this.startDate,
     // this.endDate,
     this.isNew,
+    this.isPopular,
     this.suppId,
     this.cartQty,
   });
@@ -51,6 +53,7 @@ class ProductMd extends Equatable {
         // startDate,
         // endDate,
         isNew,
+        isPopular,
         suppId,
         cartQty,
       ];
@@ -71,6 +74,7 @@ class ProductMd extends Equatable {
         // startDate: json['start_date'],
         // endDate: json['end_date'],
         isNew: json['is_new'],
+        isPopular: json['is_popular'],
         suppId: json['supp_id'],
         cartQty: json['cart_qty'],
       );
@@ -95,6 +99,7 @@ class ProductMd extends Equatable {
       // 'start_date': startDate,
       // 'end_date': endDate,
       'is_new': isNew,
+      'is_popular': isPopular,
       'supp_id': suppId,
       'cart_qty': cartQty,
     };

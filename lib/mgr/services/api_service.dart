@@ -75,35 +75,6 @@ class ApiService {
   // ===========================
   // ===========================
 
-  Future<List<ProductMd>> fetchTopProducts() async {
-    return _handleRequest(() async {
-      final response = await _supabaseClient
-          .from('products')
-          .select("*")
-          .eq('category', 'top') // Assuming 'top' category for top products
-          .limit(10);
-
-      return (response as List)
-          .map((product) => ProductMd.fromJson(product))
-          .toList();
-    });
-  }
-
-  Future<List<ProductMd>> fetchPopularProducts() async {
-    return _handleRequest(() async {
-      final response = await _supabaseClient
-          .from('products')
-          .select("*")
-          .eq('category',
-              'popular') // Assuming 'popular' category for popular products
-          .limit(10);
-
-      return (response as List)
-          .map((product) => ProductMd.fromJson(product))
-          .toList();
-    });
-  }
-
   Future<List<ProductMd>> getProducts(
       {required int from, required int to, Filter? filter}) async {
     return _handleRequest(() async {
@@ -117,24 +88,6 @@ class ApiService {
               .eq(filter.type, filter.value)
               .range(from, to)
           : await _supabaseClient.from('products').select("*").range(from, to);
-
-      return (response as List)
-          .map((product) => ProductMd.fromJson(product))
-          .toList();
-    });
-  }
-
-  Future<List<ProductMd>> fetchProductsByFilter(
-      {required int from,
-      required int to,
-      required String filterType,
-      required String filterValue}) async {
-    return _handleRequest(() async {
-      final response = await _supabaseClient
-          .from('products')
-          .select("*")
-          .eq(filterType, filterValue)
-          .range(from, to);
 
       return (response as List)
           .map((product) => ProductMd.fromJson(product))
@@ -500,7 +453,7 @@ class ApiService {
 
 class Filter {
   final String type;
-  final String value;
+  final dynamic value;
 
   Filter({required this.type, required this.value});
 }

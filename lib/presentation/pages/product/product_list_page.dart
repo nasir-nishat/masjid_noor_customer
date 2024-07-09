@@ -11,68 +11,70 @@ class ProductListPage extends GetView<ProductController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 50.h,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.categories.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Obx(() {
-                  return ChoiceChip(
-                    label: Text(controller.categories[index]),
-                    selected: controller.selectedCategory.value ==
-                        controller.categories[index],
-                    onSelected: (isSelected) {
-                      if (isSelected) {
-                        controller.selectedCategory.value =
-                            controller.categories[index];
-                        controller.fetchProductsByCategory(
-                            controller.categories[index]);
-                      }
-                    },
+    return Obx(() => Column(
+          children: [
+            SizedBox(
+              height: 50.h,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: controller.categories.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    child: Obx(() {
+                      return ChoiceChip(
+                        label: Text(controller.categories[index].name),
+                        selected: controller.selectedCategory.value ==
+                            controller.categories[index],
+                        onSelected: (isSelected) {
+                          if (isSelected) {
+                            controller.selectedCategory.value =
+                                controller.categories[index];
+                            controller.fetchProductsByCategory();
+                          }
+                        },
+                      );
+                    }),
                   );
-                }),
-              );
-            },
-          ),
-        ),
-        SizedBox(height: 10.h),
-        Expanded(
-          child: Obx(() {
-            if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              return NotificationListener<ScrollNotification>(
-                onNotification: (scrollNotification) {
-                  if (scrollNotification.metrics.pixels ==
-                      scrollNotification.metrics.maxScrollExtent) {
-                    controller.fetchProducts();
-                  }
-                  return false;
                 },
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10.w,
-                    mainAxisSpacing: 10.h,
-                    childAspectRatio: 0.8,
-                  ),
-                  itemCount: controller.products.length,
-                  itemBuilder: (context, index) {
-                    return ProductItem(
-                        product: controller.products[index],
-                        parentRoute: Routes.products);
-                  },
-                ),
-              );
-            }
-          }),
-        ),
-      ],
-    );
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: (scrollNotification) {
+                      if (scrollNotification.metrics.pixels ==
+                          scrollNotification.metrics.maxScrollExtent) {
+                        controller.fetchProducts();
+                      }
+                      return false;
+                    },
+                    child: controller.products.isEmpty
+                        ? const Center(child: Text('No products found'))
+                        : GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10.w,
+                              mainAxisSpacing: 10.h,
+                              childAspectRatio: 0.8,
+                            ),
+                            itemCount: controller.products.length,
+                            itemBuilder: (context, index) {
+                              return ProductItem(
+                                  product: controller.products[index],
+                                  parentRoute: Routes.products);
+                            },
+                          ),
+                  );
+                }
+              }),
+            ),
+          ],
+        ));
   }
 }

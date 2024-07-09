@@ -1,5 +1,6 @@
 import 'dart:async'; // Import Timer package
 import 'package:get/get.dart';
+import 'package:masjid_noor_customer/mgr/models/category_md.dart';
 import 'package:masjid_noor_customer/mgr/services/api_service.dart';
 import 'package:masjid_noor_customer/mgr/models/product_md.dart';
 
@@ -11,13 +12,13 @@ class ProductController extends GetxController {
     return Get.find<ProductController>();
   }
 
-  var topProducts = <ProductMd>[].obs;
+  var newProducts = <ProductMd>[].obs;
   var popularProducts = <ProductMd>[].obs;
   var products = <ProductMd>[].obs;
   var selectedProduct = ProductMd(name: "", sellPrice: 0).obs;
 
-  var categories = <String>['Category1', 'Category2', 'Category3'].obs;
-  var selectedCategory = 'Category1'.obs;
+  var categories = <CategoryMd>[].obs;
+  var selectedCategory = CategoryMd(name: "").obs;
 
   var isLoading = true.obs;
 
@@ -30,107 +31,69 @@ class ProductController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchTopProducts();
+    fetchNewProducts();
     fetchPopularProducts();
-    fetchProducts();
   }
 
-  void fetchTopProducts() async {
-    // List<ProductMd> fetchedProducts = await ApiService().fetchTopProducts();
-    // topProducts.value = fetchedProducts;
-    // Add dummy data
-    topProducts.value = [
-      ProductMd(
-        id: 1,
-        name: 'Product 1',
-        sellPrice: 2000,
-      ),
-      ProductMd(
-        id: 2,
-        name: 'Product 2',
-        sellPrice: 2000,
-      ),
-      ProductMd(
-        id: 3,
-        name: 'Product 3',
-        sellPrice: 2000,
-      ),
-    ];
+  void getCategories() async {
+    try {
+      var fetchedCategories = await ApiService().getCategories();
+      categories.value = fetchedCategories;
+      selectedCategory.value = fetchedCategories.first;
+      fetchProductsByCategory();
+    } catch (e) {
+      print("Error fetching categories: $e");
+    }
+  }
+
+  void fetchNewProducts() async {
+    List<ProductMd> fetchedProducts = await ApiService().getProducts(
+      from: 0,
+      to: 10,
+      filter: Filter(type: 'is_new', value: true),
+    );
+    newProducts.value = fetchedProducts..shuffle();
   }
 
   void fetchPopularProducts() async {
-    // var fetchedProducts = await ApiService().fetchPopularProducts();
-    // popularProducts.value = fetchedProducts;
-
-    popularProducts.value = [
-      ProductMd(
-        id: 1,
-        name: 'Product 1',
-        sellPrice: 2000,
-      ),
-      ProductMd(
-        id: 2,
-        name: 'Product 2',
-        sellPrice: 2000,
-      ),
-      ProductMd(
-        id: 3,
-        name: 'Product 3',
-        sellPrice: 2000,
-      ),
-    ];
+    var fetchedProducts = await ApiService().getProducts(
+      from: 0,
+      to: 10,
+      filter: Filter(type: 'is_popular', value: true),
+    );
+    popularProducts.value = fetchedProducts;
   }
 
   void fetchProducts() async {
-    // int offset = (currentPage.value - 1) * pageSize;
-    //
-    // var fetchedProducts = await ApiService().getProducts(
-    //   from: offset,
-    //   to: (offset + pageSize) - 1,
-    //   filter: selectedFilter.value,
-    // );
+    int offset = (currentPage.value - 1) * pageSize;
 
-    products.value = [
-      ProductMd(
-        id: 1,
-        name: 'Product 1',
-        sellPrice: 2000,
-      ),
-      ProductMd(
-        id: 2,
-        name: 'Product 2',
-        sellPrice: 2000,
-      ),
-      ProductMd(
-        id: 3,
-        name: 'Product 3',
-        sellPrice: 2000,
-      ),
-    ];
+    var fetchedProducts = await ApiService().getProducts(
+      from: offset,
+      to: (offset + pageSize) - 1,
+      filter: selectedFilter.value,
+    );
+
+    if (currentPage.value == 1) {
+      products.value = fetchedProducts;
+    } else {
+      products.addAll(fetchedProducts);
+    }
 
     isLoading.value = false;
   }
 
-  void fetchProductsByCategory(String category) async {
+  void fetchProductsByCategory() async {
     isLoading.value = true;
     currentPage.value = 1;
     products.clear();
 
-    // Set a timer to turn off isLoading after 10 seconds if it hasn't already
-    Timer(const Duration(seconds: 10), () {
-      if (isLoading.value) {
-        isLoading.value = false;
-      }
-    });
-
-    // Fetch products based on the selected category
     try {
-      List<ProductMd> fetchedProducts = await ApiService()
-          .fetchProductsByFilter(
-              from: 0,
-              to: pageSize - 1,
-              filterType: "categories",
-              filterValue: category);
+      List<ProductMd> fetchedProducts = await ApiService().getProducts(
+          from: 0,
+          to: pageSize - 1,
+          filter: Filter(
+              type: 'category_id',
+              value: selectedCategory.value.id.toString()));
       products.value = fetchedProducts;
     } catch (e) {
       print("Error fetching products by category: $e");
