@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/widgets/cart_item.dart';
+import 'package:masjid_noor_customer/mgr/models/cart_md.dart';
 
 class CartPage extends GetView<CartController> {
   const CartPage({super.key});
@@ -19,17 +20,17 @@ class CartPage extends GetView<CartController> {
       return ListView.separated(
         itemCount: controller.cartItems.length,
         itemBuilder: (context, index) {
-          final product = controller.cartItems[index];
+          final CartMd cartProd = controller.cartItems[index];
           return CartItem(
-            product: product,
+            cartProd: cartProd,
             onDecrease: () {
-              controller.decreaseQuantity(product);
+              controller.decreaseQuantity(cartProd);
             },
             onIncrease: () {
-              controller.increaseQuantity(product);
+              controller.increaseQuantity(cartProd);
             },
             onRemove: () {
-              controller.removeFromCart(product);
+              controller.removeFromCart(cartProd);
             },
           ); // Call the CartItem widget
         },
@@ -39,5 +40,3 @@ class CartPage extends GetView<CartController> {
     });
   }
 }
-
-// Create the CartItem Widget

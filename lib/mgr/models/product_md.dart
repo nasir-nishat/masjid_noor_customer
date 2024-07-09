@@ -17,7 +17,7 @@ class ProductMd extends Equatable {
   bool? isNew;
   bool? isPopular;
   int? suppId;
-  int? cartQty;
+  // int? cartQty;
 
   ProductMd({
     this.id,
@@ -35,7 +35,7 @@ class ProductMd extends Equatable {
     this.isNew,
     this.isPopular,
     this.suppId,
-    this.cartQty,
+    // this.cartQty,
   });
 
   @override
@@ -55,7 +55,7 @@ class ProductMd extends Equatable {
         isNew,
         isPopular,
         suppId,
-        cartQty,
+        // cartQty,
       ];
 
   factory ProductMd.fromJson(Map<String, dynamic> json) {
@@ -76,7 +76,7 @@ class ProductMd extends Equatable {
         isNew: json['is_new'],
         isPopular: json['is_popular'],
         suppId: json['supp_id'],
-        cartQty: json['cart_qty'],
+        // cartQty: json['cart_qty'],
       );
     } on TypeError catch (e, st) {
       print("Error: $e, $st");
@@ -101,7 +101,7 @@ class ProductMd extends Equatable {
       'is_new': isNew,
       'is_popular': isPopular,
       'supp_id': suppId,
-      'cart_qty': cartQty,
+      // 'cart_qty': cartQty,
     };
   }
 
@@ -121,7 +121,7 @@ class ProductMd extends Equatable {
     bool? isNew,
     bool? isPopular,
     int? suppId,
-    int? cartQty,
+    // int? cartQty,
   }) {
     return ProductMd(
       id: id ?? this.id,
@@ -139,7 +139,7 @@ class ProductMd extends Equatable {
       isNew: isNew ?? this.isNew,
       isPopular: isPopular ?? this.isPopular,
       suppId: suppId ?? this.suppId,
-      cartQty: cartQty ?? this.cartQty,
+      // cartQty: cartQty ?? this.cartQty,
     );
   }
 }

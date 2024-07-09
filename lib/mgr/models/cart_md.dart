@@ -1,0 +1,1 @@
+import 'package:masjid_noor_customer/mgr/models/product_md.dart';class CartMd {  final ProductMd product;  int quantity;  CartMd({required this.product, required this.quantity});  double get totalPrice => product.sellPrice * quantity;}

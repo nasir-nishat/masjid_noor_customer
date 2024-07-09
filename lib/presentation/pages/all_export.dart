@@ -11,6 +11,7 @@ export 'package:masjid_noor_customer/presentation/pages/product/product_search.d
 export 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
 
 export 'package:masjid_noor_customer/mgr/models/product_md.dart';
+export 'package:masjid_noor_customer/mgr/models/cart_md.dart';
 
 export 'package:get/get.dart';
 export 'package:get/get_core/src/get_main.dart';
