@@ -139,7 +139,6 @@ class ApiService {
         .from('products')
         .select()
         .ilike('name', '%$query%')
-        .or('description.ilike.%$query%')
         .range((page - 1) * limit, page * limit - 1);
 
     List<ProductMd> products =

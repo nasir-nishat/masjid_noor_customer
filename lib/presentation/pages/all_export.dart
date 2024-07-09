@@ -7,7 +7,7 @@ export 'package:masjid_noor_customer/presentation/pages/product/product_list_pag
 export 'package:masjid_noor_customer/presentation/pages/user/login_page.dart';
 export 'package:masjid_noor_customer/presentation/pages/user/profile_page.dart';
 export 'package:masjid_noor_customer/presentation/widgets/product_item.dart';
-export 'package:masjid_noor_customer/presentation/pages/product/product_search.dart';
+export 'package:masjid_noor_customer/presentation/pages/product/search_page.dart';
 export 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
 
 export 'package:masjid_noor_customer/mgr/models/product_md.dart';

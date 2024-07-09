@@ -1,16 +1,10 @@
-import 'dart:async'; // Import Timer package
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/mgr/models/category_md.dart';
 import 'package:masjid_noor_customer/mgr/services/api_service.dart';
 import 'package:masjid_noor_customer/mgr/models/product_md.dart';
 
 class ProductController extends GetxController {
-  static ProductController get to {
-    if (!Get.isRegistered<ProductController>()) {
-      Get.lazyPut<ProductController>(() => ProductController());
-    }
-    return Get.find<ProductController>();
-  }
+  static ProductController get to => Get.find();
 
   var newProducts = <ProductMd>[].obs;
   var popularProducts = <ProductMd>[].obs;
@@ -21,10 +15,10 @@ class ProductController extends GetxController {
   var selectedCategory = CategoryMd(name: "").obs;
 
   var isLoading = true.obs;
+  var isFetching = false.obs;
 
   int pageSize = 10;
   RxInt currentPage = 1.obs;
-  RxBool isFetching = false.obs;
   RxInt totalProduct = 0.obs;
   Rx<Filter> selectedFilter = Filter(type: '', value: '').obs;
 
@@ -33,14 +27,17 @@ class ProductController extends GetxController {
     super.onInit();
     fetchNewProducts();
     fetchPopularProducts();
+    getCategories();
   }
 
   void getCategories() async {
     try {
       var fetchedCategories = await ApiService().getCategories();
       categories.value = fetchedCategories;
-      selectedCategory.value = fetchedCategories.first;
-      fetchProductsByCategory();
+      if (fetchedCategories.isNotEmpty) {
+        selectedCategory.value = fetchedCategories.first;
+        fetchProductsByCategory();
+      }
     } catch (e) {
       print("Error fetching categories: $e");
     }
@@ -98,39 +95,51 @@ class ProductController extends GetxController {
     } catch (e) {
       print("Error fetching products by category: $e");
     } finally {
-      if (isLoading.value) {
-        isLoading.value = false;
-      }
+      isLoading.value = false;
     }
   }
 
   Future<void> searchProducts(String query) async {
+    isLoading.value = true;
+    currentPage.value = 1;
+    products.clear();
+
     if (query.isEmpty) {
-      currentPage.value = 1;
-      products.clear();
       fetchProducts();
       return;
     }
+    try {
+      List<ProductMd> searchedProducts =
+          await ApiService().searchProducts(query, pageSize, currentPage.value);
 
-    isFetching.value = true;
-
-    // Fetch products based on the search query
-    List<ProductMd> searchedProducts =
-        await ApiService().searchProducts(query, pageSize, currentPage.value);
-
-    if (currentPage.value == 1) {
       products.value = searchedProducts;
-    } else {
-      products.addAll(searchedProducts);
+    } catch (e) {
+      print("Error searching products: $e");
+    } finally {
+      isLoading.value = false;
     }
-
-    isFetching.value = false;
   }
 
   Future<void> loadMoreProducts() async {
     if (isFetching.value) return;
 
+    isFetching.value = true;
     currentPage.value++;
-    await searchProducts('');
+
+    int offset = (currentPage.value - 1) * pageSize;
+
+    try {
+      List<ProductMd> fetchedProducts = await ApiService().getProducts(
+        from: offset,
+        to: (offset + pageSize) - 1,
+        filter: selectedFilter.value,
+      );
+
+      products.addAll(fetchedProducts);
+    } catch (e) {
+      print("Error loading more products: $e");
+    } finally {
+      isFetching.value = false;
+    }
   }
 }
