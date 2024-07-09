@@ -1,7 +1,7 @@
+import 'dart:async'; // Import Timer package
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/mgr/services/api_service.dart';
-
-import '../../../mgr/models/product_md.dart';
+import 'package:masjid_noor_customer/mgr/models/product_md.dart';
 
 class ProductController extends GetxController {
   static ProductController get to {
@@ -38,7 +38,7 @@ class ProductController extends GetxController {
   void fetchTopProducts() async {
     // List<ProductMd> fetchedProducts = await ApiService().fetchTopProducts();
     // topProducts.value = fetchedProducts;
-    //add dummy data
+    // Add dummy data
     topProducts.value = [
       ProductMd(
         id: 1,
@@ -109,5 +109,65 @@ class ProductController extends GetxController {
     ];
 
     isLoading.value = false;
+  }
+
+  void fetchProductsByCategory(String category) async {
+    isLoading.value = true;
+    currentPage.value = 1;
+    products.clear();
+
+    // Set a timer to turn off isLoading after 10 seconds if it hasn't already
+    Timer(Duration(seconds: 10), () {
+      if (isLoading.value) {
+        isLoading.value = false;
+      }
+    });
+
+    // Fetch products based on the selected category
+    try {
+      List<ProductMd> fetchedProducts = await ApiService()
+          .fetchProductsByFilter(
+              from: 0,
+              to: pageSize - 1,
+              filterType: "categories",
+              filterValue: category);
+      products.value = fetchedProducts;
+    } catch (e) {
+      print("Error fetching products by category: $e");
+    } finally {
+      if (isLoading.value) {
+        isLoading.value = false;
+      }
+    }
+  }
+
+  Future<void> searchProducts(String query) async {
+    if (query.isEmpty) {
+      currentPage.value = 1;
+      products.clear();
+      fetchProducts();
+      return;
+    }
+
+    isFetching.value = true;
+
+    // Fetch products based on the search query
+    List<ProductMd> searchedProducts =
+        await ApiService().searchProducts(query, pageSize, currentPage.value);
+
+    if (currentPage.value == 1) {
+      products.value = searchedProducts;
+    } else {
+      products.addAll(searchedProducts);
+    }
+
+    isFetching.value = false;
+  }
+
+  Future<void> loadMoreProducts() async {
+    if (isFetching.value) return;
+
+    currentPage.value++;
+    await searchProducts('');
   }
 }

@@ -1,6 +1,10 @@
-import 'package:go_router/go_router.dart';
-import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
+
+import '../../../navigation/router.dart';
+import '../../widgets/product_item.dart';
 
 class ProductListPage extends GetView<ProductController> {
   const ProductListPage({super.key});
@@ -17,7 +21,21 @@ class ProductListPage extends GetView<ProductController> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Chip(label: Text(controller.categories[index])),
+                child: Obx(() {
+                  return ChoiceChip(
+                    label: Text(controller.categories[index]),
+                    selected: controller.selectedCategory.value ==
+                        controller.categories[index],
+                    onSelected: (isSelected) {
+                      if (isSelected) {
+                        controller.selectedCategory.value =
+                            controller.categories[index];
+                        controller.fetchProductsByCategory(
+                            controller.categories[index]);
+                      }
+                    },
+                  );
+                }),
               );
             },
           ),

@@ -180,6 +180,20 @@ class ApiService {
     }
   }
 
+  Future<List<ProductMd>> searchProducts(
+      String query, int limit, int page) async {
+    final response = await _supabaseClient
+        .from('products')
+        .select()
+        .ilike('name', '%$query%')
+        .or('description.ilike.%$query%')
+        .range((page - 1) * limit, page * limit - 1);
+
+    List<ProductMd> products =
+        (response as List).map((item) => ProductMd.fromJson(item)).toList();
+
+    return products;
+  }
   // ===========================
   // ===========================
   // Order CRUD operations

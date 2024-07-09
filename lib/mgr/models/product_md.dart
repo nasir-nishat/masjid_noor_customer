@@ -16,6 +16,7 @@ class ProductMd extends Equatable {
   // DateTime? endDate;
   bool? isNew;
   int? suppId;
+  int? cartQty;
 
   ProductMd({
     this.id,
@@ -32,6 +33,7 @@ class ProductMd extends Equatable {
     // this.endDate,
     this.isNew,
     this.suppId,
+    this.cartQty,
   });
 
   @override
@@ -50,6 +52,7 @@ class ProductMd extends Equatable {
         // endDate,
         isNew,
         suppId,
+        cartQty,
       ];
 
   factory ProductMd.fromJson(Map<String, dynamic> json) {
@@ -69,6 +72,7 @@ class ProductMd extends Equatable {
         // endDate: json['end_date'],
         isNew: json['is_new'],
         suppId: json['supp_id'],
+        cartQty: json['cart_qty'],
       );
     } on TypeError catch (e, st) {
       print("Error: $e, $st");
@@ -92,6 +96,17 @@ class ProductMd extends Equatable {
       // 'end_date': endDate,
       'is_new': isNew,
       'supp_id': suppId,
+      'cart_qty': cartQty,
     };
+  }
+
+  ProductMd copyWith({
+    int? cartQty,
+  }) {
+    return ProductMd(
+        id: id,
+        cartQty: cartQty ?? this.cartQty,
+        name: name,
+        sellPrice: sellPrice);
   }
 }

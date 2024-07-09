@@ -54,7 +54,7 @@ final GoRouter goRouter = GoRouter(
         GoRoute(
           path: Routes.home,
           pageBuilder: (context, state) {
-            return defaultTransition(child: HomePage(), routeName: Routes.home);
+            return NoTransitionPage(child: HomePage());
           },
         ),
         GoRoute(
@@ -70,7 +70,8 @@ final GoRouter goRouter = GoRouter(
           pageBuilder: (context, state) {
             Map ext = state.extra as Map;
             return NoTransitionPage(
-              child: ProductDetailsPage(id: ext['id'], parentRoute: ext['parentRoute']),
+              child: ProductDetailsPage(
+                  id: ext['id'], parentRoute: ext['parentRoute']),
             );
           },
         ),
@@ -123,8 +124,18 @@ CustomTransitionPage defaultTransition(
   return CustomTransitionPage(
       child: child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
+        // return FadeTransition(
+        //   opacity: animation,
+        //   child: child,
+        // );
+
+        final tween =
+            Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero);
+        final curveTween = CurveTween(curve: Curves.easeInOut);
+        final animation1 = animation.drive(curveTween);
+
+        return SlideTransition(
+          position: tween.animate(animation1),
           child: child,
         );
       });

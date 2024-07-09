@@ -79,6 +79,7 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   void _onItemTapped(int index, BuildContext context) {
+    // Router.neglect(context, () {
     switch (index) {
       case 0:
         if (currentRoute != Routes.home) {
@@ -101,5 +102,6 @@ class _MainLayoutState extends State<MainLayout> {
         }
         break;
     }
+    // });
   }
 }
