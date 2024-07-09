@@ -29,11 +29,13 @@ class CartController extends GetxController {
 
   void increaseQuantity(CartMd cartItem) {
     cartItem.quantity++;
+    cartItems.refresh();
   }
 
   void decreaseQuantity(CartMd cartItem) {
     if (cartItem.quantity > 1) {
       cartItem.quantity--;
+      cartItems.refresh();
     }
   }
 
