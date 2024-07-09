@@ -12,6 +12,9 @@ class CartController extends GetxController {
 
   var cartItems = <CartMd>[].obs;
 
+  double? get totalPrice =>
+      double.tryParse(calculateTotalPrice().toStringAsFixed(2));
+
   void addToCart(ProductMd product) {
     CartMd? existingCartMd =
         cartItems.firstWhereOrNull((item) => item.product.id == product.id);
