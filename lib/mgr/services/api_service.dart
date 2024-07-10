@@ -3,6 +3,7 @@ import 'package:masjid_noor_customer/mgr/models/order_item_md.dart';
 import 'package:masjid_noor_customer/mgr/models/order_md.dart';
 import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:masjid_noor_customer/mgr/models/product_md.dart';
+import 'package:masjid_noor_customer/mgr/models/user_md.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import '../dependency/supabase_dep.dart';
 import '../models/feedback_md.dart';
@@ -26,6 +27,38 @@ class ApiService {
         rethrow;
       }
     }
+  }
+
+  // ===========================
+  // ===========================
+  // USER/Profile CRUD operations
+  // ===========================
+  // ===========================
+
+  Future<UserMd> getUser(int userId) async {
+    return _handleRequest(() async {
+      final response =
+          await _supabaseClient.from('users').select("*").eq('user_id', userId);
+
+      return UserMd.fromJson(response[0]);
+    });
+  }
+
+  //register
+  Future<UserMd> registerUser(UserMd user) async {
+    return _handleRequest(() async {
+      final response = await _supabaseClient.from('users').insert({
+        'email': user.email,
+        'password_hash': user.passwordHash,
+        'first_name': user.firstName,
+        'last_name': user.lastName,
+        'is_admin': false,
+        'phone_number': user.phoneNumber,
+        'username': user.username,
+      }).select();
+
+      return UserMd.fromJson(response[0]);
+    });
   }
 
   // ===========================
