@@ -47,6 +47,26 @@ final GoRouter goRouter = GoRouter(
       path: "/",
       redirect: (_, __) => Routes.home,
     ),
+    GoRoute(
+      path: '/login-callback',
+      builder: (context, state) {
+        print("Redirect URI: ${state}");
+        SupabaseDep.impl.auth
+            .getSessionFromUrl(Uri.parse(state.toString()))
+            .then((session) {
+          print("Session: $session");
+          if (session != null) {
+            context.go('/home'); // Navigate to home page
+          } else {
+            context.go('/login'); // Navigate back to login page
+          }
+        }).catchError((e) {
+          print("Error processing auth redirect: $e");
+          context.go('/login'); // Navigate back to login page
+        });
+        return const CircularProgressIndicator(); // Show a loading page while processing
+      },
+    ),
     ShellRoute(
       builder: (context, state, child) {
         return MainLayout(child: child);

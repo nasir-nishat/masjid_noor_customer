@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_links/app_links.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,11 +24,11 @@ void main() async {
   setPathUrlStrategy();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   await SupabaseDep.impl.initialize();
-  await windowManager.ensureInitialized();
-  if (Platform.isWindows) {
-    WindowManager.instance.setMinimumSize(const Size(390, 844));
-    WindowManager.instance.setMaximumSize(const Size(390, 844));
-  }
+  // if (Platform.isWindows) {
+  // await windowManager.ensureInitialized();
+  //   WindowManager.instance.setMinimumSize(const Size(390, 844));
+  //   WindowManager.instance.setMaximumSize(const Size(390, 844));
+  // }
 
   Get.lazyPut(() => ProductController());
   Get.lazyPut(() => UserController());
@@ -47,6 +48,9 @@ class AnNoorApp extends GetView<AppController> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
+      enableScaleText: () {
+        return true;
+      },
       minTextAdapt: true,
       builder: (_, child) => SafeArea(
         child: GetMaterialApp.router(

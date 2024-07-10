@@ -57,7 +57,10 @@ class HomePage extends GetView<ProductController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: context.textTheme.labelMedium),
+              Text(title,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.textTheme.labelMedium),
               TextButton(
                   onPressed: () {
                     controller.getCategories();
