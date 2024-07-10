@@ -5,6 +5,8 @@ import 'package:flutter_multi_formatter/formatters/phone_input_formatter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
+import 'package:masjid_noor_customer/mgr/models/user_md.dart';
+import 'package:masjid_noor_customer/mgr/services/api_service.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 
 class LoginPage extends StatefulWidget {
@@ -23,6 +25,9 @@ class _LoginPageState extends State<LoginPage> {
   bool phoneNumDone = false;
   PhoneInputFormatter phoneFormatter = PhoneInputFormatter();
   TextEditingController phoneController = TextEditingController();
+
+  String userToken = '';
+  UserMd? usermd;
 
   @override
   void initState() {
@@ -60,6 +65,17 @@ class _LoginPageState extends State<LoginPage> {
       throw 'No ID Token found.';
     }
 
+    setState(() {
+      userToken = idToken;
+      usermd = UserMd(
+        email: googleUser.email,
+        passwordHash: '',
+        phoneNumber: phoneController.text,
+        createdAt: DateTime.now(),
+        firstName: googleUser.displayName?.split(' ')[0],
+        lastName: googleUser.displayName?.split(' ')[1],
+      );
+    });
     return supabase.auth.signInWithIdToken(
       provider: OAuthProvider.google,
       idToken: idToken,
@@ -158,6 +174,13 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: () async {
                               _googleSignIn();
+                              if (usermd != null && userToken.isNotEmpty) {
+                                print("OREEE");
+                                AuthenticationNotifier().login(
+                                  idToken: userToken,
+                                  usermd: usermd!,
+                                );
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,

@@ -3,6 +3,8 @@ import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 
 import '../mgr/dependency/supabase_dep.dart';
+import '../mgr/models/user_md.dart';
+import '../mgr/services/api_service.dart';
 import '../presentation/pages/all_export.dart';
 import '../presentation/pages/user/forgot_pass_page.dart';
 import '../presentation/pages/user/sign_up_page.dart';
@@ -25,10 +27,15 @@ class AuthenticationNotifier {
 
   bool get isLoggedIn => SupabaseDep.impl.currentUser != null;
 
-  Future<Result> login(String email, String password) async {
-    return await SupabaseDep.impl.auth
-        .signInWithPassword(password: password, email: email)
-        .wait();
+  Future<AuthResponse> login(
+      {required String idToken, required UserMd usermd}) async {
+    final res = await SupabaseDep.impl.auth
+        .signInWithIdToken(provider: OAuthProvider.google, idToken: idToken);
+
+    await ApiService().registerUser(usermd);
+    print("DDDDDDDDDDDD");
+    print(res);
+    return res;
   }
 
   Future<Result> logout() async {

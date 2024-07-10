@@ -35,7 +35,7 @@ class ApiService {
   // ===========================
   // ===========================
 
-  Future<UserMd> getUser(int userId) async {
+  Future<UserMd> getUser(String userId) async {
     return _handleRequest(() async {
       final response =
           await _supabaseClient.from('users').select("*").eq('user_id', userId);
