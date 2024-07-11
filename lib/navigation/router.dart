@@ -28,7 +28,9 @@ class AuthenticationNotifier {
   bool get isLoggedIn => SupabaseDep.impl.currentUser != null;
 
   Future<Result> logout() async {
-    return await SupabaseDep.impl.auth.signOut().wait();
+    return await SupabaseDep.impl.auth
+        .signOut(scope: SignOutScope.global)
+        .wait();
   }
 }
 
