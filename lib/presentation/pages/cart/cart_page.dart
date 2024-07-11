@@ -202,7 +202,8 @@ class CartPage extends GetView<CartController> {
     );
   }
 
-  Future<Map?> showDuePaymentDialog(BuildContext context) async {
+  Future<Map<String, String>?> showDuePaymentDialog(
+      BuildContext context) async {
     final phoneController = TextEditingController();
     final nameController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
@@ -212,7 +213,7 @@ class CartPage extends GetView<CartController> {
       filter: {"#": RegExp(r'[0-9]')},
     );
 
-    await showDialog<Map>(
+    final result = await showDialog<Map<String, String>>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -235,7 +236,11 @@ class CartPage extends GetView<CartController> {
                 ),
                 TextFormField(
                   controller: phoneController,
-                  decoration: const InputDecoration(labelText: 'Phone Number'),
+                  decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      prefix: Text('+82 ',
+                          style:
+                              TextStyle(fontSize: 16.sp, color: Colors.black))),
                   inputFormatters: [maskFormatter],
                   keyboardType: TextInputType.phone,
                   validator: (value) {
@@ -252,10 +257,11 @@ class CartPage extends GetView<CartController> {
             TextButton(
               onPressed: () {
                 if (_formKey.currentState?.validate() == true) {
-                  Navigator.of(context).pop({
-                    'phone': phoneController.text,
+                  Map<String, String> data = {
+                    'phone': phoneController.text.removeAllWhitespace,
                     'name': nameController.text,
-                  });
+                  };
+                  Navigator.of(context).pop(data);
                 }
               },
               child: const Text('Submit'),
@@ -264,6 +270,7 @@ class CartPage extends GetView<CartController> {
         );
       },
     );
-    return null;
+
+    return result;
   }
 }
