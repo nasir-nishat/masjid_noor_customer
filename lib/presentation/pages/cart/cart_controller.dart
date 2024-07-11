@@ -1,6 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
 import 'package:masjid_noor_customer/mgr/models/cart_md.dart';
+import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:masjid_noor_customer/mgr/models/product_md.dart';
+import 'package:masjid_noor_customer/navigation/router.dart';
 
 class CartController extends GetxController {
   static CartController get to {
@@ -11,6 +16,11 @@ class CartController extends GetxController {
   }
 
   var cartItems = <CartMd>[].obs;
+  PaymentMethod? paymentMethod;
+
+  int get totalProdCount {
+    return cartItems.fold(0, (total, cartItem) => total + cartItem.quantity);
+  }
 
   double? get totalPrice =>
       double.tryParse(calculateTotalPrice().toStringAsFixed(2));
@@ -50,4 +60,6 @@ class CartController extends GetxController {
   double calculateTotalPrice() {
     return cartItems.fold(0, (total, cartItem) => total + cartItem.totalPrice);
   }
+
+  void processOrder() {}
 }

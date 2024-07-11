@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
+import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
+import 'package:masjid_noor_customer/presentation/widgets/cart_icon_count.dart';
 
 class HomePage extends GetView<ProductController> {
   HomePage({super.key});
@@ -22,7 +24,10 @@ class HomePage extends GetView<ProductController> {
                     onPressed: () {
                       context.push(Routes.cart);
                     },
-                    icon: const Icon(Icons.shopping_cart_outlined),
+                    icon: CartIconCount(
+                      count: CartController.to.totalProdCount,
+                      removeBg: true,
+                    ),
                   ),
                 ],
               ),

@@ -54,6 +54,7 @@ class AnNoorApp extends GetView<AppController> {
       minTextAdapt: true,
       builder: (_, child) => SafeArea(
         child: GetMaterialApp.router(
+          debugShowCheckedModeBanner: false,
           theme: AppTheme.defaultTheme,
           routeInformationParser: goRouter.routeInformationParser,
           routeInformationProvider: goRouter.routeInformationProvider,

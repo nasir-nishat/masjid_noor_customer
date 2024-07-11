@@ -19,7 +19,6 @@ class ProductController extends GetxController {
 
   int pageSize = 10;
   RxInt currentPage = 1.obs;
-  RxInt totalProduct = 0.obs;
   Rx<Filter> selectedFilter = Filter(type: '', value: '').obs;
 
   @override
