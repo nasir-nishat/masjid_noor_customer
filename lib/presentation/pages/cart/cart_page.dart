@@ -126,26 +126,8 @@ class CartPage extends GetView<CartController> {
                   ),
                   SizedBox(height: 10.h),
                   ElevatedButton(
-                    onPressed: () async {
-                      if (SupabaseDep.impl.currentUser == null) {
-                        context.push(Routes.login);
-                        return;
-                      }
-                      final paymentMethod = await showPaymentDialog(context);
-                      if (paymentMethod != null) {
-                        if (paymentMethod == PaymentMethod.due) {
-                          final dueInfo = await showDuePaymentDialog(context);
-                          print(dueInfo);
-                          // if (dueInfo != null) {
-                          // controller.paymentMethod = paymentMethod;
-                          // controller.userPhone = dueInfo['phone'];
-                          // controller.kakaoId = dueInfo['kakaoId'];
-                          // controller.facebookId = dueInfo['facebookId'];
-                          // }
-                        } else {
-                          controller.paymentMethod = paymentMethod;
-                        }
-                      }
+                    onPressed: () {
+                      _paymentFunc(context);
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -166,6 +148,20 @@ class CartPage extends GetView<CartController> {
         );
       }),
     );
+  }
+
+  _paymentFunc(BuildContext context) async {
+    if (SupabaseDep.impl.currentUser == null) {
+      context.push(Routes.login);
+      return;
+    }
+    final paymentMethod = await showPaymentDialog(context);
+    if (paymentMethod != null) {
+      controller.paymentMethod = paymentMethod;
+      if (paymentMethod == PaymentMethod.due) {
+        final dueInfo = await showDuePaymentDialog(context);
+      } else {}
+    }
   }
 
   Future<PaymentMethod?> showPaymentDialog(BuildContext context) {
