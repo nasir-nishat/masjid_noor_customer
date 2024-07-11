@@ -17,22 +17,21 @@ import 'package:masjid_noor_customer/presentation/theme/app_theme.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'mgr/dependency/supabase_dep.dart';
+import 'mgr/models/user_md.dart';
 import 'navigation/router.dart';
 
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('user_box'); // Open Hive box for storing user data
+  Hive.registerAdapter(UserMdAdapter());
+  await Hive.openBox<UserMd>('user_box');
+
   setPathUrlStrategy();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   await SupabaseDep.impl.initialize();
-  // if (Platform.isWindows) {
-  // await windowManager.ensureInitialized();
-  //   WindowManager.instance.setMinimumSize(const Size(390, 844));
-  //   WindowManager.instance.setMaximumSize(const Size(390, 844));
-  // }
 
   Get.lazyPut(() => UserController());
   Get.lazyPut(() => ProductController());

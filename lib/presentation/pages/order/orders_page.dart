@@ -6,6 +6,19 @@ class OrdersPage extends GetView<OrderController> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+        body: Obx(
+      () => ListView.builder(
+        itemCount: controller.orderList.length,
+        itemBuilder: (context, index) {
+          final payment = controller.orderList[index];
+          return ListTile(
+            title: Text(payment.name),
+            subtitle: Text(payment.description),
+            trailing: Text(payment.price.toString()),
+          );
+        },
+      ),
+    ));
   }
 }

@@ -9,4 +9,12 @@ class OrderController extends GetxController {
   }
 
   var orderList = [].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchOrders();
+  }
+
+  fetchOrders() async {}
 }

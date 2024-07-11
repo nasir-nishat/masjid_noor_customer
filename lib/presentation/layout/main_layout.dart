@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
 import 'package:masjid_noor_customer/navigation/router.dart';
+import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';
 import 'package:masjid_noor_customer/presentation/widgets/header.dart';
 import 'package:masjid_noor_customer/presentation/widgets/main_side_bar.dart';
 
@@ -60,7 +61,7 @@ class _MainLayoutState extends State<MainLayout> {
     if (location.startsWith(Routes.search)) {
       return 1;
     }
-    if (location.startsWith(Routes.profile) && loggedIn) {
+    if ((location == Routes.profile) && loggedIn) {
       return 2;
     }
     return 0;
@@ -81,6 +82,7 @@ class _MainLayoutState extends State<MainLayout> {
       case 2:
         if (currentRoute != Routes.profile) {
           if (loggedIn) {
+            UserController.to.fetchUser();
             context.go(Routes.profile);
           } else {
             context.push(Routes.login);
@@ -91,11 +93,13 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   bool showBottomNav() {
-    if (currentRoute.contains(Routes.home)) {
+    if (currentRoute.contains(Routes.orders)) {
+      return false;
+    } else if (currentRoute.contains(Routes.home)) {
       return true;
     } else if (currentRoute.contains(Routes.search)) {
       return true;
-    } else if (currentRoute.contains(Routes.profile)) {
+    } else if (currentRoute == Routes.profile && loggedIn) {
       return true;
     }
     return false;

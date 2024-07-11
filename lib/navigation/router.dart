@@ -3,6 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
+import 'package:masjid_noor_customer/presentation/pages/order/orders_page.dart';
 import '../mgr/dependency/supabase_dep.dart';
 import '../mgr/models/user_md.dart';
 import '../mgr/services/api_service.dart';
@@ -21,13 +22,19 @@ class AuthenticationNotifier {
 
   static AuthenticationNotifier get instance => _authenticationNotifier;
 
-  final Box _userBox = Hive.box('user_box'); // Hive box instance
+  final Box<UserMd> _userBox = Hive.box<UserMd>('user_box');
 
   Stream<AuthState> get userStream => SupabaseDep.impl.auth.onAuthStateChange;
 
   bool get isLoggedIn => SupabaseDep.impl.currentUser != null;
 
-  UserMd? usermd;
+  UserMd? get usermd => _userBox.get('user');
+
+  set usermd(UserMd? user) {
+    if (user != null) {
+      _userBox.put('user', user);
+    }
+  }
 
   Future<Result> logout() async {
     return await SupabaseDep.impl.auth
@@ -78,21 +85,9 @@ class AuthenticationNotifier {
       profilePic: authResponse.user!.userMetadata!["avatar_url"],
     );
 
-    // Register or update the user in your database
-    usermd = await ApiService().registerUser(usermd!);
-
-    // Save user data to Hive
-    _userBox.put('user', usermd?.toJson());
+    _userBox.put('user', usermd!);
 
     return authResponse;
-  }
-
-  UserMd? getUser() {
-    final userData = _userBox.get('user');
-    if (userData != null) {
-      return UserMd.fromJson(userData);
-    }
-    return null;
   }
 }
 
@@ -129,12 +124,20 @@ final GoRouter goRouter = GoRouter(
         GoRoute(
           path: Routes.profile,
           pageBuilder: (context, state) {
-            return NoTransitionPage(
+            return const NoTransitionPage(
               child: ProfilePage(),
             );
           },
         ),
       ],
+    ),
+    GoRoute(
+      path: Routes.orders,
+      pageBuilder: (context, state) {
+        return const NoTransitionPage(
+          child: OrdersPage(),
+        );
+      },
     ),
     GoRoute(
       path: Routes.cart,
@@ -212,7 +215,7 @@ abstract class Routes {
   static const category = '/category';
   static const products = '/products';
   static const productDetails = '/product/details';
-  static const order = '/order';
+  static const orders = '/profile/orders';
   static const payment = '/payment';
   static const inventory = '/inventory';
   static const profile = '/profile';
@@ -227,7 +230,7 @@ abstract class Routes {
   static const all = {
     login,
     inventory,
-    order,
+    orders,
     home,
     products,
     productDetails,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
+import 'package:masjid_noor_customer/mgr/models/user_md.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';
 
@@ -88,11 +90,12 @@ class _LoginPageState extends State<LoginPage> {
                                 .googleSignIn();
 
                             if (auth.user != null) {
-                              final user =
-                                  AuthenticationNotifier.instance.getUser();
-                              if (user != null) {
-                                UserController.to.user = user;
-                              }
+                              UserMd user = Hive.box<UserMd>('user_box')
+                                  .values
+                                  .toList()
+                                  .first;
+                              //update controller
+
                               context.go(Routes.home);
                             } else {
                               showSnackBar(context, 'Failed to sign in');
