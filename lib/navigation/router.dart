@@ -1,17 +1,15 @@
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive/hive.dart';
 import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
-
 import '../mgr/dependency/supabase_dep.dart';
 import '../mgr/models/user_md.dart';
 import '../mgr/services/api_service.dart';
 import '../presentation/pages/all_export.dart';
-import '../presentation/pages/user/forgot_pass_page.dart';
-import '../presentation/pages/user/sign_up_page.dart';
 import '../presentation/utills/extensions.dart';
 
 class AuthenticationNotifier {
-  //Create a singleton
   static final AuthenticationNotifier _authenticationNotifier =
       AuthenticationNotifier._internal();
 
@@ -23,14 +21,78 @@ class AuthenticationNotifier {
 
   static AuthenticationNotifier get instance => _authenticationNotifier;
 
+  final Box _userBox = Hive.box('user_box'); // Hive box instance
+
   Stream<AuthState> get userStream => SupabaseDep.impl.auth.onAuthStateChange;
 
   bool get isLoggedIn => SupabaseDep.impl.currentUser != null;
+
+  UserMd? usermd;
 
   Future<Result> logout() async {
     return await SupabaseDep.impl.auth
         .signOut(scope: SignOutScope.global)
         .wait();
+  }
+
+  Future<AuthResponse> googleSignIn() async {
+    const webClientId = GOOGLE_WEB_CLIENT_ID;
+    const iosClientId = 'my-ios.apps.googleusercontent.com';
+
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      clientId: iosClientId,
+      serverClientId: webClientId,
+    );
+    final googleUser = await googleSignIn.signIn();
+    final googleAuth = await googleUser!.authentication;
+    final accessToken = googleAuth.accessToken;
+    final idToken = googleAuth.idToken;
+
+    if (accessToken == null) {
+      throw 'No Access Token found.';
+    }
+    if (idToken == null) {
+      throw 'No ID Token found.';
+    }
+
+    final authResponse = await SupabaseDep.impl.auth.signInWithIdToken(
+      provider: OAuthProvider.google,
+      idToken: idToken,
+      accessToken: accessToken,
+    );
+
+    usermd = UserMd(
+      userId: authResponse.user!.id,
+      email: authResponse.user!.userMetadata!["email"],
+      passwordHash: '',
+      phoneNumber: '', // Initially empty, can be updated later
+      createdAt: DateTime.now(),
+      firstName: authResponse.user!.userMetadata!["full_name"]
+          .toString()
+          .split(' ')[0],
+      lastName: authResponse.user!.userMetadata!["full_name"]
+          .toString()
+          .split(' ')[1],
+      username:
+          authResponse.user!.userMetadata!["email"].toString().split('@')[0],
+      profilePic: authResponse.user!.userMetadata!["avatar_url"],
+    );
+
+    // Register or update the user in your database
+    usermd = await ApiService().registerUser(usermd!);
+
+    // Save user data to Hive
+    _userBox.put('user', usermd?.toJson());
+
+    return authResponse;
+  }
+
+  UserMd? getUser() {
+    final userData = _userBox.get('user');
+    if (userData != null) {
+      return UserMd.fromJson(userData);
+    }
+    return null;
   }
 }
 
@@ -67,7 +129,7 @@ final GoRouter goRouter = GoRouter(
         GoRoute(
           path: Routes.profile,
           pageBuilder: (context, state) {
-            return const NoTransitionPage(
+            return NoTransitionPage(
               child: ProfilePage(),
             );
           },
@@ -97,22 +159,6 @@ final GoRouter goRouter = GoRouter(
         return NoTransitionPage(
           child: ProductDetailsPage(
               id: ext['id'], parentRoute: ext['parentRoute']),
-        );
-      },
-    ),
-    GoRoute(
-      path: Routes.signup,
-      pageBuilder: (context, state) {
-        return NoTransitionPage(
-          child: SignupPage(),
-        );
-      },
-    ),
-    GoRoute(
-      path: Routes.forgotPassword,
-      pageBuilder: (context, state) {
-        return NoTransitionPage(
-          child: ForgotPasswordPage(),
         );
       },
     ),

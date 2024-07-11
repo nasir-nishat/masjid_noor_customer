@@ -1,4 +1,7 @@
 import 'package:get/get.dart';
+import 'package:masjid_noor_customer/mgr/models/user_md.dart';
+import 'package:masjid_noor_customer/mgr/services/api_service.dart';
+import 'package:masjid_noor_customer/navigation/router.dart';
 
 class UserController extends GetxController {
   static UserController get to {
@@ -8,43 +11,22 @@ class UserController extends GetxController {
     return Get.find<UserController>();
   }
 
-  var userName = ''.obs;
-  var userEmail = ''.obs;
-  var userPhone = ''.obs;
+  late UserMd user;
 
   @override
   void onInit() {
     super.onInit();
-    fetchUserProfile();
+    final savedUser = AuthenticationNotifier.instance.getUser();
+    if (savedUser != null) {
+      user = savedUser;
+    } else {
+      user = UserMd(email: "", phoneNumber: "", createdAt: DateTime.now());
+    }
   }
 
-  void fetchUserProfile() {
-    // Fetch user data from the API or local storage
-    // Simulating with dummy data
-    userName.value = 'John Doe';
-    userEmail.value = 'john.doe@example.com';
-    userPhone.value = '+1234567890';
-  }
-
-  void updateUserProfile(String name, String email, String phone) {
-    // Call API to update user profile
-    userName.value = name;
-    userEmail.value = email;
-    userPhone.value = phone;
-  }
-
-  Future<void> signup(
-      String name, String email, String password, String phone) async {
-    // Call API to register user
-    // Simulating with dummy data
-    userName.value = name;
-    userEmail.value = email;
-    userPhone.value = phone;
-    // Handle response and errors
-  }
-
-  Future<void> resetPassword(String email) async {
-    // Call API to send password reset email
-    // Handle response and errors
+  void updatePhoneNumber(String phoneNumber) async {
+    await ApiService().updateUserPhoneNumber(phoneNumber);
+    user.phoneNumber = phoneNumber;
+    update();
   }
 }

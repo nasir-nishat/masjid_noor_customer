@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/order_controller.dart';
@@ -21,6 +23,8 @@ import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('user_box'); // Open Hive box for storing user data
   setPathUrlStrategy();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   await SupabaseDep.impl.initialize();
@@ -30,8 +34,8 @@ void main() async {
   //   WindowManager.instance.setMaximumSize(const Size(390, 844));
   // }
 
-  Get.lazyPut(() => ProductController());
   Get.lazyPut(() => UserController());
+  Get.lazyPut(() => ProductController());
   Get.lazyPut(() => CartController());
   Get.lazyPut(() => OrderController());
   Get.lazyPut(() => AppController());

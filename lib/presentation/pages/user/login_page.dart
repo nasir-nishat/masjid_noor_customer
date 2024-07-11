@@ -1,12 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
-
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
-import 'package:masjid_noor_customer/mgr/models/user_md.dart';
-import 'package:masjid_noor_customer/mgr/services/api_service.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,13 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final supabase = Supabase.instance.client;
-
-  // bool phoneNumDone = false;
   TextEditingController phoneController = TextEditingController();
-
-  String userToken = '';
-  UserMd? usermd;
 
   @override
   void dispose() {
@@ -87,39 +76,29 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 10.0),
-                      // _phoneNumberSec(),
                       ElevatedButton.icon(
                         icon: Image.asset(
                           'assets/google_logo.png',
                           width: 24,
                         ),
                         onPressed: () async {
-                          AuthResponse auth = await _googleSignIn();
+                          try {
+                            AuthResponse auth = await AuthenticationNotifier
+                                .instance
+                                .googleSignIn();
 
-                          usermd = UserMd(
-                            userId: auth.user!.id,
-                            email: auth.user!.userMetadata!["email"],
-                            passwordHash: '',
-                            phoneNumber: phoneController.text,
-                            createdAt: DateTime.now(),
-                            firstName: auth.user!.userMetadata!["full_name"]
-                                .toString()
-                                .split(' ')[0],
-                            lastName: auth.user!.userMetadata!["full_name"]
-                                .toString()
-                                .split(' ')[1],
-                            username: auth.user!.userMetadata!["email"]
-                                .toString()
-                                .split('@')[0],
-                            profilePic: auth.user!.userMetadata!["avatar_url"],
-                          );
-
-                          UserMd user =
-                              await ApiService().registerUser(usermd!);
-                          if (user.userId != null && user.userId!.isNotEmpty) {
-                            context.go(Routes.home);
-                          } else {
-                            showSnackBar(context, 'Failed to register user');
+                            if (auth.user != null) {
+                              final user =
+                                  AuthenticationNotifier.instance.getUser();
+                              if (user != null) {
+                                UserController.to.user = user;
+                              }
+                              context.go(Routes.home);
+                            } else {
+                              showSnackBar(context, 'Failed to sign in');
+                            }
+                          } catch (e) {
+                            showSnackBar(context, 'Error: $e');
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -144,69 +123,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _phoneNumberSec() {
-    return SpacedColumn(children: [
-      TextFormField(
-        keyboardType: TextInputType.phone,
-        controller: phoneController,
-        decoration: InputDecoration(
-          labelText: 'Phone number',
-          hintText: '010 0000 0000',
-          prefix: Text('+82 ',
-              style: TextStyle(fontSize: 16.sp, color: Colors.black)),
-        ),
-        inputFormatters: [
-          MaskTextInputFormatter(
-              mask: '### #### ####', filter: {"#": RegExp(r'[0-9]')})
-        ],
-      ),
-      const SizedBox(height: 10.0),
-      ElevatedButton(
-          onPressed: () {
-            if (phoneController.text.isEmpty ||
-                phoneController.text.length != 13) {
-              return showSnackBar(context, 'Invalid phone number');
-            }
-            setState(() {
-              // phoneNumDone = true;
-            });
-          },
-          child: const Text('Next')),
-    ]);
-  }
-
-  Future<AuthResponse> _googleSignIn() async {
-    const webClientId = GOOGLE_WEB_CLIENT_ID;
-
-    const iosClientId = 'my-ios.apps.googleusercontent.com';
-
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId: iosClientId,
-      serverClientId: webClientId,
-    );
-    final googleUser = await googleSignIn.signIn();
-    final googleAuth = await googleUser!.authentication;
-    final accessToken = googleAuth.accessToken;
-    final idToken = googleAuth.idToken;
-
-    if (accessToken == null) {
-      throw 'No Access Token found.';
-    }
-    if (idToken == null) {
-      throw 'No ID Token found.';
-    }
-
-    setState(() {
-      userToken = idToken;
-    });
-
-    return supabase.auth.signInWithIdToken(
-      provider: OAuthProvider.google,
-      idToken: idToken,
-      accessToken: accessToken,
     );
   }
 }

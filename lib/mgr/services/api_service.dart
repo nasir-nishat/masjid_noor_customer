@@ -66,6 +66,17 @@ class ApiService {
     });
   }
 
+  Future<bool> updateUserPhoneNumber(String phoneNumber) async {
+    return _handleRequest(() async {
+      final response = await _supabaseClient
+          .from('users')
+          .update({'phone_number': phoneNumber}).eq(
+              'user_id', SupabaseDep.impl.supabase.auth.currentUser!.id);
+
+      return response.isNotEmpty;
+    });
+  }
+
   // ===========================
   // ===========================
   // Categories CRUD operations
