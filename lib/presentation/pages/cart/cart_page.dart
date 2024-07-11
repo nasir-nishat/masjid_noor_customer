@@ -83,7 +83,6 @@ class CartPage extends GetView<CartController> {
                   ),
                 ),
               ),
-            const Spacer(),
             Container(
               padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
               decoration: BoxDecoration(
