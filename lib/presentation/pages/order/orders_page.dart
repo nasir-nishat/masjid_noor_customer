@@ -1,4 +1,6 @@
-import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:masjid_noor_customer/mgr/models/order_md.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/order_controller.dart';
 
 class OrdersPage extends GetView<OrderController> {
@@ -7,18 +9,56 @@ class OrdersPage extends GetView<OrderController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Obx(
-      () => ListView.builder(
-        itemCount: controller.orderList.length,
-        itemBuilder: (context, index) {
-          final payment = controller.orderList[index];
-          return ListTile(
-            title: Text(payment.name),
-            subtitle: Text(payment.description),
-            trailing: Text(payment.price.toString()),
-          );
-        },
+      appBar: AppBar(title: const Text('Orders')),
+      body: Obx(
+        () => ListView.builder(
+          itemCount: controller.orderList.length,
+          itemBuilder: (context, index) {
+            final order = controller.orderList[index];
+            return ListTile(
+              title: Text('Order #${order.id}'),
+              subtitle: Text(
+                  'Total Amount: \$${order.totalAmount.toStringAsFixed(2)}'),
+              onTap: () => _showOrderDetailsDialog(context, order),
+            );
+          },
+        ),
       ),
-    ));
+    );
+  }
+
+  void _showOrderDetailsDialog(BuildContext context, OrderDetails order) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Order #${order.id}'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Contact Number: ${order.contactNumber}'),
+                Text('Status: ${order.status}'),
+                Text('Note: ${order.note}'),
+                const SizedBox(height: 10),
+                const Text('Items:',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                ...order.items.map((item) => ListTile(
+                      title: Text('Product ID: ${item.productId}'),
+                      subtitle: Text(
+                          'Quantity: ${item.quantity}, Unit Price: \$${item.unitPrice}, Total: \$${item.totalPrice}'),
+                    )),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

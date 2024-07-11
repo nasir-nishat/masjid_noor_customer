@@ -12,11 +12,6 @@ class OrderDetailsPage extends GetView<OrderController> {
         itemCount: controller.orderList.length,
         itemBuilder: (context, index) {
           final payment = controller.orderList[index];
-          return ListTile(
-            title: Text(payment.name),
-            subtitle: Text(payment.description),
-            trailing: Text(payment.price.toString()),
-          );
         },
       ),
     );
