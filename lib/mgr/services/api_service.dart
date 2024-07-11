@@ -35,19 +35,22 @@ class ApiService {
   // ===========================
   // ===========================
 
-  Future<UserMd> getUser(String userId) async {
+  Future<UserMd?> getUser(String userId) async {
     return _handleRequest(() async {
       final response =
           await _supabaseClient.from('users').select("*").eq('user_id', userId);
 
-      return UserMd.fromJson(response[0]);
+      return response.isEmpty ? null : UserMd.fromJson(response[0]);
     });
   }
 
-  //register
   Future<UserMd> registerUser(UserMd user) async {
+    final existingUser = await getUser(user.userId!);
+    if (existingUser != null) return existingUser;
+
     return _handleRequest(() async {
       final response = await _supabaseClient.from('users').insert({
+        'user_id': user.userId,
         'email': user.email,
         'password_hash': user.passwordHash,
         'first_name': user.firstName,
@@ -55,6 +58,8 @@ class ApiService {
         'is_admin': false,
         'phone_number': user.phoneNumber,
         'username': user.username,
+        'profile_pic': user.profilePic,
+        'created_at': DateTime.now().toIso8601String(),
       }).select();
 
       return UserMd.fromJson(response[0]);

@@ -27,17 +27,6 @@ class AuthenticationNotifier {
 
   bool get isLoggedIn => SupabaseDep.impl.currentUser != null;
 
-  Future<AuthResponse> login(
-      {required String idToken, required UserMd usermd}) async {
-    final res = await SupabaseDep.impl.auth
-        .signInWithIdToken(provider: OAuthProvider.google, idToken: idToken);
-
-    await ApiService().registerUser(usermd);
-    print("DDDDDDDDDDDD");
-    print(res);
-    return res;
-  }
-
   Future<Result> logout() async {
     return await SupabaseDep.impl.auth.signOut().wait();
   }
@@ -262,7 +251,7 @@ abstract class Routes {
 }
 
 void showSnackBar(BuildContext context, String message,
-    {Duration duration = const Duration(seconds: 4)}) {
+    {Duration duration = const Duration(milliseconds: 300)}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(message),
