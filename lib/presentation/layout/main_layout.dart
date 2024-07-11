@@ -19,7 +19,7 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  bool loggedIn = false;
+  bool get loggedIn => SupabaseDep.impl.auth.currentUser != null;
 
   String get currentRoute =>
       GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
@@ -56,18 +56,17 @@ class _MainLayoutState extends State<MainLayout> {
 
   int _getSelectedIndex(BuildContext context) {
     final String location = currentRoute;
+    print("location: $location");
     if (location.startsWith(Routes.search)) {
       return 1;
     }
-    if (location.startsWith(Routes.profile)) {
-      // return 3;
+    if (location.startsWith(Routes.profile) && loggedIn) {
       return 2;
     }
     return 0;
   }
 
   void _onItemTapped(int index, BuildContext context) {
-    // Router.neglect(context, () {
     switch (index) {
       case 0:
         if (currentRoute != Routes.home) {
@@ -81,7 +80,6 @@ class _MainLayoutState extends State<MainLayout> {
         break;
       case 2:
         if (currentRoute != Routes.profile) {
-          // context.go(Routes.profile);
           if (loggedIn) {
             context.go(Routes.profile);
           } else {
@@ -90,7 +88,6 @@ class _MainLayoutState extends State<MainLayout> {
         }
         break;
     }
-    // });
   }
 
   bool showBottomNav() {

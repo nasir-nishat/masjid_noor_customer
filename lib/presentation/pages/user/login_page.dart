@@ -17,32 +17,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final supabase = Supabase.instance.client;
-  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
-  bool isLoading = false;
-  String errorMessage = '';
-  bool phoneNumDone = false;
+  // bool phoneNumDone = false;
   TextEditingController phoneController = TextEditingController();
 
   String userToken = '';
   UserMd? usermd;
-
-  bool isBtnEnabled = false;
-
-  @override
-  void initState() {
-    // _setupAuthListener();
-    super.initState();
-  }
-
-  void _setupAuthListener() {
-    supabase.auth.onAuthStateChange.listen((data) {
-      final event = data.event;
-      if (event == AuthChangeEvent.signedIn) {
-        Routes.goToHomePage(context);
-      }
-    });
-  }
 
   @override
   void dispose() {
@@ -93,106 +73,69 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(20.0),
-                  child: Form(
-                    key: loginFormKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const Text(
-                          'Login',
-                          style: TextStyle(fontSize: 30.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        'Login',
+                        style: TextStyle(fontSize: 30.0),
+                      ),
+                      const SizedBox(height: 10.0),
+                      const Text(
+                        "السلام عليكم و رحمة الله و بركاته\n",
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                      const SizedBox(height: 10.0),
+                      // _phoneNumberSec(),
+                      ElevatedButton.icon(
+                        icon: Image.asset(
+                          'assets/google_logo.png',
+                          width: 24,
                         ),
-                        const SizedBox(height: 10.0),
-                        const Text(
-                          "السلام عليكم و رحمة الله و بركاته\n",
-                          style: TextStyle(fontSize: 18.0),
+                        onPressed: () async {
+                          AuthResponse auth = await _googleSignIn();
+
+                          usermd = UserMd(
+                            userId: auth.user!.id,
+                            email: auth.user!.userMetadata!["email"],
+                            passwordHash: '',
+                            phoneNumber: phoneController.text,
+                            createdAt: DateTime.now(),
+                            firstName: auth.user!.userMetadata!["full_name"]
+                                .toString()
+                                .split(' ')[0],
+                            lastName: auth.user!.userMetadata!["full_name"]
+                                .toString()
+                                .split(' ')[1],
+                            username: auth.user!.userMetadata!["email"]
+                                .toString()
+                                .split('@')[0],
+                            profilePic: auth.user!.userMetadata!["avatar_url"],
+                          );
+
+                          UserMd user =
+                              await ApiService().registerUser(usermd!);
+                          if (user.userId != null && user.userId!.isNotEmpty) {
+                            context.go(Routes.home);
+                          } else {
+                            showSnackBar(context, 'Failed to register user');
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          elevation: 0,
+                          foregroundColor: Colors.black,
+                          minimumSize: const Size(326, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            side:
+                                const BorderSide(color: Colors.black, width: 1),
+                          ),
                         ),
-                        const SizedBox(height: 10.0),
-                        if (!phoneNumDone)
-                          TextFormField(
-                            keyboardType: TextInputType.phone,
-                            controller: phoneController,
-                            decoration: InputDecoration(
-                              labelText: 'Phone number',
-                              hintText: '010 0000 0000',
-                              prefix: Text('+82 ',
-                                  style: TextStyle(
-                                      fontSize: 16.sp, color: Colors.black)),
-                            ),
-                            inputFormatters: [
-                              MaskTextInputFormatter(
-                                  mask: '### #### ####',
-                                  filter: {"#": RegExp(r'[0-9]')})
-                            ],
-                          ),
-                        if (!phoneNumDone) const SizedBox(height: 10.0),
-                        if (!phoneNumDone)
-                          ElevatedButton(
-                              onPressed: () {
-                                if (phoneController.text.isEmpty ||
-                                    phoneController.text.length != 13) {
-                                  return showSnackBar(
-                                      context, 'Invalid phone number');
-                                }
-                                setState(() {
-                                  phoneNumDone = true;
-                                });
-                              },
-                              child: const Text('Next')),
-                        if (phoneNumDone)
-                          ElevatedButton.icon(
-                            icon: Image.asset(
-                              'assets/google_logo.png',
-                              width: 24,
-                            ),
-                            onPressed: () async {
-                              AuthResponse auth = await _googleSignIn();
-
-                              usermd = UserMd(
-                                userId: auth.user!.id,
-                                email: auth.user!.userMetadata!["email"],
-                                passwordHash: '',
-                                phoneNumber: phoneController.text,
-                                createdAt: DateTime.now(),
-                                firstName: auth.user!.userMetadata!["full_name"]
-                                    .toString()
-                                    .split(' ')[0],
-                                lastName: auth.user!.userMetadata!["full_name"]
-                                    .toString()
-                                    .split(' ')[1],
-                                username: auth.user!.userMetadata!["email"]
-                                    .toString()
-                                    .split('@')[0],
-                                profilePic:
-                                    auth.user!.userMetadata!["avatar_url"],
-                              );
-
-                              UserMd user =
-                                  await ApiService().registerUser(usermd!);
-                              if (user.userId != null &&
-                                  user.userId!.isNotEmpty) {
-                                context.go(Routes.home);
-                              } else {
-                                showSnackBar(
-                                    context, 'Failed to register user');
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              elevation: 0,
-                              foregroundColor: Colors.black,
-                              minimumSize: const Size(326, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                                side: const BorderSide(
-                                    color: Colors.black, width: 1),
-                              ),
-                            ),
-                            label: const Text('Log in with Gmail'),
-                          ),
-                      ],
-                    ),
+                        label: const Text('Log in with Gmail'),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -202,6 +145,37 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Widget _phoneNumberSec() {
+    return SpacedColumn(children: [
+      TextFormField(
+        keyboardType: TextInputType.phone,
+        controller: phoneController,
+        decoration: InputDecoration(
+          labelText: 'Phone number',
+          hintText: '010 0000 0000',
+          prefix: Text('+82 ',
+              style: TextStyle(fontSize: 16.sp, color: Colors.black)),
+        ),
+        inputFormatters: [
+          MaskTextInputFormatter(
+              mask: '### #### ####', filter: {"#": RegExp(r'[0-9]')})
+        ],
+      ),
+      const SizedBox(height: 10.0),
+      ElevatedButton(
+          onPressed: () {
+            if (phoneController.text.isEmpty ||
+                phoneController.text.length != 13) {
+              return showSnackBar(context, 'Invalid phone number');
+            }
+            setState(() {
+              // phoneNumDone = true;
+            });
+          },
+          child: const Text('Next')),
+    ]);
   }
 
   Future<AuthResponse> _googleSignIn() async {
