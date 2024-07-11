@@ -1,7 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 
 // Enum for order status types
-enum OrderStatusType {
+enum OrderStatus {
   pending,
   processing,
   shipped,
@@ -9,16 +9,15 @@ enum OrderStatusType {
   cancelled,
 }
 
-// Extension to parse string to OrderStatusType enum
-extension ParseToString on OrderStatusType {
+extension OrderStatusParseToString on OrderStatus {
   String toShortString() {
     return toString().split('.').last;
   }
 
-  static OrderStatusType fromString(String status) {
-    return OrderStatusType.values.firstWhere(
+  static OrderStatus fromString(String status) {
+    return OrderStatus.values.firstWhere(
       (e) => e.toShortString() == status,
-      orElse: () => OrderStatusType.pending,
+      orElse: () => OrderStatus.pending,
     );
   }
 }
@@ -31,6 +30,9 @@ class OrderDetails {
   final String note;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final PaymentMethod paymentType;
+  final OrderStatus orderStatus;
+  final String userId;
   final List<OrderItemDetails> items;
 
   OrderDetails({
@@ -42,6 +44,9 @@ class OrderDetails {
     required this.createdAt,
     required this.updatedAt,
     required this.items,
+    required this.paymentType,
+    required this.orderStatus,
+    required this.userId,
   });
 
   factory OrderDetails.fromJson(Map<String, dynamic> json) {
@@ -53,15 +58,25 @@ class OrderDetails {
       note: json['note'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
-      items: (json['items'] as List)
-          .map((item) => OrderItemDetails.fromJson(item))
-          .toList(),
+      // items: (json['items'] as List)
+      //     .map((e) => OrderItemDetails.fromJson(e))
+      //     .toList(),
+      items: (json['order_items'] as List?)
+              ?.map((e) => OrderItemDetails.fromJson(e))
+              .toList() ??
+          [],
+
+      orderStatus: OrderStatusParseToString.fromString(json['order_status']),
+      paymentType:
+          PaymentMethodParseToString.fromString(json['payment_type'] ?? 'cash'),
+      userId: json['user_id'],
     );
   }
 }
 
 class OrderItemDetails {
   final int id;
+  final int orderId;
   final int productId;
   final int quantity;
   final double unitPrice;
@@ -69,6 +84,7 @@ class OrderItemDetails {
 
   OrderItemDetails({
     required this.id,
+    required this.orderId,
     required this.productId,
     required this.quantity,
     required this.unitPrice,
@@ -78,10 +94,22 @@ class OrderItemDetails {
   factory OrderItemDetails.fromJson(Map<String, dynamic> json) {
     return OrderItemDetails(
       id: json['id'],
+      orderId: json['order_id'],
       productId: json['product_id'],
       quantity: json['quantity'],
-      unitPrice: json['unit_price'],
-      totalPrice: json['total_price'],
+      unitPrice: double.parse(json['unit_price'].toString()),
+      totalPrice: double.parse(json['total_price'].toString()),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'order_id': orderId,
+      'product_id': productId,
+      'quantity': quantity,
+      'unit_price': unitPrice,
+      'total_price': totalPrice,
+    };
   }
 }

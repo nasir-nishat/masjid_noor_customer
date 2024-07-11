@@ -206,6 +206,7 @@ class ApiService {
     required String contactNumber,
     required String userId,
     required String note,
+    required PaymentMethod paymentMethod,
   }) async {
     final totalAmount = cartItems.fold<double>(
       0.0,
@@ -221,6 +222,9 @@ class ApiService {
             'total_amount': totalAmount,
             'status': 'pending',
             'note': note,
+            'user_id': userId,
+            'order_status': 'pending',
+            'payment_method': paymentMethod.toShortString(),
           })
           .select()
           .single();
@@ -238,12 +242,6 @@ class ApiService {
         });
       }
 
-      // // Link order to user in user_orders table
-      // await _supabaseClient.from('user_orders').insert({
-      //   'order_id': orderId,
-      //   'user_id': userId,
-      // });
-
       // Fetch order details and items
       final orderDetailsResponse = await _supabaseClient
           .from('orders')
@@ -257,6 +255,19 @@ class ApiService {
       print('Error placing order: $error');
       return null;
     }
+  }
+
+  Future<List<OrderDetails>> getUserOrders(String userId) async {
+    final orderDetailsResponse = await _supabaseClient
+        .from('orders')
+        .select('*, order_items(*)')
+        .eq('user_id', userId);
+
+    List<OrderDetails> orders = (orderDetailsResponse as List)
+        .map((order) => OrderDetails.fromJson(order))
+        .toList();
+
+    return orders;
   }
 
   Future<void> updateOrderStatus(int id, String status) async {

@@ -20,6 +20,7 @@ class CartController extends GetxController {
   PaymentMethod? paymentMethod;
   var contactNumber = '';
   var note = '';
+  RxBool isLoading = false.obs;
 
   int get totalProdCount {
     return cartItems.fold(0, (total, cartItem) => total + cartItem.quantity);
@@ -68,17 +69,30 @@ class CartController extends GetxController {
     if (cartItems.isEmpty) {
       return;
     }
+    isLoading.value = true;
+
+    String userId = SupabaseDep.impl.supabase.auth.currentUser?.id ?? '';
+    if (userId.isEmpty) {
+      isLoading.value = false;
+      showSnackBar(context, 'Please login to place order');
+      return;
+    }
 
     final orderDetails = await ApiService().placeOrder(
       cartItems: cartItems,
       contactNumber: contactNumber,
-      userId: SupabaseDep.impl.supabase.auth.currentUser?.id ?? '',
+      userId: userId,
       note: '',
+      paymentMethod: paymentMethod ?? PaymentMethod.cash,
     );
 
     if (orderDetails != null) {
+      isLoading.value = false;
       clearCart();
-      context.pop();
+      if (context.mounted) {
+        context.pop();
+      }
     }
+    isLoading.value = false;
   }
 }

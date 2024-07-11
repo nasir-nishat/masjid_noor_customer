@@ -64,7 +64,22 @@ class AnNoorApp extends GetView<AppController> {
           routerDelegate: goRouter.routerDelegate,
           backButtonDispatcher: goRouter.backButtonDispatcher,
           builder: (context, child) {
-            return botToastBuilder(context, child);
+            return Stack(
+              children: [
+                child!,
+                Obx(() {
+                  if (Get.find<CartController>().isLoading.value) {
+                    return Container(
+                      color: Colors.black.withOpacity(0.5),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                }),
+              ],
+            );
           },
         ),
       ),
