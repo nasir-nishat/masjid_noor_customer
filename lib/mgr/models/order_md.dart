@@ -23,65 +23,65 @@ extension ParseToString on OrderStatusType {
   }
 }
 
-class OrderMd extends Equatable {
-  final int? id;
-  final DateTime? orderDate;
-  final double? totalAmount;
-  OrderStatusType? status;
-  final String? note;
-  final String? contactNumber;
+class OrderDetails {
+  final int id;
+  final String contactNumber;
+  final double totalAmount;
+  final String status;
+  final String note;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final List<OrderItemDetails> items;
 
-  OrderMd(
-      {this.id,
-      this.orderDate,
-      this.totalAmount,
-      this.status,
-      this.note,
-      this.contactNumber});
+  OrderDetails({
+    required this.id,
+    required this.contactNumber,
+    required this.totalAmount,
+    required this.status,
+    required this.note,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.items,
+  });
 
-  @override
-  List<Object?> get props => [
-        id,
-        orderDate,
-        totalAmount,
-        status,
-        note,
-        contactNumber,
-      ];
-
-  factory OrderMd.fromJson(Map<String, dynamic> json) {
-    try {
-      return OrderMd(
-        id: json['order_id'],
-        orderDate: DateTime.parse(json['order_date']),
-        totalAmount: (json['total_amount'] as num) as double,
-        status: json['status'] != null
-            ? ParseToString.fromString(json['status'])
-            : null,
-        note: json['note'],
-        contactNumber: json['contact_number'],
-      );
-    } on TypeError catch (e, st) {
-      print("Type Error: $e\nStack Trace: $st");
-      rethrow;
-    } catch (e, st) {
-      print("Error: $e\nStack Trace: $st");
-      rethrow;
-    }
+  factory OrderDetails.fromJson(Map<String, dynamic> json) {
+    return OrderDetails(
+      id: json['id'],
+      contactNumber: json['contact_number'],
+      totalAmount: json['total_amount'],
+      status: json['status'],
+      note: json['note'],
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
+      items: (json['items'] as List)
+          .map((item) => OrderItemDetails.fromJson(item))
+          .toList(),
+    );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'order_date': orderDate?.toIso8601String(),
-      'total_amount': totalAmount,
-      'status': status?.toShortString(),
-      'note': note,
-      'contact_number': contactNumber,
-    };
-  }
+class OrderItemDetails {
+  final int id;
+  final int productId;
+  final int quantity;
+  final double unitPrice;
+  final double totalPrice;
 
-  void updateStatus(OrderStatusType newStatus) {
-    status = newStatus;
+  OrderItemDetails({
+    required this.id,
+    required this.productId,
+    required this.quantity,
+    required this.unitPrice,
+    required this.totalPrice,
+  });
+
+  factory OrderItemDetails.fromJson(Map<String, dynamic> json) {
+    return OrderItemDetails(
+      id: json['id'],
+      productId: json['product_id'],
+      quantity: json['quantity'],
+      unitPrice: json['unit_price'],
+      totalPrice: json['total_price'],
+    );
   }
 }

@@ -190,34 +190,62 @@ class ApiService {
   // ===========================
   // ===========================
 
-  Future<List<OrderMd>> getOrders(
-      {required int from, required int to, Filter? filter}) async {
-    return _handleRequest(() async {
-      final response = (filter != null && filter.type.isNotEmpty)
-          ? await _supabaseClient
-              .from('orders')
-              .select("*")
-              .eq(filter.type, filter.value)
-              .range(from, to)
-          : await _supabaseClient.from('orders').select("*").range(from, to);
+  Future<OrderDetails?> placeOrder({
+    required List<CartMd> cartItems,
+    required String contactNumber,
+    required String userId,
+    required String note,
+  }) async {
+    final totalAmount = cartItems.fold<double>(
+      0.0,
+      (sum, item) => sum + item.totalPrice,
+    );
 
-      print("Response: $response");
-      return (response as List)
-          .map((order) => OrderMd.fromJson(order))
-          .toList();
-    });
-  }
+    try {
+      // Insert into orders table
+      final orderResponse = await _supabaseClient
+          .from('orders')
+          .insert({
+            'contact_number': contactNumber,
+            'total_amount': totalAmount,
+            'status': 'pending',
+            'note': note,
+          })
+          .select()
+          .single();
 
-  Future<void> createOrder(OrderMd order) async {
-    await _handleRequest(() async {
-      await _supabaseClient.from('orders').insert({
-        'order_date': order.orderDate,
-        'total_amount': order.totalAmount,
-        'status': order.status,
-        'note': order.note,
-        'contact_number': order.contactNumber,
-      }).select();
-    });
+      final orderId = orderResponse['id'];
+
+      // Insert into order_items table
+      for (final item in cartItems) {
+        await _supabaseClient.from('order_items').insert({
+          'order_id': orderId,
+          'product_id': item.product.id,
+          'quantity': item.quantity,
+          'unit_price': item.product.sellPrice,
+          'total_price': item.totalPrice,
+        });
+      }
+
+      // // Link order to user in user_orders table
+      // await _supabaseClient.from('user_orders').insert({
+      //   'order_id': orderId,
+      //   'user_id': userId,
+      // });
+
+      // Fetch order details and items
+      final orderDetailsResponse = await _supabaseClient
+          .from('orders')
+          .select('*, order_items(*)')
+          .eq('id', orderId)
+          .single();
+
+      return OrderDetails.fromJson(orderDetailsResponse);
+    } catch (error) {
+      // Handle error
+      print('Error placing order: $error');
+      return null;
+    }
   }
 
   Future<void> updateOrderStatus(int id, String status) async {

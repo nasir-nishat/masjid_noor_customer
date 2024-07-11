@@ -5,6 +5,7 @@ import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
 import 'package:masjid_noor_customer/mgr/models/cart_md.dart';
 import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:masjid_noor_customer/mgr/models/product_md.dart';
+import 'package:masjid_noor_customer/mgr/services/api_service.dart';
 import 'package:masjid_noor_customer/navigation/router.dart';
 
 class CartController extends GetxController {
@@ -17,6 +18,8 @@ class CartController extends GetxController {
 
   var cartItems = <CartMd>[].obs;
   PaymentMethod? paymentMethod;
+  var contactNumber = '';
+  var note = '';
 
   int get totalProdCount {
     return cartItems.fold(0, (total, cartItem) => total + cartItem.quantity);
@@ -61,5 +64,21 @@ class CartController extends GetxController {
     return cartItems.fold(0, (total, cartItem) => total + cartItem.totalPrice);
   }
 
-  void processOrder() {}
+  void processOrder(BuildContext context) async {
+    if (cartItems.isEmpty) {
+      return;
+    }
+
+    final orderDetails = await ApiService().placeOrder(
+      cartItems: cartItems,
+      contactNumber: contactNumber,
+      userId: SupabaseDep.impl.supabase.auth.currentUser?.id ?? '',
+      note: '',
+    );
+
+    if (orderDetails != null) {
+      clearCart();
+      context.pop();
+    }
+  }
 }

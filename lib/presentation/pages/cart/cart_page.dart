@@ -47,8 +47,10 @@ class CartPage extends GetView<CartController> {
             ),
             SizedBox(height: 10.h),
             if (controller.cartItems.isEmpty)
-              const Center(
-                child: Text('Your cart is empty'),
+              const Expanded(
+                child: Center(
+                  child: Text('Your cart is empty'),
+                ),
               )
             else
               Expanded(
@@ -83,6 +85,7 @@ class CartPage extends GetView<CartController> {
                   ),
                 ),
               ),
+            // if (controller.cartItems.isNotEmpty)
             Container(
               padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
               decoration: BoxDecoration(
@@ -158,8 +161,16 @@ class CartPage extends GetView<CartController> {
     if (paymentMethod != null) {
       controller.paymentMethod = paymentMethod;
       if (paymentMethod == PaymentMethod.due) {
-        final dueInfo = await showDuePaymentDialog(context);
-      } else {}
+        Map<String, String>? dueInfo = await showDuePaymentDialog(context);
+        if (dueInfo != null) {
+          controller.contactNumber = dueInfo['phone']!;
+          controller.processOrder(context);
+        } else {
+          return;
+        }
+      } else {
+        controller.processOrder(context);
+      }
     }
   }
 
@@ -200,7 +211,7 @@ class CartPage extends GetView<CartController> {
   Future<Map<String, String>?> showDuePaymentDialog(
       BuildContext context) async {
     final phoneController = TextEditingController();
-    final nameController = TextEditingController();
+    // final nameController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
     final maskFormatter = MaskTextInputFormatter(
@@ -219,16 +230,16 @@ class CartPage extends GetView<CartController> {
               mainAxisSize: MainAxisSize.min,
               verticalSpace: 10.h,
               children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Name is required';
-                    }
-                    return null;
-                  },
-                ),
+                // TextFormField(
+                //   controller: nameController,
+                //   decoration: const InputDecoration(labelText: 'Name'),
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Name is required';
+                //     }
+                //     return null;
+                //   },
+                // ),
                 TextFormField(
                   controller: phoneController,
                   decoration: InputDecoration(
@@ -254,7 +265,7 @@ class CartPage extends GetView<CartController> {
                 if (_formKey.currentState?.validate() == true) {
                   Map<String, String> data = {
                     'phone': phoneController.text.removeAllWhitespace,
-                    'name': nameController.text,
+                    // 'name': nameController.text,
                   };
                   Navigator.of(context).pop(data);
                 }
