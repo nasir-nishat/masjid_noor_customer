@@ -27,7 +27,6 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    print(currentRoute);
     return Scaffold(
       body: Padding(padding: EdgeInsets.all(10.w), child: widget.child),
       bottomNavigationBar: showBottomNav()
