@@ -223,7 +223,7 @@ class ApiService {
             'status': 'pending',
             'note': note,
             'user_id': userId,
-            'order_status': 'pending',
+            'status': 'pending',
             'payment_method': paymentMethod.toShortString(),
           })
           .select()

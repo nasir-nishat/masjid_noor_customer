@@ -62,7 +62,7 @@ class OrderDetailsMd {
               .toList() ??
           [],
 
-      status: OrderStatusParseToString.fromString(json['order_status']),
+      status: OrderStatusParseToString.fromString(json['status']),
       paymentType:
           PaymentMethodParseToString.fromString(json['payment_type'] ?? 'cash'),
       userId: json['user_id'],
