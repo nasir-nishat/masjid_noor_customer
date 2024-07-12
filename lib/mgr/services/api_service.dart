@@ -201,7 +201,7 @@ class ApiService {
   // ===========================
   // ===========================
 
-  Future<OrderDetails?> placeOrder({
+  Future<OrderDetailsMd?> placeOrder({
     required List<CartMd> cartItems,
     required String contactNumber,
     required String userId,
@@ -243,13 +243,13 @@ class ApiService {
       }
 
       // Fetch order details and items
-      final orderDetailsResponse = await _supabaseClient
+      final OrderDetailsMdResponse = await _supabaseClient
           .from('orders')
           .select('*, order_items(*)')
           .eq('id', orderId)
           .single();
 
-      return OrderDetails.fromJson(orderDetailsResponse);
+      return OrderDetailsMd.fromJson(OrderDetailsMdResponse);
     } catch (error) {
       // Handle error
       print('Error placing order: $error');
@@ -257,14 +257,14 @@ class ApiService {
     }
   }
 
-  Future<List<OrderDetails>> getUserOrders(String userId) async {
-    final orderDetailsResponse = await _supabaseClient
+  Future<List<OrderDetailsMd>> getUserOrders(String userId) async {
+    final orderDetailsMdResponse = await _supabaseClient
         .from('orders')
         .select('*, order_items(*)')
         .eq('user_id', userId);
 
-    List<OrderDetails> orders = (orderDetailsResponse as List)
-        .map((order) => OrderDetails.fromJson(order))
+    List<OrderDetailsMd> orders = (orderDetailsMdResponse as List)
+        .map((order) => OrderDetailsMd.fromJson(order))
         .toList();
 
     return orders;

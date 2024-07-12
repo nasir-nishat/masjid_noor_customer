@@ -11,7 +11,7 @@ class OrderController extends GetxController {
     return Get.find<OrderController>();
   }
 
-  var orderList = <OrderDetails>[].obs;
+  var orderList = <OrderDetailsMd>[].obs;
 
   @override
   void onInit() {
@@ -21,7 +21,7 @@ class OrderController extends GetxController {
 
   Future<void> fetchOrders() async {
     String userId = SupabaseDep.impl.auth.currentUser!.id;
-    List<OrderDetails> orders = await ApiService().getUserOrders(userId);
+    List<OrderDetailsMd> orders = await ApiService().getUserOrders(userId);
     orderList.assignAll(orders);
   }
 }

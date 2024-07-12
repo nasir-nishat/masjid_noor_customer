@@ -19,7 +19,7 @@ class OrdersPage extends GetView<OrderController> {
               title: Text('Order #${order.id}'),
               subtitle: Text(
                   'Total Amount: \$${order.totalAmount.toStringAsFixed(2)}'),
-              onTap: () => _showOrderDetailsDialog(context, order),
+              onTap: () => _showOrderDetailsMdDialog(context, order),
             );
           },
         ),
@@ -27,7 +27,7 @@ class OrdersPage extends GetView<OrderController> {
     );
   }
 
-  void _showOrderDetailsDialog(BuildContext context, OrderDetails order) {
+  void _showOrderDetailsMdDialog(BuildContext context, OrderDetailsMd order) {
     showDialog(
       context: context,
       builder: (context) {

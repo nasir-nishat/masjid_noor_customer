@@ -22,20 +22,18 @@ extension OrderStatusParseToString on OrderStatus {
   }
 }
 
-class OrderDetails {
+class OrderDetailsMd {
   final int id;
   final String contactNumber;
   final double totalAmount;
-  final String status;
+  final OrderStatus status;
   final String note;
   final DateTime createdAt;
   final DateTime updatedAt;
   final PaymentMethod paymentType;
-  final OrderStatus orderStatus;
   final String userId;
-  final List<OrderItemDetails> items;
-
-  OrderDetails({
+  final List<OrderItemDetailsMd> items;
+  OrderDetailsMd({
     required this.id,
     required this.contactNumber,
     required this.totalAmount,
@@ -45,28 +43,26 @@ class OrderDetails {
     required this.updatedAt,
     required this.items,
     required this.paymentType,
-    required this.orderStatus,
     required this.userId,
   });
 
-  factory OrderDetails.fromJson(Map<String, dynamic> json) {
-    return OrderDetails(
+  factory OrderDetailsMd.fromJson(Map<String, dynamic> json) {
+    return OrderDetailsMd(
       id: json['id'],
       contactNumber: json['contact_number'],
       totalAmount: json['total_amount'],
-      status: json['status'],
       note: json['note'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       // items: (json['items'] as List)
-      //     .map((e) => OrderItemDetails.fromJson(e))
+      //     .map((e) => OrderItemDetailsMd.fromJson(e))
       //     .toList(),
       items: (json['order_items'] as List?)
-              ?.map((e) => OrderItemDetails.fromJson(e))
+              ?.map((e) => OrderItemDetailsMd.fromJson(e))
               .toList() ??
           [],
 
-      orderStatus: OrderStatusParseToString.fromString(json['order_status']),
+      status: OrderStatusParseToString.fromString(json['order_status']),
       paymentType:
           PaymentMethodParseToString.fromString(json['payment_type'] ?? 'cash'),
       userId: json['user_id'],
@@ -74,7 +70,7 @@ class OrderDetails {
   }
 }
 
-class OrderItemDetails {
+class OrderItemDetailsMd {
   final int id;
   final int orderId;
   final int productId;
@@ -82,7 +78,7 @@ class OrderItemDetails {
   final double unitPrice;
   final double totalPrice;
 
-  OrderItemDetails({
+  OrderItemDetailsMd({
     required this.id,
     required this.orderId,
     required this.productId,
@@ -91,8 +87,8 @@ class OrderItemDetails {
     required this.totalPrice,
   });
 
-  factory OrderItemDetails.fromJson(Map<String, dynamic> json) {
-    return OrderItemDetails(
+  factory OrderItemDetailsMd.fromJson(Map<String, dynamic> json) {
+    return OrderItemDetailsMd(
       id: json['id'],
       orderId: json['order_id'],
       productId: json['product_id'],

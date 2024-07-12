@@ -69,7 +69,7 @@ class CartController extends GetxController {
       return;
     }
 
-    final orderDetails = await ApiService().placeOrder(
+    final OrderDetailsMd = await ApiService().placeOrder(
       cartItems: cartItems,
       contactNumber: contactNumber,
       userId: userId,
@@ -77,7 +77,7 @@ class CartController extends GetxController {
       paymentMethod: paymentMethod ?? PaymentMethod.cash,
     );
 
-    if (orderDetails != null) {
+    if (OrderDetailsMd != null) {
       AppController.to.hideGlobalLoading();
       clearCart();
       if (context.mounted) {
