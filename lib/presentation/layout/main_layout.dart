@@ -6,6 +6,8 @@ import 'package:masjid_noor_customer/navigation/router.dart';
 import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';
 
+import '../widgets/header.dart';
+
 final GlobalKey<ScaffoldState> drawerKey = GlobalKey();
 
 class MainLayout extends StatefulWidget {
@@ -26,6 +28,15 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 5.w,
+          ),
+          child: Header(),
+        ),
+      ),
       body: Padding(padding: EdgeInsets.all(10.w), child: widget.child),
       bottomNavigationBar: showBottomNav()
           ? BottomNavigationBar(
@@ -56,37 +67,26 @@ class _MainLayoutState extends State<MainLayout> {
     );
   }
 
-  void _getSelectedIndex(BuildContext context) {
-    final String location = currentRoute;
-
-    if (location.startsWith(Routes.products)) {
-      AppController.to.navIndex.value = 1;
-    } else if (location.startsWith(Routes.search)) {
-      AppController.to.navIndex.value = 2;
-    } else if ((location == Routes.profile) && loggedIn) {
-      AppController.to.navIndex.value = 3;
-    } else {
-      AppController.to.navIndex.value = 0;
-    }
-  }
-
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
         if (currentRoute != Routes.home) {
           AppController.to.navIndex.value = 0;
+          AppController.to.currentRoute.value = Routes.home;
           context.go(Routes.home);
         }
         break;
       case 1:
         if (currentRoute != Routes.products) {
           AppController.to.navIndex.value = 1;
+          AppController.to.currentRoute.value = Routes.products;
           context.go(Routes.products);
         }
         break;
       case 2:
         if (currentRoute != Routes.search) {
           AppController.to.navIndex.value = 2;
+          AppController.to.currentRoute.value = Routes.search;
           context.go(Routes.search);
         }
         break;
@@ -95,6 +95,7 @@ class _MainLayoutState extends State<MainLayout> {
           if (loggedIn) {
             UserController.to.fetchUser();
             AppController.to.navIndex.value = 3;
+            AppController.to.currentRoute.value = Routes.profile;
             context.go(Routes.profile);
           } else {
             context.push(Routes.login);

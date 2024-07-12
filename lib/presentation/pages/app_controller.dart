@@ -14,6 +14,8 @@ class AppController extends GetxController {
 
   RxBool globalLoading = false.obs;
 
+  RxString currentRoute = ''.obs;
+
   void showGlobalLoading() {
     globalLoading.value = true;
     Future.delayed(const Duration(seconds: 10), () {

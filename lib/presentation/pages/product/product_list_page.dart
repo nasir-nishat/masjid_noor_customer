@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
+import 'package:masjid_noor_customer/presentation/widgets/cart_icon_count.dart';
 
 import '../../../navigation/router.dart';
 import '../../widgets/product_item.dart';
@@ -16,23 +17,6 @@ class ProductListPage extends GetView<ProductController> {
     return Scaffold(
       body: Column(
         children: [
-          Row(
-            children: [
-              // IconButton(
-              //   onPressed: () {
-              //     context.pop();
-              //   },
-              //   icon: const Icon(Icons.arrow_back),
-              // ),
-              Text(
-                'Products',
-                style: TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
           SizedBox(
             height: 50.h,
             child: ListView.builder(

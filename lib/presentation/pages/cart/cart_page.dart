@@ -128,9 +128,11 @@ class CartPage extends GetView<CartController> {
                   ),
                   SizedBox(height: 10.h),
                   ElevatedButton(
-                    onPressed: () {
-                      _paymentFunc(context);
-                    },
+                    onPressed: controller.cartItems.isEmpty
+                        ? null
+                        : () {
+                            _paymentFunc(context);
+                          },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 12.h),
                       minimumSize: Size(double.infinity, 40.h),
