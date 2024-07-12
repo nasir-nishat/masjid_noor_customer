@@ -1,7 +1,4 @@
-import 'package:get/get.dart';
-import 'package:masjid_noor_customer/mgr/models/category_md.dart';
-import 'package:masjid_noor_customer/mgr/services/api_service.dart';
-import 'package:masjid_noor_customer/mgr/models/product_md.dart';
+import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 
 class ProductController extends GetxController {
   static ProductController get to => Get.find();

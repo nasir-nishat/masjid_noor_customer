@@ -1,12 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
-import 'package:masjid_noor_customer/mgr/models/cart_md.dart';
-import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
-import 'package:masjid_noor_customer/mgr/models/product_md.dart';
-import 'package:masjid_noor_customer/mgr/services/api_service.dart';
-import 'package:masjid_noor_customer/navigation/router.dart';
+import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 
 class CartController extends GetxController {
   static CartController get to {
@@ -20,7 +12,6 @@ class CartController extends GetxController {
   PaymentMethod? paymentMethod;
   var contactNumber = '';
   var note = '';
-  RxBool isLoading = false.obs;
 
   int get totalProdCount {
     return cartItems.fold(0, (total, cartItem) => total + cartItem.quantity);
@@ -69,11 +60,11 @@ class CartController extends GetxController {
     if (cartItems.isEmpty) {
       return;
     }
-    isLoading.value = true;
+    AppController.to.showLoading();
 
     String userId = SupabaseDep.impl.supabase.auth.currentUser?.id ?? '';
     if (userId.isEmpty) {
-      isLoading.value = false;
+      AppController.to.hideLoading();
       showSnackBar(context, 'Please login to place order');
       return;
     }
@@ -87,12 +78,12 @@ class CartController extends GetxController {
     );
 
     if (orderDetails != null) {
-      isLoading.value = false;
+      AppController.to.hideLoading();
       clearCart();
       if (context.mounted) {
         context.pop();
       }
     }
-    isLoading.value = false;
+    AppController.to.hideLoading();
   }
 }

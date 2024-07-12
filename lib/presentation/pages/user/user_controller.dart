@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:masjid_noor_customer/mgr/models/user_md.dart';
 import 'package:masjid_noor_customer/mgr/services/api_service.dart';
-import 'package:masjid_noor_customer/navigation/router.dart';
 
 class UserController extends GetxController {
   static UserController get to {

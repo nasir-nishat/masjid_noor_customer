@@ -1,6 +1,5 @@
-import 'dart:io';
+import 'dart:async';
 
-import 'package:app_links/app_links.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,26 +19,34 @@ import 'mgr/dependency/supabase_dep.dart';
 import 'mgr/models/user_md.dart';
 import 'navigation/router.dart';
 
-import 'package:window_manager/window_manager.dart';
-
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  Hive.registerAdapter(UserMdAdapter());
-  await Hive.openBox<UserMd>('user_box');
+  // Ensure everything is initialized in the same zone
+  await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Hive.initFlutter();
+    Hive.registerAdapter(UserMdAdapter());
+    await Hive.openBox<UserMd>('user_box');
 
-  setPathUrlStrategy();
-  GoRouter.optionURLReflectsImperativeAPIs = true;
-  await SupabaseDep.impl.initialize();
+    setPathUrlStrategy();
+    GoRouter.optionURLReflectsImperativeAPIs = true;
+    await SupabaseDep.impl.initialize();
 
-  Get.lazyPut(() => UserController());
-  Get.lazyPut(() => ProductController());
-  Get.lazyPut(() => CartController());
-  Get.lazyPut(() => OrderController());
-  Get.lazyPut(() => AppController());
+    Get.lazyPut(() => UserController());
+    Get.lazyPut(() => ProductController());
+    Get.lazyPut(() => CartController());
+    Get.lazyPut(() => OrderController());
+    Get.lazyPut(() => AppController());
 
-  runApp(AnNoorApp());
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.dumpErrorToConsole(details);
+      AppController.to.showErrorDialog(details.exceptionAsString());
+    };
+
+    runApp(AnNoorApp());
+  }, (error, stackTrace) {
+    print('Caught Dart error: $error');
+    AppController.to.showErrorDialog(error.toString());
+  });
 }
 
 class AnNoorApp extends GetView<AppController> {
@@ -64,11 +71,12 @@ class AnNoorApp extends GetView<AppController> {
           routerDelegate: goRouter.routerDelegate,
           backButtonDispatcher: goRouter.backButtonDispatcher,
           builder: (context, child) {
+            AppController.to.setGlobalContext(context);
             return Stack(
               children: [
                 child!,
                 Obx(() {
-                  if (Get.find<CartController>().isLoading.value) {
+                  if (AppController.to.isLoading.value) {
                     return Container(
                       color: Colors.black.withOpacity(0.5),
                       child: const Center(
