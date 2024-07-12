@@ -114,6 +114,14 @@ final GoRouter goRouter = GoRouter(
           },
         ),
         GoRoute(
+          path: Routes.products,
+          pageBuilder: (context, state) {
+            return const NoTransitionPage(
+              child: ProductListPage(),
+            );
+          },
+        ),
+        GoRoute(
           path: Routes.search,
           pageBuilder: (context, state) {
             return const NoTransitionPage(
@@ -144,14 +152,6 @@ final GoRouter goRouter = GoRouter(
       pageBuilder: (context, state) {
         return const NoTransitionPage(
           child: CartPage(),
-        );
-      },
-    ),
-    GoRoute(
-      path: Routes.products,
-      pageBuilder: (context, state) {
-        return const NoTransitionPage(
-          child: ProductListPage(),
         );
       },
     ),

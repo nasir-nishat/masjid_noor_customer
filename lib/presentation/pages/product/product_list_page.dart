@@ -18,12 +18,12 @@ class ProductListPage extends GetView<ProductController> {
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  context.pop();
-                },
-                icon: const Icon(Icons.arrow_back),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     context.pop();
+              //   },
+              //   icon: const Icon(Icons.arrow_back),
+              // ),
               Text(
                 'Products',
                 style: TextStyle(

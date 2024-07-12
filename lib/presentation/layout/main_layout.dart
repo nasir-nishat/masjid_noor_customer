@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
 import 'package:masjid_noor_customer/navigation/router.dart';
+import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';
-import 'package:masjid_noor_customer/presentation/widgets/header.dart';
-import 'package:masjid_noor_customer/presentation/widgets/main_side_bar.dart';
 
-final GlobalKey<ScaffoldState> drawerKey = GlobalKey(); // Create a key
+final GlobalKey<ScaffoldState> drawerKey = GlobalKey();
 
 class MainLayout extends StatefulWidget {
   final Widget child;
@@ -31,7 +29,7 @@ class _MainLayoutState extends State<MainLayout> {
       body: Padding(padding: EdgeInsets.all(10.w), child: widget.child),
       bottomNavigationBar: showBottomNav()
           ? BottomNavigationBar(
-              currentIndex: _getSelectedIndex(context),
+              currentIndex: AppController.to.navIndex.value,
               onTap: (index) {
                 _onItemTapped(index, context);
               },
@@ -39,6 +37,10 @@ class _MainLayoutState extends State<MainLayout> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_bag_outlined),
+                  label: 'Mart',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.search),
@@ -54,34 +56,45 @@ class _MainLayoutState extends State<MainLayout> {
     );
   }
 
-  int _getSelectedIndex(BuildContext context) {
+  void _getSelectedIndex(BuildContext context) {
     final String location = currentRoute;
-    print("location: $location");
-    if (location.startsWith(Routes.search)) {
-      return 1;
+
+    if (location.startsWith(Routes.products)) {
+      AppController.to.navIndex.value = 1;
+    } else if (location.startsWith(Routes.search)) {
+      AppController.to.navIndex.value = 2;
+    } else if ((location == Routes.profile) && loggedIn) {
+      AppController.to.navIndex.value = 3;
+    } else {
+      AppController.to.navIndex.value = 0;
     }
-    if ((location == Routes.profile) && loggedIn) {
-      return 2;
-    }
-    return 0;
   }
 
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
         if (currentRoute != Routes.home) {
+          AppController.to.navIndex.value = 0;
           context.go(Routes.home);
         }
         break;
       case 1:
-        if (currentRoute != Routes.search) {
-          context.go(Routes.search);
+        if (currentRoute != Routes.products) {
+          AppController.to.navIndex.value = 1;
+          context.go(Routes.products);
         }
         break;
       case 2:
+        if (currentRoute != Routes.search) {
+          AppController.to.navIndex.value = 2;
+          context.go(Routes.search);
+        }
+        break;
+      case 3:
         if (currentRoute != Routes.profile) {
           if (loggedIn) {
             UserController.to.fetchUser();
+            AppController.to.navIndex.value = 3;
             context.go(Routes.profile);
           } else {
             context.push(Routes.login);
@@ -99,6 +112,8 @@ class _MainLayoutState extends State<MainLayout> {
     } else if (currentRoute.contains(Routes.search)) {
       return true;
     } else if (currentRoute == Routes.profile && loggedIn) {
+      return true;
+    } else if (currentRoute == Routes.products) {
       return true;
     }
     return false;
