@@ -18,6 +18,9 @@ class ProductController extends GetxController {
   RxInt currentPage = 1.obs;
   Rx<Filter> selectedFilter = Filter(type: '', value: '').obs;
 
+  bool get isLoadingMoreEnabled =>
+      products.length >= pageSize && !isFetching.value && !isLoading.value;
+
   @override
   void onInit() {
     super.onInit();
@@ -76,7 +79,7 @@ class ProductController extends GetxController {
     isLoading.value = false;
   }
 
-  void fetchProductsByCategory() async {
+  Future<void> fetchProductsByCategory() async {
     isLoading.value = true;
     currentPage.value = 1;
     products.clear();
@@ -118,7 +121,7 @@ class ProductController extends GetxController {
   }
 
   Future<void> loadMoreProducts() async {
-    if (isFetching.value) return;
+    if (isFetching.value || !isLoadingMoreEnabled) return;
 
     isFetching.value = true;
     currentPage.value++;
@@ -129,7 +132,10 @@ class ProductController extends GetxController {
       List<ProductMd> fetchedProducts = await ApiService().getProducts(
         from: offset,
         to: (offset + pageSize) - 1,
-        filter: selectedFilter.value,
+        filter: Filter(
+          type: 'category_id',
+          value: selectedCategory.value.id.toString(),
+        ),
       );
 
       products.addAll(fetchedProducts);

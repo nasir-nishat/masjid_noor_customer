@@ -14,91 +14,132 @@ class ProductListPage extends GetView<ProductController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(() => Column(
+      body: Column(
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  Text(
-                    'Products',
-                    style: TextStyle(
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              IconButton(
+                onPressed: () {
+                  context.pop();
+                },
+                icon: const Icon(Icons.arrow_back),
               ),
-              SizedBox(
-                height: 50.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: controller.categories.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: Obx(() {
-                        return ChoiceChip(
-                          label: Text(controller.categories[index].name),
-                          selected: controller.selectedCategory.value ==
-                              controller.categories[index],
-                          onSelected: (isSelected) {
-                            if (isSelected) {
-                              controller.selectedCategory.value =
-                                  controller.categories[index];
-                              controller.fetchProductsByCategory();
-                            }
-                          },
-                        );
-                      }),
-                    );
-                  },
+              Text(
+                'Products',
+                style: TextStyle(
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10.h),
-              Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    return NotificationListener<ScrollNotification>(
-                      // onNotification: (scrollNotification) {
-                      //   if (scrollNotification.metrics.pixels ==
-                      //       scrollNotification.metrics.maxScrollExtent) {
-                      //     if (!controller.isLoading.value) {
-                      //       controller.loadMoreProducts();
-                      //     }
-                      //   }
-                      //   return false;
-                      // },
-                      child: controller.products.isEmpty
-                          ? const Center(child: Text('No products found'))
-                          : GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10.w,
-                                mainAxisSpacing: 10.h,
-                                childAspectRatio: 0.8,
-                              ),
-                              itemCount: controller.products.length,
-                              itemBuilder: (context, index) {
-                                return ProductItem(
-                                  product: controller.products[index],
-                                  parentRoute: Routes.products,
-                                );
-                              },
-                            ),
-                    );
-                  }
-                }),
-              ),
             ],
-          )),
+          ),
+          SizedBox(
+            height: 50.h,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.categories.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                  child: Obx(() {
+                    return ChoiceChip(
+                      label: Text(controller.categories[index].name),
+                      selected: controller.selectedCategory.value ==
+                          controller.categories[index],
+                      onSelected: (isSelected) {
+                        if (isSelected) {
+                          controller.selectedCategory.value =
+                              controller.categories[index];
+                          controller.fetchProductsByCategory();
+                        }
+                      },
+                    );
+                  }),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Expanded(
+            child: Obx(() {
+              if (controller.isLoading.value && controller.products.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return RefreshIndicator(
+                  onRefresh: () => controller.fetchProductsByCategory(),
+                  child: controller.products.isEmpty
+                      ? const Center(child: Text('No products found'))
+                      : GridView.builder(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, // Number of columns in the grid
+                            crossAxisSpacing:
+                                10.w, // Horizontal space between grid items
+                            mainAxisSpacing:
+                                10.h, // Vertical space between grid items
+                            childAspectRatio:
+                                0.8, // Aspect ratio for the grid items
+                          ),
+                          itemCount: controller.products.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == controller.products.length) {
+                              if (controller.isFetching.value) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            }
+                            return ProductItem(
+                              product: controller.products[index],
+                              parentRoute: Routes.products,
+                            );
+                          },
+                          controller: ScrollController()
+                            ..addListener(() {
+                              if (controller.isLoadingMoreEnabled &&
+                                  ScrollController().position.pixels ==
+                                      ScrollController()
+                                          .position
+                                          .maxScrollExtent) {
+                                controller.loadMoreProducts();
+                              }
+                            }),
+                        ),
+                  // : ListView.builder(
+                  //     itemCount: controller.products.length + 1,
+                  //     itemBuilder: (context, index) {
+                  //       if (index == controller.products.length) {
+                  //         if (controller.isFetching.value) {
+                  //           return const Center(
+                  //               child: CircularProgressIndicator());
+                  //         } else {
+                  //           return const SizedBox.shrink();
+                  //         }
+                  //       }
+                  //       return ProductItem(
+                  //         product: controller.products[index],
+                  //         parentRoute: Routes.products,
+                  //       );
+                  //     },
+                  //     controller: ScrollController()
+                  //       ..addListener(() {
+                  //         if (controller.isLoadingMoreEnabled &&
+                  //             ScrollController().position.pixels ==
+                  //                 ScrollController()
+                  //                     .position
+                  //                     .maxScrollExtent) {
+                  //           controller.loadMoreProducts();
+                  //         }
+                  //       }),
+                  //   ),
+                );
+              }
+            }),
+          ),
+        ],
+      ),
     );
   }
 }
