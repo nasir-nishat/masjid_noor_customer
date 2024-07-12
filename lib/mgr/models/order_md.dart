@@ -4,8 +4,7 @@ import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 enum OrderStatus {
   pending,
   processing,
-  shipped,
-  delivered,
+  completed,
   cancelled,
 }
 

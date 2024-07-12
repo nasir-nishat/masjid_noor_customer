@@ -16,7 +16,8 @@ class OrdersPage extends GetView<OrderController> {
           itemBuilder: (context, index) {
             final order = controller.orderList[index];
             return ListTile(
-              title: Text('Order #${order.id}'),
+              title: Text(
+                  'Order #${order.id} - ${order.status.toShortString().capitalize}'),
               subtitle: Text(
                   'Total Amount: \$${order.totalAmount.toStringAsFixed(2)}'),
               onTap: () => _showOrderDetailsMdDialog(context, order),

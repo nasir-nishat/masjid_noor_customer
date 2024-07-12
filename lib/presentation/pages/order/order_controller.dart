@@ -12,6 +12,7 @@ class OrderController extends GetxController {
   }
 
   var orderList = <OrderDetailsMd>[].obs;
+  RxBool isLoadingOrders = false.obs;
 
   @override
   void onInit() {
@@ -20,8 +21,10 @@ class OrderController extends GetxController {
   }
 
   Future<void> fetchOrders() async {
+    isLoadingOrders.value = true;
     String userId = SupabaseDep.impl.auth.currentUser!.id;
     List<OrderDetailsMd> orders = await ApiService().getUserOrders(userId);
     orderList.assignAll(orders);
+    isLoadingOrders.value = false;
   }
 }
