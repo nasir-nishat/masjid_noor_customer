@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:masjid_noor_customer/presentation/layout/error_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/order_controller.dart';
@@ -20,7 +21,6 @@ import 'mgr/models/user_md.dart';
 import 'navigation/router.dart';
 
 void main() async {
-  // Ensure everything is initialized in the same zone
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Hive.initFlutter();
@@ -37,15 +37,11 @@ void main() async {
     Get.lazyPut(() => OrderController());
     Get.lazyPut(() => AppController());
 
-    FlutterError.onError = (FlutterErrorDetails details) {
-      FlutterError.dumpErrorToConsole(details);
-      AppController.to.showErrorDialog(details.exceptionAsString());
-    };
-
     runApp(AnNoorApp());
   }, (error, stackTrace) {
     print('Caught Dart error: $error');
-    AppController.to.showErrorDialog(error.toString());
+    print('Stack trace: $stackTrace');
+    // You can add additional error reporting here, like sending to a crash reporting service
   });
 }
 
@@ -71,10 +67,10 @@ class AnNoorApp extends GetView<AppController> {
           routerDelegate: goRouter.routerDelegate,
           backButtonDispatcher: goRouter.backButtonDispatcher,
           builder: (context, child) {
-            AppController.to.setGlobalContext(context);
+            child = botToastBuilder(context, child);
             return Stack(
               children: [
-                child!,
+                ErrorBoundary(child: child),
                 Obx(() {
                   if (AppController.to.globalLoading.value) {
                     return Container(

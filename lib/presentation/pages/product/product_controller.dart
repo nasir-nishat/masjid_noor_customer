@@ -58,6 +58,7 @@ class ProductController extends GetxController {
   }
 
   void fetchProducts() async {
+    isLoading.value = true;
     int offset = (currentPage.value - 1) * pageSize;
 
     var fetchedProducts = await ApiService().getProducts(

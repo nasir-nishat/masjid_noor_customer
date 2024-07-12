@@ -11,33 +11,6 @@ class AppController extends GetxController {
   }
 
   RxBool globalLoading = false.obs;
-  BuildContext? globalContext;
-
-  void setGlobalContext(BuildContext context) {
-    globalContext = context;
-  }
-
-  void showErrorDialog(String message) {
-    if (globalContext != null) {
-      showDialog(
-        context: globalContext!,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Go Home'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
 
   void showGlobalLoading() {
     globalLoading.value = true;

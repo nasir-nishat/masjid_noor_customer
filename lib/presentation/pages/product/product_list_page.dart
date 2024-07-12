@@ -66,13 +66,15 @@ class ProductListPage extends GetView<ProductController> {
                     return const Center(child: CircularProgressIndicator());
                   } else {
                     return NotificationListener<ScrollNotification>(
-                      onNotification: (scrollNotification) {
-                        if (scrollNotification.metrics.pixels ==
-                            scrollNotification.metrics.maxScrollExtent) {
-                          controller.fetchProducts();
-                        }
-                        return false;
-                      },
+                      // onNotification: (scrollNotification) {
+                      //   if (scrollNotification.metrics.pixels ==
+                      //       scrollNotification.metrics.maxScrollExtent) {
+                      //     if (!controller.isLoading.value) {
+                      //       controller.loadMoreProducts();
+                      //     }
+                      //   }
+                      //   return false;
+                      // },
                       child: controller.products.isEmpty
                           ? const Center(child: Text('No products found'))
                           : GridView.builder(

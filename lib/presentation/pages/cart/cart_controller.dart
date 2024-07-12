@@ -60,11 +60,11 @@ class CartController extends GetxController {
     if (cartItems.isEmpty) {
       return;
     }
-    AppController.to.showLoading();
+    AppController.to.showGlobalLoading();
 
     String userId = SupabaseDep.impl.supabase.auth.currentUser?.id ?? '';
     if (userId.isEmpty) {
-      AppController.to.hideLoading();
+      AppController.to.hideGlobalLoading();
       showSnackBar(context, 'Please login to place order');
       return;
     }
@@ -78,12 +78,12 @@ class CartController extends GetxController {
     );
 
     if (orderDetails != null) {
-      AppController.to.hideLoading();
+      AppController.to.hideGlobalLoading();
       clearCart();
       if (context.mounted) {
         context.pop();
       }
     }
-    AppController.to.hideLoading();
+    AppController.to.hideGlobalLoading();
   }
 }
