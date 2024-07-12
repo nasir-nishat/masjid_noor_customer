@@ -10,7 +10,7 @@ class AppController extends GetxController {
     return Get.find<AppController>();
   }
 
-  RxBool isLoading = false.obs;
+  RxBool globalLoading = false.obs;
   BuildContext? globalContext;
 
   void setGlobalContext(BuildContext context) {
@@ -39,14 +39,14 @@ class AppController extends GetxController {
     }
   }
 
-  void showLoading() {
-    isLoading.value = true;
+  void showGlobalLoading() {
+    globalLoading.value = true;
     Future.delayed(const Duration(seconds: 10), () {
-      isLoading.value = false;
+      globalLoading.value = false;
     });
   }
 
-  void hideLoading() {
-    isLoading.value = false;
+  void hideGlobalLoading() {
+    globalLoading.value = false;
   }
 }

@@ -76,7 +76,7 @@ class AnNoorApp extends GetView<AppController> {
               children: [
                 child!,
                 Obx(() {
-                  if (AppController.to.isLoading.value) {
+                  if (AppController.to.globalLoading.value) {
                     return Container(
                       color: Colors.black.withOpacity(0.5),
                       child: const Center(
