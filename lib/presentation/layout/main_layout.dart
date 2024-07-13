@@ -30,7 +30,7 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
+        preferredSize: Size.fromHeight(50.h),
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 5.w,
@@ -41,6 +41,7 @@ class _MainLayoutState extends State<MainLayout> {
       body: Padding(padding: EdgeInsets.all(10.w), child: widget.child),
       bottomNavigationBar: showBottomNav()
           ? BottomNavigationBar(
+              selectedFontSize: 0,
               currentIndex: AppController.to.navIndex.value,
               onTap: (index) {
                 _onItemTapped(index, context);
@@ -48,19 +49,19 @@ class _MainLayoutState extends State<MainLayout> {
               items: const [
                 BottomNavigationBarItem(
                   icon: HeroIcon(HeroIcons.home),
-                  label: 'Home',
+                  label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: HeroIcon(HeroIcons.shoppingBag),
-                  label: 'Mart',
+                  label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: HeroIcon(HeroIcons.magnifyingGlass),
-                  label: 'Search',
+                  label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: HeroIcon(HeroIcons.user),
-                  label: 'Profile',
+                  label: '',
                 ),
               ],
             )
