@@ -195,6 +195,7 @@ class ApiService {
 
     return products;
   }
+
   // ===========================
   // ===========================
   // Order CRUD operations
@@ -258,10 +259,16 @@ class ApiService {
   }
 
   Future<List<OrderDetailsMd>> getUserOrders(String userId) async {
-    final orderDetailsMdResponse = await _supabaseClient
-        .from('orders')
-        .select('*, order_items(*)')
-        .eq('user_id', userId);
+    final orderDetailsMdResponse =
+        await _supabaseClient.from('orders').select('''
+        *, 
+        order_items:order_items (
+          *,
+          product:products (
+            name
+          )
+        )
+      ''').eq('user_id', userId);
 
     List<OrderDetailsMd> orders = (orderDetailsMdResponse as List)
         .map((order) => OrderDetailsMd.fromJson(order))

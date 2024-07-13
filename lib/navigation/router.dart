@@ -48,7 +48,6 @@ class AuthenticationNotifier {
     const iosClientId = 'my-ios.apps.googleusercontent.com';
 
     final GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId: iosClientId,
       serverClientId: webClientId,
     );
     final googleUser = await googleSignIn.signIn();
@@ -294,7 +293,7 @@ abstract class Routes {
 }
 
 void showSnackBar(BuildContext context, String message,
-    {Duration duration = const Duration(milliseconds: 300)}) {
+    {Duration duration = const Duration(minutes: 1)}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(message),

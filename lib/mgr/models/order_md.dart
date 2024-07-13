@@ -32,6 +32,7 @@ class OrderDetailsMd {
   final PaymentMethod paymentType;
   final String userId;
   final List<OrderItemDetailsMd> items;
+
   OrderDetailsMd({
     required this.id,
     required this.contactNumber,
@@ -76,6 +77,7 @@ class OrderItemDetailsMd {
   final int quantity;
   final double unitPrice;
   final double totalPrice;
+  final String productName;
 
   OrderItemDetailsMd({
     required this.id,
@@ -84,6 +86,7 @@ class OrderItemDetailsMd {
     required this.quantity,
     required this.unitPrice,
     required this.totalPrice,
+    required this.productName,
   });
 
   factory OrderItemDetailsMd.fromJson(Map<String, dynamic> json) {
@@ -94,6 +97,7 @@ class OrderItemDetailsMd {
       quantity: json['quantity'],
       unitPrice: double.parse(json['unit_price'].toString()),
       totalPrice: double.parse(json['total_price'].toString()),
+      productName: json['product']['name'],
     );
   }
 
@@ -105,6 +109,7 @@ class OrderItemDetailsMd {
       'quantity': quantity,
       'unit_price': unitPrice,
       'total_price': totalPrice,
+      'product_name': productName,
     };
   }
 }
