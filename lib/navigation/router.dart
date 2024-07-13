@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/orders_page.dart';
+import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_page.dart';
 import '../mgr/dependency/supabase_dep.dart';
 import '../mgr/models/user_md.dart';
 import '../mgr/services/api_service.dart';
@@ -72,7 +73,8 @@ class AuthenticationNotifier {
       userId: authResponse.user!.id,
       email: authResponse.user!.userMetadata!["email"],
       passwordHash: '',
-      phoneNumber: '', // Initially empty, can be updated later
+      phoneNumber: '',
+      // Initially empty, can be updated later
       createdAt: DateTime.now(),
       firstName: authResponse.user!.userMetadata!["full_name"]
           .toString()
@@ -148,6 +150,14 @@ final GoRouter goRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: Routes.prayerTimes,
+      pageBuilder: (context, state) {
+        return const NoTransitionPage(
+          child: PrayerTimes(),
+        );
+      },
+    ),
+    GoRoute(
       path: Routes.cart,
       pageBuilder: (context, state) {
         return const NoTransitionPage(
@@ -219,6 +229,7 @@ abstract class Routes {
   static const payment = '/payment';
   static const inventory = '/inventory';
   static const profile = '/profile';
+  static const prayerTimes = '/prayer-times';
 
   static const productCreate = '/create';
   static const forgotPassword = '/forgot-password';
@@ -241,6 +252,7 @@ abstract class Routes {
     cart,
     search,
     signup,
+    prayerTimes,
   };
 
   static void goToHomePage(BuildContext context) {

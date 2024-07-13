@@ -7,9 +7,11 @@ import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/mgr/models/feedback_md.dart';
 import 'package:masjid_noor_customer/mgr/services/api_service.dart';
 import 'package:masjid_noor_customer/navigation/router.dart';
+
 // import 'package:masjid_noor_customer/presentation/admin_pages/app_controller.dart';
 // import 'package:masjid_noor_customer/presentation/admin_pages/widgets/tap_widget.dart';
 import 'package:masjid_noor_customer/presentation/constants.dart';
+
 // import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 import 'package:masjid_noor_customer/presentation/widgets/tap_widget.dart';
 
@@ -41,6 +43,7 @@ class _MainSidebarState extends State<MainSidebar> {
     const _MainNavItem(title: "Products", route: Routes.products),
     const _MainNavItem(title: "Inventory", route: Routes.inventory),
     const _MainNavItem(title: "Order", route: Routes.orders),
+    const _MainNavItem(title: "Prayer times", route: Routes.prayerTimes),
     // const _MainNavItem(title: "Payment", route: Routes.payment),
   ];
 
