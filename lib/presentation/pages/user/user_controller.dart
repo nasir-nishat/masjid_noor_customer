@@ -17,7 +17,7 @@ class UserController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchUser();
+    // fetchUser();
   }
 
   fetchUser() async {

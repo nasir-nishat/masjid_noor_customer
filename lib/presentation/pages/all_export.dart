@@ -34,3 +34,4 @@ export 'package:masjid_noor_customer/mgr/models/category_md.dart';
 export 'package:go_router/go_router.dart';
 export 'package:hive/hive.dart';
 export 'package:masjid_noor_customer/mgr/models/user_md.dart';
+export 'package:heroicons/heroicons.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
 import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:masjid_noor_customer/navigation/router.dart';
@@ -21,29 +22,27 @@ class CartPage extends GetView<CartController> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  icon: const Icon(Icons.arrow_back),
-                ),
-                Text(
-                  'Cart',
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
+            Padding(
+              padding: EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Cart',
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    controller.clearCart();
-                  },
-                  icon: const Icon(Icons.delete),
-                ),
-              ],
+                  InkWell(
+                    onTap: () {
+                      context.pop();
+                      // controller.clearCart();
+                    },
+                    child: const HeroIcon(HeroIcons.xMark),
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: 10.h),
             if (controller.cartItems.isEmpty)
@@ -70,7 +69,6 @@ class CartPage extends GetView<CartController> {
                           if (stockQty > 0 && cartProd.quantity >= stockQty) {
                             showSnackBar(context, 'Stock is not enough',
                                 duration: const Duration(seconds: 1));
-
                             return;
                           }
                           controller.increaseQuantity(cartProd);
@@ -85,9 +83,9 @@ class CartPage extends GetView<CartController> {
                   ),
                 ),
               ),
-            // if (controller.cartItems.isNotEmpty)
+            SizedBox(height: 10.h),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+              padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(

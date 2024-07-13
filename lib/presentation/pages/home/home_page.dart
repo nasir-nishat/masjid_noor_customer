@@ -1,8 +1,5 @@
-import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
-import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
-import 'package:masjid_noor_customer/presentation/widgets/cart_icon_count.dart';
 
 class HomePage extends GetView<ProductController> {
   HomePage({super.key});
@@ -14,15 +11,22 @@ class HomePage extends GetView<ProductController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                child: Image.network(
-                  'https://picsum.photos/200/300',
-                  height: 180.h,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(height: 20.h),
+                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                  child: Image.network('https://picsum.photos/200/300',
+                      height: 180.h, width: double.infinity, fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                      ),
+                      child: const Center(
+                        child: Text('No Image'),
+                      ),
+                    );
+                  })),
+              SizedBox(height: 10.h),
               _buildProductSection(
                   'New Products', controller.newProducts, context),
               _buildProductSection(
@@ -61,7 +65,6 @@ class HomePage extends GetView<ProductController> {
             ],
           ),
         ),
-        SizedBox(height: 10.h),
         SizedBox(
           height: 200.h,
           child: ListView.separated(
@@ -76,7 +79,6 @@ class HomePage extends GetView<ProductController> {
             separatorBuilder: (context, index) => SizedBox(width: 10.w),
           ),
         ),
-        SizedBox(height: 20.h),
       ],
     );
   }

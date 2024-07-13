@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
 import 'package:masjid_noor_customer/navigation/router.dart';
 import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
@@ -34,7 +35,7 @@ class _MainLayoutState extends State<MainLayout> {
           padding: EdgeInsets.symmetric(
             horizontal: 5.w,
           ),
-          child: Header(),
+          child: const Header(),
         ),
       ),
       body: Padding(padding: EdgeInsets.all(10.w), child: widget.child),
@@ -46,19 +47,19 @@ class _MainLayoutState extends State<MainLayout> {
               },
               items: const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
+                  icon: HeroIcon(HeroIcons.home),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_bag_outlined),
+                  icon: HeroIcon(HeroIcons.shoppingBag),
                   label: 'Mart',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
+                  icon: HeroIcon(HeroIcons.magnifyingGlass),
                   label: 'Search',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
+                  icon: HeroIcon(HeroIcons.user),
                   label: 'Profile',
                 ),
               ],
