@@ -26,10 +26,24 @@ class ProductListPage extends GetView<ProductController> {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.w),
                   child: Obx(() {
+                    bool isSelected = controller.selectedCategory.value ==
+                        controller.categories[index];
                     return ChoiceChip(
-                      label: Text(controller.categories[index].name),
-                      selected: controller.selectedCategory.value ==
-                          controller.categories[index],
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      backgroundColor:
+                          isSelected ? Colors.blue : Colors.transparent,
+                      selectedColor: Colors.blue,
+                      side: isSelected
+                          ? BorderSide.none
+                          : const BorderSide(color: Colors.grey),
+                      showCheckmark: false,
+                      label: Text(
+                        controller.categories[index].name,
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      selected: isSelected,
                       onSelected: (isSelected) {
                         if (isSelected) {
                           controller.selectedCategory.value =
@@ -57,13 +71,10 @@ class ProductListPage extends GetView<ProductController> {
                           padding: EdgeInsets.symmetric(horizontal: 12.w),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, // Number of columns in the grid
-                            crossAxisSpacing:
-                                10.w, // Horizontal space between grid items
-                            mainAxisSpacing:
-                                10.h, // Vertical space between grid items
-                            childAspectRatio:
-                                0.8, // Aspect ratio for the grid items
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10.w,
+                            mainAxisSpacing: 10.h,
+                            childAspectRatio: 0.8,
                           ),
                           itemCount: controller.products.length + 1,
                           itemBuilder: (context, index) {
