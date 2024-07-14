@@ -43,6 +43,7 @@ dependencies:
   mask_text_input_formatter: ^2.9.0
   share_plus: ^9.0.0
   hive: ^2.2.3
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -55,8 +56,9 @@ flutter:
   uses-material-design: true
 
   assets:
-      - assets/fonts/
-      - assets/
+    - assets/fonts/
+    - assets/prayer_times/
+    - assets/
 
 
   fonts:

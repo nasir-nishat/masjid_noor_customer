@@ -148,14 +148,14 @@ final GoRouter goRouter = GoRouter(
         );
       },
     ),
-    GoRoute(
-      path: Routes.prayerTimes,
-      pageBuilder: (context, state) {
-        return const NoTransitionPage(
-          child: PrayerTimes(),
-        );
-      },
-    ),
+    // GoRoute(
+    //   path: Routes.prayerTimes,
+    //   pageBuilder: (context, state) {
+    //     return const NoTransitionPage(
+    //       child: PrayerTimes(),
+    //     );
+    //   },
+    // ),
     GoRoute(
       path: Routes.cart,
       pageBuilder: (context, state) {

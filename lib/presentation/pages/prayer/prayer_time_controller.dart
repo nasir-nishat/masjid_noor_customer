@@ -1,40 +1,46 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class PrayerTime {
+  final String name;
+  final String time;
+
+  PrayerTime({required this.name, required this.time});
+}
 
 class PrayerTimesController extends GetxController {
-  var fajr = TimeOfDay(hour: 5, minute: 0).obs;
-  var dhuhr = TimeOfDay(hour: 12, minute: 0).obs;
-  var asr = TimeOfDay(hour: 15, minute: 0).obs;
-  var maghrib = TimeOfDay(hour: 18, minute: 0).obs;
-  var isha = TimeOfDay(hour: 20, minute: 0).obs;
+  RxList<PrayerTime> prayerTimes = <PrayerTime>[].obs;
+  RxBool isLoading = false.obs;
+  RxString error = ''.obs;
 
-  void setTime(String prayer, TimeOfDay time) {
-    switch (prayer) {
-      case 'Fajr':
-        fajr.value = time;
-        break;
-      case 'Dhuhr':
-        dhuhr.value = time;
-        break;
-      case 'Asr':
-        asr.value = time;
-        break;
-      case 'Maghrib':
-        maghrib.value = time;
-        break;
-      case 'Isha':
-        isha.value = time;
-        break;
-      default:
-        break;
+  Future<void> fetchPrayerTimes(
+      {required double latitude, required double longitude}) async {
+    isLoading.value = true;
+    error.value = '';
+
+    try {
+      final response = await http.get(Uri.parse(
+          'http://api.aladhan.com/v1/timings/${DateTime.now().millisecondsSinceEpoch ~/ 1000}?latitude=$latitude&longitude=$longitude&method=2'));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final timings = data['data']['timings'];
+
+        prayerTimes.value = [
+          PrayerTime(name: 'Fajr', time: timings['Fajr']),
+          PrayerTime(name: 'Dhuhr', time: timings['Dhuhr']),
+          PrayerTime(name: 'Asr', time: timings['Asr']),
+          PrayerTime(name: 'Maghrib', time: timings['Maghrib']),
+          PrayerTime(name: 'Isha', time: timings['Isha']),
+        ];
+      } else {
+        error.value = 'Failed to load prayer times';
+      }
+    } catch (e) {
+      error.value = 'An error occurred: $e';
     }
-  }
 
-  void savePrayerTimes() {
-    print('Fajr: ${fajr.value.format(Get.context!)}');
-    print('Dhuhr: ${dhuhr.value.format(Get.context!)}');
-    print('Asr: ${asr.value.format(Get.context!)}');
-    print('Maghrib: ${maghrib.value.format(Get.context!)}');
-    print('Isha: ${isha.value.format(Get.context!)}');
+    isLoading.value = false;
   }
 }

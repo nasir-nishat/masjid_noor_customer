@@ -1,59 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
-import 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
 
-class PrayerTimes extends GetView<PrayerTimesController> {
-  const PrayerTimes({super.key});
+class PrayerTimesBanner extends GetView<PrayerTimesController> {
+  static PrayerTimesBanner get to => Get.find();
+
+  PrayerTimesBanner({Key? key}) : super(key: key) {
+    // Replace with actual latitude and longitude
+    controller.fetchPrayerTimes(latitude: 21.4225, longitude: 39.8262);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Prayer Times'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: () {
-              controller.savePrayerTimes();
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.r),
-        child: SpacedColumn(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          verticalSpace: 20.h,
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return Center(child: CircularProgressIndicator());
+      }
+
+      if (controller.error.isNotEmpty) {
+        return Center(child: Text(controller.error.value));
+      }
+
+      return Container(
+        height: 120,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: controller.prayerTimes.length,
+          itemBuilder: (context, index) {
+            final prayerTime = controller.prayerTimes[index];
+            return PrayerTimeCard(prayerTime: prayerTime);
+          },
+        ),
+      );
+    });
+  }
+}
+
+class PrayerTimeCard extends StatelessWidget {
+  final PrayerTime prayerTime;
+
+  const PrayerTimeCard({Key? key, required this.prayerTime}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(8),
+      child: Container(
+        width: 120,
+        padding: EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildTimePicker(context, 'Fajr', controller.fajr),
-            _buildTimePicker(context, 'Dhuhr', controller.dhuhr),
-            _buildTimePicker(context, 'Asr', controller.asr),
-            _buildTimePicker(context, 'Maghrib', controller.maghrib),
-            _buildTimePicker(context, 'Isha', controller.isha),
+            Text(
+              prayerTime.name,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+              prayerTime.time,
+              style: TextStyle(fontSize: 16),
+            ),
           ],
         ),
       ),
     );
-  }
-
-  Widget _buildTimePicker(
-      BuildContext context, String prayer, Rx<TimeOfDay> time) {
-    return Obx(() {
-      return ListTile(
-        title: Text(prayer),
-        trailing: Text(time.value.format(context)),
-        onTap: () async {
-          TimeOfDay? picked = await showTimePicker(
-            context: context,
-            initialTime: time.value,
-          );
-          if (picked != null && picked != time.value) {
-            controller.setTime(prayer, picked);
-          }
-        },
-      );
-    });
   }
 }

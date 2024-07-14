@@ -11,6 +11,7 @@ import 'package:masjid_noor_customer/presentation/layout/error_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/order_controller.dart';
+import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';
 import 'package:masjid_noor_customer/presentation/theme/app_theme.dart';
@@ -31,6 +32,7 @@ void main() async {
     GoRouter.optionURLReflectsImperativeAPIs = true;
     await SupabaseDep.impl.initialize();
 
+    Get.lazyPut(() => PrayerTimesController());
     Get.lazyPut(() => UserController());
     Get.lazyPut(() => ProductController());
     Get.lazyPut(() => CartController());
