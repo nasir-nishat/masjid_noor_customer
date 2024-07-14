@@ -5,8 +5,7 @@ import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_contr
 class PrayerTimesBanner extends GetView<PrayerTimesController> {
   static PrayerTimesBanner get to => Get.find();
 
-  PrayerTimesBanner({Key? key}) : super(key: key) {
-    // Replace with actual latitude and longitude
+  PrayerTimesBanner({super.key}) {
     controller.fetchPrayerTimes(latitude: 21.4225, longitude: 39.8262);
   }
 
@@ -14,14 +13,14 @@ class PrayerTimesBanner extends GetView<PrayerTimesController> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) {
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       }
 
       if (controller.error.isNotEmpty) {
         return Center(child: Text(controller.error.value));
       }
 
-      return Container(
+      return SizedBox(
         height: 120,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -39,7 +38,7 @@ class PrayerTimesBanner extends GetView<PrayerTimesController> {
 class PrayerTimeCard extends StatelessWidget {
   final PrayerTime prayerTime;
 
-  const PrayerTimeCard({Key? key, required this.prayerTime}) : super(key: key);
+  const PrayerTimeCard({super.key, required this.prayerTime});
 
   @override
   Widget build(BuildContext context) {

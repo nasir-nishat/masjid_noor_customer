@@ -5,8 +5,9 @@ import 'dart:convert';
 class PrayerTime {
   final String name;
   final String time;
+  final String? jamahTime;
 
-  PrayerTime({required this.name, required this.time});
+  PrayerTime({required this.name, required this.time, this.jamahTime});
 }
 
 class PrayerTimesController extends GetxController {
