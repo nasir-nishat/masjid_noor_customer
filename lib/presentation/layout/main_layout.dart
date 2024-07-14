@@ -43,6 +43,7 @@ class _MainLayoutState extends State<MainLayout> {
           ? BottomNavigationBar(
               selectedFontSize: 0,
               currentIndex: AppController.to.navIndex.value,
+              useLegacyColorScheme: false,
               onTap: (index) {
                 _onItemTapped(index, context);
               },

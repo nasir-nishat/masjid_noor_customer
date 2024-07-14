@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
+import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 
 class ProductDetailsPage extends GetView<ProductController> {
   final String id;
   final String parentRoute;
+
   const ProductDetailsPage(
       {super.key, required this.id, required this.parentRoute});
 
@@ -22,69 +24,86 @@ class ProductDetailsPage extends GetView<ProductController> {
             minimumSize: Size(double.infinity, 50.h),
           ),
           child: const Text("Add to Cart"),
-          onPressed: () {},
+          onPressed: () {
+            CartController.to.addToCart(prod);
+            context.push(Routes.cart);
+          },
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                  onPressed: () {
-                    context.go(parentRoute);
-                  },
-                  icon: const Icon(Icons.close)),
-            ),
-            SizedBox(height: 20.h),
-            Image.network(
-              prod.images?.firstOrNull ??
-                  'https://picsum.photos/id/230/200/200',
-              height: 300.h,
-              width: 500.w,
-              fit: BoxFit.fill,
-            ),
-            SizedBox(height: 20.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
-              child: SpacedColumn(
-                verticalSpace: 10,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Divider(),
-                  Text(
-                    prod.name,
-                    style: context.textTheme.headlineLarge,
-                  ),
-                  Text(
-                    prod.sellPrice.toString(),
-                    style: context.textTheme.headlineMedium
-                        ?.copyWith(color: const Color(0xFFB00020)),
-                  ),
-                  if (prod.description != null &&
-                      prod.description!.isNotEmpty) ...[
-                    const Divider(),
-                    Text(
-                      "Description",
-                      style: context.textTheme.headlineMedium,
-                    ),
-                    SizedBox(height: 20.h),
-                    SizedBox(
-                      width: 700.w,
-                      child: Text(
-                        prod.description ?? "",
-                        softWrap: true,
-                        style: context.textTheme.bodyLarge,
-                      ),
-                    ),
-                  ],
-                  const Divider(),
-                  SizedBox(height: 80.h), // Extra space to avoid button overlap
-                ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16..w),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                    onPressed: () {
+                      context.go(parentRoute);
+                    },
+                    icon: const Icon(Icons.close)),
               ),
-            ),
-          ],
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                child: Image.network(
+                  prod.images?.firstOrNull ??
+                      'https://picsum.photos/id/230/200/200',
+
+                  // height: 250.h,
+                  // fit: BoxFit.fill,
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: SpacedColumn(
+                  verticalSpace: 10,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Divider(
+                    //     color: Colors.blueGrey,
+                    //     height: 0.5.h,
+                    //     thickness: 0.5.h),
+                    Text(
+                      prod.name,
+                      style: context.textTheme.headlineLarge,
+                    ),
+                    Text(
+                      "₩ ${prod.sellPrice.toString()}",
+                      style: context.textTheme.headlineMedium
+                          ?.copyWith(color: const Color(0xFFB00020)),
+                    ),
+                    if (prod.description != null &&
+                        prod.description!.isNotEmpty) ...[
+                      Divider(
+                          color: Colors.blueGrey,
+                          height: 0.5.h,
+                          thickness: 0.5.h),
+                      Text(
+                        "Description",
+                        style: context.textTheme.headlineMedium,
+                      ),
+                      SizedBox(
+                        width: 700.w,
+                        child: Text(
+                          prod.description ?? "",
+                          softWrap: true,
+                          style: context.textTheme.bodyLarge,
+                        ),
+                      ),
+                    ],
+                    // Divider(
+                    //     color: Colors.blueGrey,
+                    //     height: 0.5.h,
+                    //     thickness: 0.5.h),
+                    SizedBox(
+                        height: 80.h), // Extra space to avoid button overlap
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
