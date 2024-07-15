@@ -15,20 +15,36 @@ class ProductDetailsPage extends GetView<ProductController> {
   @override
   Widget build(BuildContext context) {
     ProductMd prod = controller.selectedProduct.value;
+    bool isAvailable = prod.stockQty != null && prod.stockQty! > 0;
     return Scaffold(
       bottomSheet: Container(
         padding: EdgeInsets.all(10.w),
         color: Colors.white,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, 50.h),
-          ),
-          child: const Text("Add to Cart"),
-          onPressed: () {
-            CartController.to.addToCart(prod);
-            context.push(Routes.cart);
-          },
-        ),
+        child: isAvailable
+            ? ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50.h),
+                ),
+                child: const Text("Add to Cart"),
+                onPressed: () {
+                  if (isAvailable) {
+                    CartController.to.addToCart(prod);
+                    context.push(Routes.cart);
+                  } else {
+                    showSnackBar(context, "This product is out of stock");
+                  }
+                },
+              )
+            : Container(
+                height: 50,
+                color: Colors.grey[200],
+                child: const Center(
+                  child: Text(
+                    "Out of Stock",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -48,9 +64,6 @@ class ProductDetailsPage extends GetView<ProductController> {
                 child: Image.network(
                   prod.images?.firstOrNull ??
                       'https://picsum.photos/id/230/200/200',
-
-                  // height: 250.h,
-                  // fit: BoxFit.fill,
                 ),
               ),
               SizedBox(height: 20.h),
