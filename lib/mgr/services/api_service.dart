@@ -202,7 +202,7 @@ class ApiService {
   // ===========================
   // ===========================
 
-  Future<OrderDetailsMd?> placeOrder({
+  Future<String?> placeOrder({
     required List<CartMd> cartItems,
     required String contactNumber,
     required String userId,
@@ -224,7 +224,6 @@ class ApiService {
             'status': 'pending',
             'note': note,
             'user_id': userId,
-            'status': 'pending',
             'payment_method': paymentMethod.toShortString(),
           })
           .select()
@@ -243,16 +242,8 @@ class ApiService {
         });
       }
 
-      // Fetch order details and items
-      final OrderDetailsMdResponse = await _supabaseClient
-          .from('orders')
-          .select('*, order_items(*)')
-          .eq('id', orderId)
-          .single();
-
-      return OrderDetailsMd.fromJson(OrderDetailsMdResponse);
+      return orderId.toString();
     } catch (error) {
-      // Handle error
       print('Error placing order: $error');
       return null;
     }
@@ -273,6 +264,8 @@ class ApiService {
     List<OrderDetailsMd> orders = (orderDetailsMdResponse as List)
         .map((order) => OrderDetailsMd.fromJson(order))
         .toList();
+
+    print(orders);
 
     return orders;
   }

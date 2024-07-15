@@ -62,12 +62,11 @@ class AuthenticationNotifier {
       accessToken: accessToken,
     );
 
-    usermd = UserMd(
+    UserMd userLog = UserMd(
       userId: authResponse.user!.id,
       email: authResponse.user!.userMetadata!["email"],
       passwordHash: '',
       phoneNumber: '',
-      // Initially empty, can be updated later
       createdAt: DateTime.now(),
       firstName: authResponse.user!.userMetadata!["full_name"]
           .toString()
@@ -79,6 +78,13 @@ class AuthenticationNotifier {
           authResponse.user!.userMetadata!["email"].toString().split('@')[0],
       profilePic: authResponse.user!.userMetadata!["avatar_url"],
     );
+
+    UserMd? curUserMd = await ApiService().getUser(authResponse.user!.id);
+    if (curUserMd != null) {
+      usermd = userLog;
+    } else {
+      await ApiService().registerUser(usermd!);
+    }
 
     _userBox.put('user', usermd!);
 

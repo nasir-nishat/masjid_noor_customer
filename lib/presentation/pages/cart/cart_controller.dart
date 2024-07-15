@@ -1,5 +1,7 @@
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 
+import '../../../mgr/models/order_md.dart';
+
 class CartController extends GetxController {
   static CartController get to {
     if (!Get.isRegistered<CartController>()) {
@@ -56,9 +58,9 @@ class CartController extends GetxController {
     return cartItems.fold(0, (total, cartItem) => total + cartItem.totalPrice);
   }
 
-  void processOrder(BuildContext context) async {
+  Future<bool> processOrder(BuildContext context) async {
     if (cartItems.isEmpty) {
-      return;
+      return false;
     }
     AppController.to.showGlobalLoading();
 
@@ -66,24 +68,29 @@ class CartController extends GetxController {
     if (userId.isEmpty) {
       AppController.to.hideGlobalLoading();
       showSnackBar(context, 'Please login to place order');
-      return;
+      return false;
     }
 
-    final OrderDetailsMd = await ApiService().placeOrder(
+    final String? orderId = await ApiService().placeOrder(
       cartItems: cartItems,
       contactNumber: contactNumber,
       userId: userId,
       note: '',
       paymentMethod: paymentMethod ?? PaymentMethod.cash,
     );
+    print("++++++++++++++++++");
+    print(orderId);
+    print("++++++++++++++++++");
 
-    if (OrderDetailsMd != null) {
-      AppController.to.hideGlobalLoading();
+    if (orderId != null && orderId.isNotEmpty) {
       clearCart();
       if (context.mounted) {
         context.pop();
       }
+      AppController.to.hideGlobalLoading();
+      return true;
     }
     AppController.to.hideGlobalLoading();
+    return false;
   }
 }

@@ -7,6 +7,7 @@ import 'package:masjid_noor_customer/mgr/dependency/supabase_dep.dart';
 import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:masjid_noor_customer/navigation/router.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
+import 'package:masjid_noor_customer/presentation/pages/user/profile_page.dart';
 import 'package:masjid_noor_customer/presentation/widgets/cart_item.dart';
 import 'package:masjid_noor_customer/mgr/models/cart_md.dart';
 import 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
@@ -170,6 +171,12 @@ class CartPage extends GetView<CartController> {
         } else {
           return;
         }
+      } else if (paymentMethod == PaymentMethod.bankTransfer) {
+        if (!context.mounted) return;
+        bool orderDone = await controller.processOrder(context);
+        if (!orderDone) return;
+        if (!context.mounted) return;
+        showBankDetailsDialog(context);
       } else {
         if (!context.mounted) return;
         controller.processOrder(context);
