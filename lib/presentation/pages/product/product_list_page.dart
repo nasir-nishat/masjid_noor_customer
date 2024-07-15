@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
-import 'package:masjid_noor_customer/presentation/widgets/cart_icon_count.dart';
-
 import '../../../navigation/router.dart';
 import '../../widgets/product_item.dart';
 

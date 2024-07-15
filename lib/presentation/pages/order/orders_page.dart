@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:heroicons/heroicons.dart';
 import 'package:masjid_noor_customer/mgr/models/order_md.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/order_controller.dart';
 import 'package:masjid_noor_customer/presentation/widgets/order_status.dart';

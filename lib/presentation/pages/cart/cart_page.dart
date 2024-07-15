@@ -161,14 +161,17 @@ class CartPage extends GetView<CartController> {
     if (paymentMethod != null) {
       controller.paymentMethod = paymentMethod;
       if (paymentMethod == PaymentMethod.due) {
+        if (!context.mounted) return;
         Map<String, String>? dueInfo = await showDuePaymentDialog(context);
         if (dueInfo != null) {
           controller.contactNumber = dueInfo['phone']!;
+          if (!context.mounted) return;
           controller.processOrder(context);
         } else {
           return;
         }
       } else {
+        if (!context.mounted) return;
         controller.processOrder(context);
       }
     }
