@@ -111,7 +111,7 @@ final GoRouter goRouter = GoRouter(
         GoRoute(
           path: Routes.products,
           pageBuilder: (context, state) {
-            return const NoTransitionPage(
+            return NoTransitionPage(
               child: ProductListPage(),
             );
           },

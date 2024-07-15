@@ -6,10 +6,21 @@ import '../../../navigation/router.dart';
 import '../../widgets/product_item.dart';
 
 class ProductListPage extends GetView<ProductController> {
-  const ProductListPage({super.key});
+  ProductListPage({super.key});
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<ProductController>();
+
+    _scrollController.addListener(() {
+      if (controller.isLoadingMoreEnabled &&
+          _scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent) {
+        controller.loadMoreProducts();
+      }
+    });
+
     return Scaffold(
       body: Column(
         children: [
@@ -87,44 +98,8 @@ class ProductListPage extends GetView<ProductController> {
                               parentRoute: Routes.products,
                             );
                           },
-                          controller: ScrollController()
-                            ..addListener(() {
-                              if (controller.isLoadingMoreEnabled &&
-                                  ScrollController().position.pixels ==
-                                      ScrollController()
-                                          .position
-                                          .maxScrollExtent) {
-                                controller.loadMoreProducts();
-                              }
-                            }),
+                          controller: _scrollController,
                         ),
-                  // : ListView.builder(
-                  //     itemCount: controller.products.length + 1,
-                  //     itemBuilder: (context, index) {
-                  //       if (index == controller.products.length) {
-                  //         if (controller.isFetching.value) {
-                  //           return const Center(
-                  //               child: CircularProgressIndicator());
-                  //         } else {
-                  //           return const SizedBox.shrink();
-                  //         }
-                  //       }
-                  //       return ProductItem(
-                  //         product: controller.products[index],
-                  //         parentRoute: Routes.products,
-                  //       );
-                  //     },
-                  //     controller: ScrollController()
-                  //       ..addListener(() {
-                  //         if (controller.isLoadingMoreEnabled &&
-                  //             ScrollController().position.pixels ==
-                  //                 ScrollController()
-                  //                     .position
-                  //                     .maxScrollExtent) {
-                  //           controller.loadMoreProducts();
-                  //         }
-                  //       }),
-                  //   ),
                 );
               }
             }),
