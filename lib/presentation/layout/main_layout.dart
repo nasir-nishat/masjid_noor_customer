@@ -23,9 +23,6 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   bool get loggedIn => SupabaseDep.impl.auth.currentUser != null;
 
-  String get currentRoute =>
-      GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,14 +32,14 @@ class _MainLayoutState extends State<MainLayout> {
           padding: EdgeInsets.symmetric(
             horizontal: 5.w,
           ),
-          child: const Header(),
+          child: Header(currentRoute: getCurrentRoute(context)),
         ),
       ),
       body: Padding(padding: EdgeInsets.all(10.w), child: widget.child),
-      bottomNavigationBar: showBottomNav()
+      bottomNavigationBar: showBottomNav(context)
           ? BottomNavigationBar(
               selectedFontSize: 0,
-              currentIndex: AppController.to.navIndex.value,
+              currentIndex: getCurrentIndex(context),
               useLegacyColorScheme: false,
               onTap: (index) {
                 _onItemTapped(index, context);
@@ -70,26 +67,41 @@ class _MainLayoutState extends State<MainLayout> {
     );
   }
 
+  int getCurrentIndex(BuildContext context) {
+    String currentRoute = getCurrentRoute(context);
+
+    switch (currentRoute) {
+      case Routes.home:
+        return 0;
+      case Routes.products:
+        return 1;
+      case Routes.search:
+        return 2;
+      case Routes.profile:
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
   void _onItemTapped(int index, BuildContext context) {
+    String currentRoute = getCurrentRoute(context);
     switch (index) {
       case 0:
         if (currentRoute != Routes.home) {
-          AppController.to.navIndex.value = 0;
-          AppController.to.currentRoute.value = Routes.home;
+          // AppController.to.currentRoute.value = Routes.home;
           context.go(Routes.home);
         }
         break;
       case 1:
         if (currentRoute != Routes.products) {
-          AppController.to.navIndex.value = 1;
-          AppController.to.currentRoute.value = Routes.products;
+          // AppController.to.currentRoute.value = Routes.products;
           context.go(Routes.products);
         }
         break;
       case 2:
         if (currentRoute != Routes.search) {
-          AppController.to.navIndex.value = 2;
-          AppController.to.currentRoute.value = Routes.search;
+          // AppController.to.currentRoute.value = Routes.search;
           context.go(Routes.search);
         }
         break;
@@ -97,8 +109,7 @@ class _MainLayoutState extends State<MainLayout> {
         if (currentRoute != Routes.profile) {
           if (loggedIn) {
             UserController.to.fetchUser();
-            AppController.to.navIndex.value = 3;
-            AppController.to.currentRoute.value = Routes.profile;
+            // AppController.to.currentRoute.value = Routes.profile;
             context.go(Routes.profile);
           } else {
             context.push(Routes.login);
@@ -108,7 +119,8 @@ class _MainLayoutState extends State<MainLayout> {
     }
   }
 
-  bool showBottomNav() {
+  bool showBottomNav(BuildContext context) {
+    String currentRoute = getCurrentRoute(context);
     if (currentRoute.contains(Routes.orders)) {
       return false;
     } else if (currentRoute.contains(Routes.home)) {

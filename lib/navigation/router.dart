@@ -92,6 +92,9 @@ class AuthenticationNotifier {
   }
 }
 
+String getCurrentRoute(BuildContext context) =>
+    GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+
 final GoRouter goRouter = GoRouter(
   initialLocation: Routes.home,
   debugLogDiagnostics: true,

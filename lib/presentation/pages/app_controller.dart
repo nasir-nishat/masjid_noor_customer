@@ -10,11 +10,7 @@ class AppController extends GetxController {
     return Get.find<AppController>();
   }
 
-  RxInt navIndex = 0.obs;
-
   RxBool globalLoading = false.obs;
-
-  RxString currentRoute = ''.obs;
 
   void showGlobalLoading() {
     globalLoading.value = true;

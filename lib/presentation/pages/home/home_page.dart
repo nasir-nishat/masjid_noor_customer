@@ -11,7 +11,7 @@ class HomePage extends GetView<ProductController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              PrayerTimesBanner(),
+              const PrayerTimesBanner(),
               SizedBox(height: 10.h),
               _buildProductSection(
                   'New Products', controller.newProducts, context),
@@ -40,7 +40,7 @@ class HomePage extends GetView<ProductController> {
               TextButton(
                   onPressed: () {
                     controller.getCategories();
-                    AppController.to.navIndex.value = 1;
+                    // AppController.to.navIndex.value = 1;
                     context.go(Routes.products);
                   },
                   child: Text(
