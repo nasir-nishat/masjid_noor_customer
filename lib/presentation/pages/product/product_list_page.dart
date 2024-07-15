@@ -7,6 +7,7 @@ import '../../widgets/product_item.dart';
 
 class ProductListPage extends GetView<ProductController> {
   ProductListPage({super.key});
+
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -86,7 +87,7 @@ class ProductListPage extends GetView<ProductController> {
                           itemCount: controller.products.length + 1,
                           itemBuilder: (context, index) {
                             if (index == controller.products.length) {
-                              if (controller.isFetching.value) {
+                              if (controller.isLoading.value) {
                                 return const Center(
                                     child: CircularProgressIndicator());
                               } else {

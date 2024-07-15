@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 
 class ProductController extends GetxController {
@@ -12,14 +14,14 @@ class ProductController extends GetxController {
   var selectedCategory = CategoryMd(name: "").obs;
 
   var isLoading = true.obs;
-  var isFetching = false.obs;
+  var isSearchLoading = false.obs;
 
   int pageSize = 10;
   RxInt currentPage = 1.obs;
   Rx<Filter> selectedFilter = Filter(type: '', value: '').obs;
 
   bool get isLoadingMoreEnabled =>
-      products.length >= pageSize && !isFetching.value && !isLoading.value;
+      products.length >= pageSize && !isLoading.value;
 
   var searchedProducts = <ProductMd>[].obs;
 
@@ -102,7 +104,7 @@ class ProductController extends GetxController {
   }
 
   Future<void> searchProducts(String query) async {
-    isLoading.value = true;
+    isSearchLoading.value = true;
     currentPage.value = 1;
     searchedProducts.clear();
 
@@ -114,35 +116,37 @@ class ProductController extends GetxController {
     } catch (e) {
       print("Error searching products: $e");
     } finally {
-      isLoading.value = false;
+      isSearchLoading.value = false;
     }
   }
 
   Future<void> loadMoreSearchProducts(String query) async {
-    if (isFetching.value || !isLoadingMoreEnabled) return;
-
-    isFetching.value = true;
+    isSearchLoading.value = true;
     currentPage.value++;
 
     try {
-      List<ProductMd> fetchedProducts = await ApiService().searchProducts(
+      List<ProductMd> fetchedProducts = await ApiService()
+          .searchProducts(
         query,
         pageSize,
         currentPage.value,
-      );
+      )
+          .timeout(const Duration(seconds: 5), onTimeout: () {
+        throw TimeoutException("Search operation timed out after 5 seconds");
+      });
 
       searchedProducts.addAll(fetchedProducts);
     } catch (e) {
       print("Error loading more search products: $e");
     } finally {
-      isFetching.value = false;
+      isSearchLoading.value = false;
     }
   }
 
   Future<void> loadMoreProducts() async {
-    if (isFetching.value || !isLoadingMoreEnabled) return;
+    if (!isLoadingMoreEnabled) return;
 
-    isFetching.value = true;
+    isLoading.value = true;
     currentPage.value++;
 
     int offset = (currentPage.value - 1) * pageSize;
@@ -161,7 +165,7 @@ class ProductController extends GetxController {
     } catch (e) {
       print("Error loading more products: $e");
     } finally {
-      isFetching.value = false;
+      isLoading.value = false;
     }
   }
 }
