@@ -12,8 +12,29 @@ class OrdersPage extends GetView<OrderController> {
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
           appBar: AppBar(
-            title: Text('Cart',
-                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold)),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Cart',
+                    style: TextStyle(
+                        fontSize: 24.sp, fontWeight: FontWeight.bold)),
+                SizedBox(
+                  width: 150.w,
+                  child: DropdownButtonFormField<String>(
+                    value: controller.selectedStatus.value,
+                    items: controller.orderStatuses
+                        .map((status) => DropdownMenuItem(
+                              value: status,
+                              child: Text(status),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      controller.filterOrders(value!);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
           body: controller.orderList.isEmpty
               ? const Center(child: Text('No orders found'))

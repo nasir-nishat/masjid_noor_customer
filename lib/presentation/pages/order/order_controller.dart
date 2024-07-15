@@ -13,6 +13,9 @@ class OrderController extends GetxController {
 
   var orderList = <OrderDetailsMd>[].obs;
   RxBool isLoadingOrders = false.obs;
+  var orderStatuses =
+      ['All', 'Pending', 'Processing', 'Completed', 'Cancelled'].obs;
+  var selectedStatus = 'All'.obs;
 
   @override
   void onInit() {
@@ -26,5 +29,17 @@ class OrderController extends GetxController {
     List<OrderDetailsMd> orders = await ApiService().getUserOrders(userId);
     orderList.assignAll(orders);
     isLoadingOrders.value = false;
+  }
+
+  filterOrders(String status) {
+    selectedStatus.value = status;
+    if (status == 'All') {
+      fetchOrders();
+    } else {
+      orderList.assignAll(orderList
+          .where((element) =>
+              element.status.toShortString().contains(status.toLowerCase()))
+          .toList());
+    }
   }
 }
