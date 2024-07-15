@@ -21,6 +21,8 @@ class ProductController extends GetxController {
   bool get isLoadingMoreEnabled =>
       products.length >= pageSize && !isFetching.value && !isLoading.value;
 
+  var searchedProducts = <ProductMd>[].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -102,21 +104,38 @@ class ProductController extends GetxController {
   Future<void> searchProducts(String query) async {
     isLoading.value = true;
     currentPage.value = 1;
-    products.clear();
+    searchedProducts.clear();
 
-    if (query.isEmpty) {
-      fetchProducts();
-      return;
-    }
     try {
-      List<ProductMd> searchedProducts =
+      List<ProductMd> srchPrds =
           await ApiService().searchProducts(query, pageSize, currentPage.value);
 
-      products.value = searchedProducts;
+      searchedProducts.value = srchPrds;
     } catch (e) {
       print("Error searching products: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> loadMoreSearchProducts(String query) async {
+    if (isFetching.value || !isLoadingMoreEnabled) return;
+
+    isFetching.value = true;
+    currentPage.value++;
+
+    try {
+      List<ProductMd> fetchedProducts = await ApiService().searchProducts(
+        query,
+        pageSize,
+        currentPage.value,
+      );
+
+      searchedProducts.addAll(fetchedProducts);
+    } catch (e) {
+      print("Error loading more search products: $e");
+    } finally {
+      isFetching.value = false;
     }
   }
 

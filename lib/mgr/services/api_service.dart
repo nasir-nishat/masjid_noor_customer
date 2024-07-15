@@ -184,6 +184,7 @@ class ApiService {
 
   Future<List<ProductMd>> searchProducts(
       String query, int limit, int page) async {
+    print("Searching products for: $query");
     final response = await _supabaseClient
         .from('products')
         .select()
@@ -192,7 +193,7 @@ class ApiService {
 
     List<ProductMd> products =
         (response as List).map((item) => ProductMd.fromJson(item)).toList();
-
+    print(products);
     return products;
   }
 
