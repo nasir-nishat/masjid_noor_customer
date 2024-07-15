@@ -52,13 +52,13 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('../noor-mart-keynoor-mart-key.jks')
+            storeFile file('../noor-mart-key/noor-mart-key.jks')
             storePassword = 'Masjidnoor'
             keyAlias = 'bingnotes'
             keyPassword = 'Masjidnoor'
         }
         debug {
-            storeFile file('../noor-mart-keynoor-mart-key.jks')
+            storeFile file('../noor-mart-key/noor-mart-key.jks')
             storePassword = 'Masjidnoor'
             keyAlias = 'bingnotes'
             keyPassword = 'Masjidnoor'

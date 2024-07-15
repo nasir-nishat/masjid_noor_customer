@@ -81,7 +81,7 @@ class AuthenticationNotifier {
 
     UserMd? curUserMd = await ApiService().getUser(authResponse.user!.id);
     if (curUserMd != null) {
-      usermd = userLog;
+      usermd = curUserMd;
     } else {
       await ApiService().registerUser(usermd!);
     }

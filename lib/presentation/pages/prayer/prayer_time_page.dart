@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PrayerTimesBanner extends StatefulWidget {
   const PrayerTimesBanner({super.key});
@@ -23,7 +24,7 @@ class _PrayerTimesBannerState extends State<PrayerTimesBanner> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
+        return _buildLoadingShimmer(); // Show shimmer loading effect
       }
 
       if (controller.error.isNotEmpty) {
@@ -42,6 +43,49 @@ class _PrayerTimesBannerState extends State<PrayerTimesBanner> {
         ),
       );
     });
+  }
+
+  Widget _buildLoadingShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: SizedBox(
+        height: 120,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 5, // Placeholder count
+          itemBuilder: (context, index) {
+            return _buildShimmerCard();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerCard() {
+    return Card(
+      margin: EdgeInsets.all(8.r),
+      child: Container(
+        width: 120,
+        padding: EdgeInsets.all(16.r),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80.w,
+              height: 16.h,
+              color: Colors.white,
+            ),
+            SizedBox(height: 8.h),
+            Container(
+              width: 60.w,
+              height: 16.h,
+              color: Colors.white,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
