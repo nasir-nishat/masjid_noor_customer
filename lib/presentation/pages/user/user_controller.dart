@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:masjid_noor_customer/mgr/models/user_md.dart';
 import 'package:masjid_noor_customer/mgr/services/api_service.dart';
+import 'package:masjid_noor_customer/navigation/router.dart';
 
 class UserController extends GetxController {
   static UserController get to {
@@ -13,12 +14,6 @@ class UserController extends GetxController {
 
   Rx<UserMd> user = UserMd(phoneNumber: '', email: '').obs;
   RxBool isLoading = false.obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    // fetchUser();
-  }
 
   fetchUser() async {
     isLoading.value = true;
@@ -39,6 +34,14 @@ class UserController extends GetxController {
 
   void updatePhoneNumber(String phoneNumber) async {
     await ApiService().updateUserPhoneNumber(phoneNumber);
+    user.update((val) {
+      AuthenticationNotifier.instance.usermd!.phoneNumber = phoneNumber;
+      final userBox = Hive.box<UserMd>('user_box');
+      UserMd hiveUser = userBox.values.toList().first;
+      hiveUser.phoneNumber = phoneNumber;
+      userBox.put('user', hiveUser);
+      val!.phoneNumber = phoneNumber;
+    });
     update();
   }
 }

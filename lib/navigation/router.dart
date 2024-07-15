@@ -1,13 +1,7 @@
-import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hive/hive.dart';
 import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/orders_page.dart';
-import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_page.dart';
-import '../mgr/dependency/supabase_dep.dart';
-import '../mgr/models/user_md.dart';
-import '../mgr/services/api_service.dart';
 import '../presentation/pages/all_export.dart';
 import '../presentation/utills/extensions.dart';
 
@@ -293,7 +287,8 @@ abstract class Routes {
 }
 
 void showSnackBar(BuildContext context, String message,
-    {Duration duration = const Duration(minutes: 1)}) {
+    {Duration duration =
+        kDebugMode ? const Duration(minutes: 1) : const Duration(seconds: 3)}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(message),

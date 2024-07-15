@@ -30,7 +30,7 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.h),
+        preferredSize: Size.fromHeight(60.h),
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 5.w,

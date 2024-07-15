@@ -5,6 +5,7 @@ import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:masjid_noor_customer/mgr/models/product_md.dart';
 import 'package:masjid_noor_customer/mgr/models/user_md.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
+import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
 import '../dependency/supabase_dep.dart';
 import '../models/feedback_md.dart';
 import '../models/supplier_md.dart';
@@ -66,14 +67,13 @@ class ApiService {
     });
   }
 
-  Future<bool> updateUserPhoneNumber(String phoneNumber) async {
+  Future updateUserPhoneNumber(String phoneNumber) async {
     return _handleRequest(() async {
-      final response = await _supabaseClient
+      await _supabaseClient
           .from('users')
-          .update({'phone_number': phoneNumber}).eq(
-              'user_id', SupabaseDep.impl.supabase.auth.currentUser!.id);
-
-      return response.isNotEmpty;
+          .update({'phone_number': phoneNumber.removeAllWhitespace})
+          .eq('user_id', SupabaseDep.impl.supabase.auth.currentUser!.id)
+          .wait();
     });
   }
 

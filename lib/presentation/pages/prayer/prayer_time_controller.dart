@@ -20,6 +20,19 @@ class PrayerTimesController extends GetxController {
   RxString currentAddress = ''.obs;
   Rx<Position?> currentPosition = Rx<Position?>(null);
 
+  Future<void> getCurrentPosition(BuildContext context) async {
+    final hasPermission = await handleLocationPermission(context);
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      currentPosition.value = position;
+      fetchPrayerTimes(
+          latitude: position.latitude, longitude: position.longitude);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
   Future<void> fetchPrayerTimes(
       {required double latitude, required double longitude}) async {
     isLoading.value = true;
@@ -47,18 +60,6 @@ class PrayerTimesController extends GetxController {
     }
 
     isLoading.value = false;
-  }
-
-  Future<void> getCurrentPosition(BuildContext context) async {
-    final hasPermission = await handleLocationPermission(context);
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-      // setState(() => _currentPosition = position);
-      currentPosition.value = position;
-    }).catchError((e) {
-      debugPrint(e);
-    });
   }
 
   Future<bool> handleLocationPermission(BuildContext context) async {

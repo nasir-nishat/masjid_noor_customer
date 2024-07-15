@@ -1,39 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
-
-// class PrayerTimesBanner extends GetView<PrayerTimesController> {
-//   static PrayerTimesBanner get to => Get.find();
-//
-//   PrayerTimesBanner({super.key}) {
-//     controller.fetchPrayerTimes(latitude: 21.4225, longitude: 39.8262);
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Obx(() {
-//       if (controller.isLoading.value) {
-//         return const Center(child: CircularProgressIndicator());
-//       }
-//
-//       if (controller.error.isNotEmpty) {
-//         return Center(child: Text(controller.error.value));
-//       }
-//
-//       return SizedBox(
-//         height: 120,
-//         child: ListView.builder(
-//           scrollDirection: Axis.horizontal,
-//           itemCount: controller.prayerTimes.length,
-//           itemBuilder: (context, index) {
-//             final prayerTime = controller.prayerTimes[index];
-//             return PrayerTimeCard(prayerTime: prayerTime);
-//           },
-//         ),
-//       );
-//     });
-//   }
-// }
 
 class PrayerTimesBanner extends StatefulWidget {
   const PrayerTimesBanner({super.key});
@@ -49,7 +17,6 @@ class _PrayerTimesBannerState extends State<PrayerTimesBanner> {
   void initState() {
     super.initState();
     controller.getCurrentPosition(context);
-    // controller.fetchPrayerTimes(latitude: 21.4225, longitude: 39.8262);
   }
 
   @override
@@ -86,21 +53,21 @@ class PrayerTimeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.all(8.r),
       child: Container(
         width: 120,
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               prayerTime.name,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Text(
               prayerTime.time,
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16.sp),
             ),
           ],
         ),

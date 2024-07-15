@@ -23,6 +23,12 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    }
+
 android {
     namespace = "com.example.masjid_noor_customer"
     compileSdk = flutter.compileSdkVersion
@@ -42,6 +48,21 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('../noor-mart-keynoor-mart-key.jks')
+            storePassword = 'Masjidnoor'
+            keyAlias = 'bingnotes'
+            keyPassword = 'Masjidnoor'
+        }
+        debug {
+            storeFile file('../noor-mart-keynoor-mart-key.jks')
+            storePassword = 'Masjidnoor'
+            keyAlias = 'bingnotes'
+            keyPassword = 'Masjidnoor'
+        }
     }
 
     buildTypes {
