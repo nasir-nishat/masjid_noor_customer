@@ -36,41 +36,47 @@ class OrdersPage extends GetView<OrderController> {
               ],
             ),
           ),
-          body: controller.orderList.isEmpty
-              ? const Center(child: Text('No orders found'))
-              : Padding(
-                  padding: EdgeInsets.all(8.w),
-                  child: controller.isLoadingOrders.value
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : ListView.separated(
-                          itemCount: controller.orderList.length,
-                          itemBuilder: (context, index) {
-                            final order = controller.orderList[index];
-                            return ListTile(
-                              title: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Order #${order.id} \nTotal Amount: \$${order.totalAmount.toStringAsFixed(2)}',
-                                  ),
-                                  OrderStatusWidget(status: order.status),
-                                ],
-                              ),
-                              onTap: () =>
-                                  _showOrderDetailsBottomSheet(context, order),
-                            );
-                          },
-                          separatorBuilder: (context, index) => Divider(
-                            thickness: .5.h,
-                            height: .5.h,
-                            color: Colors.grey[300],
+          body: RefreshIndicator(
+            onRefresh: () {
+              controller.selectedStatus.value = 'All';
+              return controller.fetchOrders();
+            },
+            child: controller.filteredOrderList.isEmpty
+                ? const Center(child: Text('No orders found'))
+                : Padding(
+                    padding: EdgeInsets.all(8.w),
+                    child: controller.isLoadingOrders.value
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ListView.separated(
+                            itemCount: controller.filteredOrderList.length,
+                            itemBuilder: (context, index) {
+                              final order = controller.filteredOrderList[index];
+                              return ListTile(
+                                title: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Order #${order.id} \nTotal Amount: \$${order.totalAmount.toStringAsFixed(2)}',
+                                    ),
+                                    OrderStatusWidget(status: order.status),
+                                  ],
+                                ),
+                                onTap: () => _showOrderDetailsBottomSheet(
+                                    context, order),
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(
+                              thickness: .5.h,
+                              height: .5.h,
+                              color: Colors.grey[300],
+                            ),
                           ),
-                        ),
-                ),
+                  ),
+          ),
         ));
   }
 
@@ -86,14 +92,6 @@ class OrdersPage extends GetView<OrderController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Align(
-              //   alignment: Alignment.centerRight,
-              //   child: InkWell(
-              //       onTap: () {
-              //         Navigator.of(context).pop();
-              //       },
-              //       child: const HeroIcon(HeroIcons.xMark)),
-              // ),
               Align(
                 alignment: Alignment.center,
                 child: Container(
