@@ -15,7 +15,7 @@ class OrdersPage extends GetView<OrderController> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Cart',
+                Text('Orders',
                     style: TextStyle(
                         fontSize: 24.sp, fontWeight: FontWeight.bold)),
                 SizedBox(
