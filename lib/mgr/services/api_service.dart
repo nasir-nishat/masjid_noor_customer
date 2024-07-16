@@ -260,7 +260,7 @@ class ApiService {
             name
           )
         )
-      ''').eq('user_id', userId);
+      ''').eq('user_id', userId).order('created_at', ascending: false);
 
     List<OrderDetailsMd> orders = (orderDetailsMdResponse as List)
         .map((order) => OrderDetailsMd.fromJson(order))
