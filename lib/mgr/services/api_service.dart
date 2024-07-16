@@ -8,6 +8,7 @@ import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
 import '../dependency/supabase_dep.dart';
 import '../models/feedback_md.dart';
+import '../models/jamah_md.dart';
 import '../models/supplier_md.dart';
 
 class ApiService {
@@ -296,6 +297,21 @@ class ApiService {
       return (response as List)
           .map((orderItem) => OrderItemMd.fromJson(orderItem))
           .toList();
+    });
+  }
+
+  // ===========================
+  // ===========================
+  // Jamah operations
+  // ===========================
+  // ===========================
+  Future<JamahMd> getJamahTime(int id) async {
+    return _handleRequest(() async {
+      final response =
+          await _supabaseClient.from('jamah_times').select("*").eq("id", id);
+
+      print(response);
+      return JamahMd.fromJson(response[0]);
     });
   }
 

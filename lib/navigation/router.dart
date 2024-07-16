@@ -2,6 +2,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/orders_page.dart';
+import 'package:masjid_noor_customer/presentation/pages/prayer/jamah_times_page.dart';
 import '../presentation/pages/all_export.dart';
 import '../presentation/utills/extensions.dart';
 
@@ -151,14 +152,14 @@ final GoRouter goRouter = GoRouter(
         );
       },
     ),
-    // GoRoute(
-    //   path: Routes.prayerTimes,
-    //   pageBuilder: (context, state) {
-    //     return const NoTransitionPage(
-    //       child: PrayerTimes(),
-    //     );
-    //   },
-    // ),
+    GoRoute(
+      path: Routes.jamahTimes,
+      pageBuilder: (context, state) {
+        return const NoTransitionPage(
+          child: JamahTimesPage(),
+        );
+      },
+    ),
     GoRoute(
       path: Routes.cart,
       pageBuilder: (context, state) {
@@ -231,7 +232,7 @@ abstract class Routes {
   static const payment = '/payment';
   static const inventory = '/inventory';
   static const profile = '/profile';
-  static const prayerTimes = '/prayer-times';
+  static const jamahTimes = '/jamah-times';
 
   static const productCreate = '/create';
   static const forgotPassword = '/forgot-password';
@@ -254,7 +255,7 @@ abstract class Routes {
     cart,
     search,
     signup,
-    prayerTimes,
+    jamahTimes,
   };
 
   static void goToHomePage(BuildContext context) {

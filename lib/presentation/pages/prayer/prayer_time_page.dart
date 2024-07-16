@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../../navigation/router.dart';
 
 class PrayerTimesBanner extends StatefulWidget {
   const PrayerTimesBanner({super.key});
@@ -40,7 +43,11 @@ class _PrayerTimesBannerState extends State<PrayerTimesBanner> {
           itemCount: controller.prayerTimes.length,
           itemBuilder: (context, index) {
             final prayerTime = controller.prayerTimes[index];
-            return PrayerTimeCard(prayerTime: prayerTime);
+            return GestureDetector(
+                onTap: () {
+                  context.push(Routes.jamahTimes);
+                },
+                child: PrayerTimeCard(prayerTime: prayerTime));
           },
         ),
       );

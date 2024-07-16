@@ -4,10 +4,13 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:masjid_noor_customer/mgr/models/jamah_md.dart';
+import 'package:masjid_noor_customer/mgr/services/api_service.dart';
+
 class PrayerTime {
   final String name;
   final String time;
-  final String? jamahTime;
+  String? jamahTime;
 
   PrayerTime({required this.name, required this.time, this.jamahTime});
 }
@@ -18,6 +21,8 @@ class PrayerTimesController extends GetxController {
   RxList<PrayerTime> prayerTimes = <PrayerTime>[].obs;
   RxBool isLoading = false.obs;
   RxString error = ''.obs;
+
+  RxList<JamahMd> jamahs = <JamahMd>[].obs;
 
   Rx<Position?> currentPosition = Rx<Position?>(null);
 
@@ -53,6 +58,7 @@ class PrayerTimesController extends GetxController {
           PrayerTime(name: 'Maghrib', time: timings['Maghrib']),
           PrayerTime(name: 'Isha', time: timings['Isha']),
         ];
+        await getJamah();
       } else {
         error.value = 'Failed to load prayer times';
       }
@@ -93,5 +99,11 @@ class PrayerTimesController extends GetxController {
       return false;
     }
     return true;
+  }
+
+  Future getJamah() async {
+    JamahMd masjidNoor = await ApiService().getJamahTime(1);
+    JamahMd sejongDorm = await ApiService().getJamahTime(2);
+    jamahs.value = [masjidNoor, sejongDorm];
   }
 }

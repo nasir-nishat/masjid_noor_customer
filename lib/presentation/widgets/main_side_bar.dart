@@ -43,7 +43,6 @@ class _MainSidebarState extends State<MainSidebar> {
     const _MainNavItem(title: "Products", route: Routes.products),
     const _MainNavItem(title: "Inventory", route: Routes.inventory),
     const _MainNavItem(title: "Order", route: Routes.orders),
-    const _MainNavItem(title: "Prayer times", route: Routes.prayerTimes),
     // const _MainNavItem(title: "Payment", route: Routes.payment),
   ];
 
