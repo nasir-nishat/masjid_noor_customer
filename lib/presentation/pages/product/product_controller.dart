@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
+import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 
 class ProductController extends GetxController {
   static ProductController get to => Get.find();

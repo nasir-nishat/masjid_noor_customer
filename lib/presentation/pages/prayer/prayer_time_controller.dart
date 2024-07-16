@@ -13,14 +13,15 @@ class PrayerTime {
 }
 
 class PrayerTimesController extends GetxController {
+  static PrayerTimesController get to => Get.find();
+
   RxList<PrayerTime> prayerTimes = <PrayerTime>[].obs;
   RxBool isLoading = false.obs;
   RxString error = ''.obs;
 
-  RxString currentAddress = ''.obs;
   Rx<Position?> currentPosition = Rx<Position?>(null);
 
-  Future<void> getCurrentPosition(BuildContext context) async {
+  Future<void> getCurrentLocation(BuildContext context) async {
     final hasPermission = await handleLocationPermission(context);
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)

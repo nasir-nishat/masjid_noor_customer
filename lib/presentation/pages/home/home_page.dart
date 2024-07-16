@@ -1,23 +1,29 @@
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
+import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_page.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 
 class HomePage extends GetView<ProductController> {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const PrayerTimesBanner(),
-              SizedBox(height: 10.h),
-              _buildProductSection(
-                  'New Products', controller.newProducts, context),
-              _buildProductSection(
-                  'Popular Products', controller.popularProducts, context),
-            ],
+    return Obx(() => RefreshIndicator(
+          onRefresh: () async {
+            await PrayerTimesController.to.getCurrentLocation(context);
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const PrayerTimesBanner(),
+                SizedBox(height: 10.h),
+                _buildProductSection(
+                    'New Products', controller.newProducts, context),
+                _buildProductSection(
+                    'Popular Products', controller.popularProducts, context),
+              ],
+            ),
           ),
         ));
   }

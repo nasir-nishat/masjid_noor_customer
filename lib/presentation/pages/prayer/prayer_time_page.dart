@@ -17,14 +17,16 @@ class _PrayerTimesBannerState extends State<PrayerTimesBanner> {
   @override
   void initState() {
     super.initState();
-    controller.getCurrentPosition(context);
+    if (controller.currentPosition.value == null) {
+      controller.getCurrentLocation(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) {
-        return _buildLoadingShimmer(); // Show shimmer loading effect
+        return _buildLoadingShimmer();
       }
 
       if (controller.error.isNotEmpty) {
