@@ -84,12 +84,14 @@ class ProductListPage extends GetView<ProductController> {
                             mainAxisSpacing: 10.h,
                             childAspectRatio: 0.8,
                           ),
-                          itemCount: controller.products.length + 1,
+                          itemCount: controller.products.length +
+                              (controller.isLoading.value ? 2 : 0),
                           itemBuilder: (context, index) {
-                            if (index == controller.products.length) {
+                            if (index >= controller.products.length) {
                               if (controller.isLoading.value) {
                                 return const Center(
-                                    child: CircularProgressIndicator());
+                                  child: CircularProgressIndicator(),
+                                );
                               } else {
                                 return const SizedBox.shrink();
                               }
@@ -104,7 +106,7 @@ class ProductListPage extends GetView<ProductController> {
                 );
               }
             }),
-          ),
+          )
         ],
       ),
     );
