@@ -10,9 +10,8 @@ import 'package:masjid_noor_customer/mgr/services/api_service.dart';
 class PrayerTime {
   final String name;
   final String time;
-  String? jamahTime;
 
-  PrayerTime({required this.name, required this.time, this.jamahTime});
+  PrayerTime({required this.name, required this.time});
 }
 
 class PrayerTimesController extends GetxController {
