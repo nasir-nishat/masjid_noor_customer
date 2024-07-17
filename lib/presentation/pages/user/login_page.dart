@@ -86,12 +86,13 @@ class _LoginPageState extends State<LoginPage> {
                                 .googleSignIn();
 
                             if (auth.user != null) {
-                              UserMd user = Hive.box<UserMd>('user_box')
+                              Hive.box<UserMd>('user_box')
                                   .values
                                   .toList()
                                   .first;
                               //update controller
 
+                              if (!context.mounted) return;
                               context.go(Routes.home);
                             } else {
                               // showSnackBar(context, 'Failed to sign in');
