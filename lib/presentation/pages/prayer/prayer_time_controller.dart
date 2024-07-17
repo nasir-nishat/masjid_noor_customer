@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'package:masjid_noor_customer/mgr/models/jamah_md.dart';
 import 'package:masjid_noor_customer/mgr/services/api_service.dart';
 
+import '../../../mgr/models/bank_md.dart';
+
 class PrayerTime {
   final String name;
   final String time;
@@ -20,10 +22,9 @@ class PrayerTimesController extends GetxController {
   RxList<PrayerTime> prayerTimes = <PrayerTime>[].obs;
   RxBool isLoading = false.obs;
   RxString error = ''.obs;
-
   RxList<JamahMd> jamahs = <JamahMd>[].obs;
-
   Rx<Position?> currentPosition = Rx<Position?>(null);
+  Rx<BankMd?> bankDetails = Rx<BankMd?>(null);
 
   Future<void> getCurrentLocation(BuildContext context) async {
     final hasPermission = await handleLocationPermission(context);
@@ -104,5 +105,9 @@ class PrayerTimesController extends GetxController {
     JamahMd masjidNoor = await ApiService().getJamahTime(1);
     JamahMd sejongDorm = await ApiService().getJamahTime(2);
     jamahs.value = [masjidNoor, sejongDorm];
+  }
+
+  Future getBankDetails() async {
+    bankDetails.value = await ApiService().getBank(7);
   }
 }

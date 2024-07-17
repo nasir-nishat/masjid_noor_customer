@@ -1,3 +1,4 @@
+import 'package:masjid_noor_customer/mgr/models/bank_md.dart';
 import 'package:masjid_noor_customer/mgr/models/category_md.dart';
 import 'package:masjid_noor_customer/mgr/models/order_item_md.dart';
 import 'package:masjid_noor_customer/mgr/models/order_md.dart';
@@ -315,75 +316,13 @@ class ApiService {
     });
   }
 
-  // ===========================
-  // ===========================
-  // Payment operations
-  // ===========================
-  // ===========================
-  // TODO: REMOVE Deprecated
-  Future<List<PaymentMd>> getPayments() async {
+  Future<BankMd> getBank(int id) async {
     return _handleRequest(() async {
-      final response = await _supabaseClient.from('payments').select("*");
+      final response =
+          await _supabaseClient.from('banks').select("*").eq("id", id);
 
-      return (response as List)
-          .map((payment) => PaymentMd.fromJson(payment))
-          .toList();
-    });
-  }
-
-  // TODO: REMOVE Deprecated
-  //get single payment
-  Future<PaymentMd> getPayment(int paymentId) async {
-    return _handleRequest(() async {
-      final response = await _supabaseClient
-          .from('payments')
-          .select("*")
-          .eq('payment_id', paymentId);
-
-      return PaymentMd.fromJson(response[0]);
-    });
-  }
-
-  // TODO: USE THIS ONE
-  // Future<List<PaymentMd>> getPayments( {required int from, required int to, Filter? filter}) async {
-  //   final response = (filter != null && filter.type.isNotEmpty)
-  //       ? await _supabaseClient
-  //       .from('payments')
-  //       .select("*")
-  //       .eq(filter.type, filter.value)
-  //       .range(from, to)
-  //       : await _supabaseClient.from('payments').select("*").range(from, to);
-  //
-  //   return (response as List)
-  //       .map((payment) => PaymentMd.fromJson(payment))
-  //       .toList();
-  // }
-
-  Future<void> createPayment(PaymentMd payment) async {
-    await _handleRequest(() async {
-      await _supabaseClient.from('payments').insert({
-        'user_id': payment.userId,
-        'order_id': payment.orderId,
-        'payment_type': payment.paymentType,
-        'payment_status': payment.paymentStatus,
-        'amount': payment.amount,
-        'payment_date': payment.paymentDate,
-        'due_date': payment.dueDate,
-      }).select();
-    });
-  }
-
-  Future<void> updatePaymentStatus(int id, String status) async {
-    await _handleRequest(() async {
-      await _supabaseClient
-          .from('payments')
-          .update({'payment_status': status}).eq('payment_id', id);
-    });
-  }
-
-  Future<void> deletePayment(int id) async {
-    await _handleRequest(() async {
-      await _supabaseClient.from('payments').delete().eq('payment_id', id);
+      print(response);
+      return BankMd.fromJson(response[0]);
     });
   }
 

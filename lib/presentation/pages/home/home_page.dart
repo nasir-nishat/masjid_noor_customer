@@ -11,6 +11,7 @@ class HomePage extends GetView<ProductController> {
     return Obx(() => RefreshIndicator(
           onRefresh: () async {
             await PrayerTimesController.to.getCurrentLocation(context);
+            await PrayerTimesController.to.getBankDetails();
           },
           child: SingleChildScrollView(
             child: Column(
