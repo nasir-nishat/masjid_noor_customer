@@ -296,13 +296,47 @@ abstract class Routes {
   }
 }
 
-void showSnackBar(BuildContext context, String message,
-    {Duration duration =
-        kDebugMode ? const Duration(minutes: 1) : const Duration(seconds: 3)}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(message),
-      duration: duration,
-    ),
+void showToast(String message, {bool isSuccess = true, bool? isWarning}) {
+  BotToast.showText(
+    text: message,
+    duration: const Duration(seconds: 1),
+    contentColor: (isWarning == true)
+        ? Colors.orange
+        : isSuccess
+            ? Colors.green
+            : Colors.red,
   );
+}
+
+void showErrorDialog(String message,
+    {Function(CancelFunc)? onClose, bool isSuccess = false}) {
+  BotToast.showEnhancedWidget(
+      clickClose: false,
+      allowClick: false,
+      warpWidget: (cancelFunc, widget) {
+        return MaterialApp(
+          home: Container(
+            color: Colors.grey.withOpacity(.7),
+            child: widget,
+          ),
+        );
+      },
+      toastBuilder: (cancelFunc) {
+        return AlertDialog(
+          title: Text(isSuccess ? "Success" : 'Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (onClose == null) {
+                  cancelFunc();
+                } else {
+                  onClose(cancelFunc);
+                }
+              },
+              child: const Text('Close'),
+            )
+          ],
+        );
+      });
 }

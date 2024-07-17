@@ -67,7 +67,8 @@ class CartController extends GetxController {
     String userId = SupabaseDep.impl.supabase.auth.currentUser?.id ?? '';
     if (userId.isEmpty) {
       AppController.to.hideGlobalLoading();
-      showSnackBar(context, 'Please login to place order');
+      // showSnackBar(context, 'Please login to place order');
+      showToast('Please login to place order',isWarning: true);
       return false;
     }
 
@@ -78,9 +79,6 @@ class CartController extends GetxController {
       note: '',
       paymentMethod: paymentMethod ?? PaymentMethod.cash,
     );
-    print("++++++++++++++++++");
-    print(orderId);
-    print("++++++++++++++++++");
 
     if (orderId != null && orderId.isNotEmpty) {
       clearCart();

@@ -68,8 +68,9 @@ class CartPage extends GetView<CartController> {
                         onIncrease: () {
                           int stockQty = cartProd.product.stockQty ?? 0;
                           if (stockQty > 0 && cartProd.quantity >= stockQty) {
-                            showSnackBar(context, 'Stock is not enough',
-                                duration: const Duration(seconds: 1));
+                            // showSnackBar(context, 'Stock is not enough',
+                            //     duration: const Duration(seconds: 1));
+                            showToast('Stock is not enough', isWarning: true);
                             return;
                           }
                           controller.increaseQuantity(cartProd);

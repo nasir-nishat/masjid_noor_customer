@@ -10,6 +10,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:masjid_noor_customer/presentation/layout/error_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/app_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
+import 'package:masjid_noor_customer/presentation/pages/internet/internet_binding.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/order_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
@@ -32,18 +33,11 @@ void main() async {
     GoRouter.optionURLReflectsImperativeAPIs = true;
     await SupabaseDep.impl.initialize();
 
-    Get.lazyPut(() => PrayerTimesController());
-    Get.lazyPut(() => UserController());
-    Get.lazyPut(() => ProductController());
-    Get.lazyPut(() => CartController());
-    Get.lazyPut(() => OrderController());
-    Get.lazyPut(() => AppController());
-
     runApp(AnNoorApp());
   }, (error, stackTrace) {
     print('Caught Dart error: $error');
     print('Stack trace: $stackTrace');
-    // You can add additional error reporting here, like sending to a crash reporting service
+    // add additional error reporting here, like sending to a crash reporting service
   });
 }
 
@@ -62,6 +56,7 @@ class AnNoorApp extends GetView<AppController> {
       minTextAdapt: true,
       builder: (_, child) => SafeArea(
         child: GetMaterialApp.router(
+          initialBinding: InitialBindings(),
           debugShowCheckedModeBanner: false,
           theme: AppTheme.defaultTheme,
           routeInformationParser: goRouter.routeInformationParser,

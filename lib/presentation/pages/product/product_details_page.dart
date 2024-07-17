@@ -28,7 +28,8 @@ class ProductDetailsPage extends GetView<ProductController> {
                     CartController.to.addToCart(prod);
                     context.push(Routes.cart);
                   } else {
-                    showSnackBar(context, "This product is out of stock");
+                    // showSnackBar(context, "This product is out of stock");
+                    showToast("This product is out of stock", isWarning: true);
                   }
                 },
               )

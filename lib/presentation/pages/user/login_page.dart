@@ -94,10 +94,12 @@ class _LoginPageState extends State<LoginPage> {
 
                               context.go(Routes.home);
                             } else {
-                              showSnackBar(context, 'Failed to sign in');
+                              // showSnackBar(context, 'Failed to sign in');
+                              showToast('Failed to sign in', isSuccess: false);
                             }
                           } catch (e) {
-                            showSnackBar(context, 'Error: $e');
+                            // showSnackBar(context, 'Error: $e');
+                            showToast('Error: $e', isSuccess: false);
                           }
                         },
                         style: ElevatedButton.styleFrom(
