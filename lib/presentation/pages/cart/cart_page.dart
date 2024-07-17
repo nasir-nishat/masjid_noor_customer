@@ -13,6 +13,8 @@ import 'package:masjid_noor_customer/mgr/models/cart_md.dart';
 import 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
+import 'barcode_scanner.dart';
+
 class CartPage extends GetView<CartController> {
   const CartPage({super.key});
 
@@ -26,7 +28,6 @@ class CartPage extends GetView<CartController> {
             Padding(
               padding: EdgeInsets.only(top: 16.h, left: 16.w, right: 16.w),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Cart',
@@ -34,6 +35,17 @@ class CartPage extends GetView<CartController> {
                       fontSize: 24.sp,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const Spacer(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const BarcodeScannerSimple(),
+                        ),
+                      );
+                    },
+                    child: const HeroIcon(HeroIcons.qrCode),
                   ),
                   InkWell(
                     onTap: () {

@@ -47,7 +47,6 @@ class HomePage extends GetView<ProductController> {
               TextButton(
                   onPressed: () {
                     controller.getCategories();
-                    // AppController.to.navIndex.value = 1;
                     context.go(Routes.products);
                   },
                   child: Text(
