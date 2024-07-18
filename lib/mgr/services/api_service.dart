@@ -12,6 +12,17 @@ import '../models/feedback_md.dart';
 import '../models/jamah_md.dart';
 import '../models/supplier_md.dart';
 
+class ApiException implements Exception {
+  final String message;
+  final String? code;
+
+  ApiException(this.message, {this.code});
+
+  @override
+  String toString() =>
+      'ApiException: $message${code != null ? ' (Code: $code)' : ''}';
+}
+
 class ApiService {
   ApiService();
 
@@ -20,15 +31,13 @@ class ApiService {
   Future<T> _handleRequest<T>(Future<T> Function() request) async {
     try {
       return await request();
+    } on PostgrestException catch (e) {
+      throw ApiException('Database error: ${e.message}', code: e.code);
+    } on AuthException catch (e) {
+      throw ApiException('Authentication error: ${e.message}',
+          code: e.statusCode);
     } catch (e) {
-      print('Error: $e');
-      if (e is PostgrestException) {
-        print('PostgrestException: ${e.message}');
-        rethrow;
-      } else {
-        print('Unknown error: $e');
-        rethrow;
-      }
+      throw ApiException('Unknown error occurred: $e');
     }
   }
 

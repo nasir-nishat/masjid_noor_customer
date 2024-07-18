@@ -25,6 +25,10 @@ import 'navigation/router.dart';
 void main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    FlutterError.onError = (details) {
+      FlutterError.presentError(details);
+      showErrorDialog('An unexpected error occurred: ${details.exception}');
+    };
     await Hive.initFlutter();
     Hive.registerAdapter(UserMdAdapter());
     await Hive.openBox<UserMd>('user_box');
@@ -37,7 +41,7 @@ void main() async {
   }, (error, stackTrace) {
     print('Caught Dart error: $error');
     print('Stack trace: $stackTrace');
-    // add additional error reporting here, like sending to a crash reporting service
+    showErrorDialog('An unexpected error occurred: $error');
   });
 }
 
