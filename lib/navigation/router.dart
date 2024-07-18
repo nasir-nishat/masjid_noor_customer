@@ -4,6 +4,7 @@ import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/orders_page.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/jamah_times_page.dart';
 import '../presentation/pages/all_export.dart';
+import '../presentation/pages/cart/cart_page_v2.dart';
 import '../presentation/utills/extensions.dart';
 
 class AuthenticationNotifier {
@@ -164,7 +165,8 @@ final GoRouter goRouter = GoRouter(
       path: Routes.cart,
       pageBuilder: (context, state) {
         return const NoTransitionPage(
-          child: CartPage(),
+          // child: CartPage(),
+          child: CartPageV2(),
         );
       },
     ),
