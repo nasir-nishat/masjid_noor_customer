@@ -169,4 +169,13 @@ class ProductController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<ProductMd?> searchProductByBarcode(String barcode) async {
+    try {
+      return await ApiService().searchProductByBarcode(barcode);
+    } catch (e) {
+      print("Error searching product by barcode: $e");
+      return null;
+    }
+  }
 }

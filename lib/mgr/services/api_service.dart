@@ -476,6 +476,17 @@ class ApiService {
     });
   }
 
+  Future<ProductMd?> searchProductByBarcode(String barcode) async {
+    return _handleRequest(() async {
+      final response = await _supabaseClient
+          .from('products')
+          .select("*")
+          .eq('barcode', barcode);
+
+      return ProductMd.fromJson(response[0]);
+    });
+  }
+
   // ===========================
   // ===========================
   // CRUD Images from Supabase bucket
