@@ -251,6 +251,7 @@ class ApiService {
           'quantity': item.quantity,
           'unit_price': item.product.sellPrice,
           'total_price': item.totalPrice,
+          'product_name': item.product.name,
         });
       }
 
@@ -262,24 +263,60 @@ class ApiService {
   }
 
   Future<List<OrderDetailsMd>> getUserOrders(String userId) async {
-    final orderDetailsMdResponse =
-        await _supabaseClient.from('orders').select('''
-        *, 
-        order_items:order_items (
+    try {
+      final response = await _supabaseClient.from('orders').select('''
           *,
-          product:products (
-            name
+          order_items:order_items (
+            *,
+            product:products (
+              name
+            )
           )
-        )
-      ''').eq('user_id', userId).order('created_at', ascending: false);
+        ''').eq('user_id', userId).order('created_at', ascending: false).wait();
 
-    List<OrderDetailsMd> orders = (orderDetailsMdResponse as List)
-        .map((order) => OrderDetailsMd.fromJson(order))
-        .toList();
+      if (response.error != null) {
+        print('Error fetching orders: ${response.error!.message}');
+        return [];
+      }
 
-    print(orders);
+      final ordersData = response.data as List<dynamic>?;
 
-    return orders;
+      if (ordersData == null) {
+        return [];
+      }
+
+      List<OrderDetailsMd> orders = ordersData
+          .map(
+              (order) => OrderDetailsMd.fromJson(order as Map<String, dynamic>))
+          .toList();
+
+      // Print and check results
+      for (var order in orders) {
+        print('Order ID: ${order.id}');
+        print('Contact Number: ${order.contactNumber}');
+        print('Total Amount: ${order.totalAmount}');
+        print('Status: ${order.status}');
+        print('Note: ${order.note}');
+        print('Created At: ${order.createdAt}');
+        print('Updated At: ${order.updatedAt}');
+        print('Payment Type: ${order.paymentType}');
+        print('User ID: ${order.userId}');
+
+        for (var item in order.items) {
+          print('  Item ID: ${item.id}');
+          print('  Product ID: ${item.productId ?? 'Unknown'}');
+          print('  Product Name: ${item.productName}');
+          print('  Quantity: ${item.quantity}');
+          print('  Unit Price: ${item.unitPrice}');
+          print('  Total Price: ${item.totalPrice}');
+        }
+      }
+
+      return orders;
+    } catch (e) {
+      print('Error fetching orders: $e');
+      return [];
+    }
   }
 
   Future<void> updateOrderStatus(int id, String status) async {

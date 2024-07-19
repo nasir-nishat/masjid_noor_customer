@@ -57,32 +57,45 @@ class ProductDetailsPage extends GetView<ProductController> {
                     },
                     icon: const Icon(Icons.close)),
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                child: CachedNetworkImage(
-                  imageUrl: prod.images?.firstOrNull,
-                  errorWidget: (context, url, error) {
-                    return Container(
-                      width: 200.w,
-                      height: 200.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                      ),
-                      child: const Center(
-                        child: Text('No Image'),
-                      ),
-                    );
-                  },
-                  placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Container(
-                        height: 200.h,
+              if (prod.images == null || prod.images!.isEmpty)
+                Container(
+                  width: 400.w,
+                  height: 200.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: const Center(
+                    child: Text('No Image'),
+                  ),
+                )
+              else
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                  child: CachedNetworkImage(
+                    imageUrl: prod.images?.firstOrNull,
+                    errorWidget: (context, url, error) {
+                      return Container(
                         width: 200.w,
-                        decoration: BoxDecoration(color: Colors.grey[200]),
-                      )),
+                        height: 200.h,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                        ),
+                        child: const Center(
+                          child: Text('No Image'),
+                        ),
+                      );
+                    },
+                    placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          height: 200.h,
+                          width: 200.w,
+                          decoration: BoxDecoration(color: Colors.grey[200]),
+                        )),
+                  ),
                 ),
-              ),
               SizedBox(height: 20.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w),

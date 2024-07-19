@@ -48,24 +48,24 @@ class OrderDetailsMd {
 
   factory OrderDetailsMd.fromJson(Map<String, dynamic> json) {
     return OrderDetailsMd(
-      id: json['id'],
-      contactNumber: json['contact_number'],
-      totalAmount: json['total_amount'],
-      note: json['note'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      // items: (json['items'] as List)
-      //     .map((e) => OrderItemDetailsMd.fromJson(e))
-      //     .toList(),
-      items: (json['order_items'] as List?)
-              ?.map((e) => OrderItemDetailsMd.fromJson(e))
+      id: json['id'] as int? ?? 0,
+      contactNumber: json['contact_number'] as String? ?? '',
+      totalAmount: (json['total_amount'] as num?)?.toDouble() ?? 0.0,
+      note: json['note'] as String? ?? '',
+      createdAt: DateTime.tryParse(json['created_at'] as String? ?? '') ??
+          DateTime.now(),
+      updatedAt: DateTime.tryParse(json['updated_at'] as String? ?? '') ??
+          DateTime.now(),
+      items: (json['order_items'] as List<dynamic>?)
+              ?.map(
+                  (e) => OrderItemDetailsMd.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-
-      status: OrderStatusParseToString.fromString(json['status']),
-      paymentType:
-          PaymentMethodParseToString.fromString(json['payment_type'] ?? 'cash'),
-      userId: json['user_id'],
+      status: OrderStatusParseToString.fromString(
+          json['status'] as String? ?? 'pending'),
+      paymentType: PaymentMethodParseToString.fromString(
+          json['payment_type'] as String? ?? 'cash'),
+      userId: json['user_id'] as String? ?? '',
     );
   }
 }
@@ -73,7 +73,7 @@ class OrderDetailsMd {
 class OrderItemDetailsMd {
   final int id;
   final int orderId;
-  final int productId;
+  final int? productId; // Changed to int?
   final int quantity;
   final double unitPrice;
   final double totalPrice;
@@ -82,7 +82,7 @@ class OrderItemDetailsMd {
   OrderItemDetailsMd({
     required this.id,
     required this.orderId,
-    required this.productId,
+    this.productId,
     required this.quantity,
     required this.unitPrice,
     required this.totalPrice,
@@ -91,13 +91,13 @@ class OrderItemDetailsMd {
 
   factory OrderItemDetailsMd.fromJson(Map<String, dynamic> json) {
     return OrderItemDetailsMd(
-      id: json['id'],
-      orderId: json['order_id'],
-      productId: json['product_id'],
-      quantity: json['quantity'],
-      unitPrice: double.parse(json['unit_price'].toString()),
-      totalPrice: double.parse(json['total_price'].toString()),
-      productName: json['product']['name'],
+      id: json['id'] as int? ?? 0,
+      orderId: json['order_id'] as int? ?? 0,
+      productId: json['product_id'] as int?, // Changed to int?
+      quantity: json['quantity'] as int? ?? 0,
+      unitPrice: (json['unit_price'] as num?)?.toDouble() ?? 0.0,
+      totalPrice: (json['total_price'] as num?)?.toDouble() ?? 0.0,
+      productName: json['product_name'] as String? ?? '',
     );
   }
 
@@ -105,7 +105,7 @@ class OrderItemDetailsMd {
     return {
       'id': id,
       'order_id': orderId,
-      'product_id': productId,
+      'product_id': productId, // Allow null
       'quantity': quantity,
       'unit_price': unitPrice,
       'total_price': totalPrice,

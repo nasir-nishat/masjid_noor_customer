@@ -139,7 +139,10 @@ class OrdersPage extends GetView<OrderController> {
                         itemBuilder: (context, index) {
                           final item = order.items[index];
                           return ListTile(
-                            title: Text(item.productName ?? "",
+                            title: Text(
+                                item.productName.isEmpty
+                                    ? "Unknown Product"
+                                    : item.productName,
                                 style: TextStyle(
                                     fontSize: 16.sp,
                                     fontWeight: FontWeight.bold)),
