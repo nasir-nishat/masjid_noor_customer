@@ -39,11 +39,7 @@ class CartPage extends GetView<CartController> {
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const BarcodeScannerSimple(),
-                        ),
-                      );
+                      context.push(Routes.barcodeScanner);
                     },
                     child: const HeroIcon(HeroIcons.qrCode),
                   ),

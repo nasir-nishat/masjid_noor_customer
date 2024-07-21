@@ -4,6 +4,7 @@ import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/orders_page.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/jamah_times_page.dart';
 import '../presentation/pages/all_export.dart';
+import '../presentation/pages/cart/barcode_scanner.dart';
 import '../presentation/pages/cart/cart_page_v2.dart';
 import '../presentation/utills/extensions.dart';
 
@@ -116,7 +117,7 @@ final GoRouter goRouter = GoRouter(
         GoRoute(
           path: Routes.home,
           pageBuilder: (context, state) {
-            return NoTransitionPage(child: HomePage());
+            return const NoTransitionPage(child: HomePage());
           },
         ),
         GoRoute(
@@ -167,6 +168,14 @@ final GoRouter goRouter = GoRouter(
         return const NoTransitionPage(
           // child: CartPage(),
           child: CartPageV2(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.barcodeScanner,
+      pageBuilder: (context, state) {
+        return const NoTransitionPage(
+          child: BarcodeScannerSimple(),
         );
       },
     ),
@@ -242,7 +251,7 @@ abstract class Routes {
   static const cart = '/cart';
   static const search = '/search';
   static const signup = '/sign-up';
-
+  static const barcodeScanner = '/barcode-scanner';
   static const all = {
     login,
     inventory,
@@ -258,6 +267,7 @@ abstract class Routes {
     search,
     signup,
     jamahTimes,
+    barcodeScanner,
   };
 
   static void goToHomePage(BuildContext context) {
@@ -301,9 +311,12 @@ abstract class Routes {
 void showToast(String message, {bool isSuccess = true, bool? isWarning}) {
   BotToast.showText(
     text: message,
-    duration: const Duration(seconds: 1),
+    textStyle: TextStyle(
+        color: isWarning == true ? Colors.black : Colors.white,
+        fontWeight: FontWeight.bold),
+    duration: const Duration(seconds: 2),
     contentColor: (isWarning == true)
-        ? Colors.orange
+        ? Colors.yellow.shade400
         : isSuccess
             ? Colors.green
             : Colors.red,
