@@ -24,7 +24,6 @@ class ProductController extends GetxController {
   bool get isLoadingMoreEnabled =>
       products.length >= pageSize && !isLoading.value;
 
-  var searchedProducts = <ProductMd>[].obs;
 
   @override
   void onInit() {
@@ -102,46 +101,6 @@ class ProductController extends GetxController {
       print("Error fetching products by category: $e");
     } finally {
       isLoading.value = false;
-    }
-  }
-
-  Future<void> searchProducts(String query) async {
-    isSearchLoading.value = true;
-    currentPage.value = 1;
-    searchedProducts.clear();
-
-    try {
-      List<ProductMd> srchPrds =
-          await ApiService().searchProducts(query, pageSize, currentPage.value);
-
-      searchedProducts.value = srchPrds;
-    } catch (e) {
-      print("Error searching products: $e");
-    } finally {
-      isSearchLoading.value = false;
-    }
-  }
-
-  Future<void> loadMoreSearchProducts(String query) async {
-    isSearchLoading.value = true;
-    currentPage.value++;
-
-    try {
-      List<ProductMd> fetchedProducts = await ApiService()
-          .searchProducts(
-        query,
-        pageSize,
-        currentPage.value,
-      )
-          .timeout(const Duration(seconds: 5), onTimeout: () {
-        throw TimeoutException("Search operation timed out after 5 seconds");
-      });
-
-      searchedProducts.addAll(fetchedProducts);
-    } catch (e) {
-      print("Error loading more search products: $e");
-    } finally {
-      isSearchLoading.value = false;
     }
   }
 
