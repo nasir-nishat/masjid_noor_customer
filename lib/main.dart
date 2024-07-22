@@ -21,6 +21,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'mgr/dependency/supabase_dep.dart';
 import 'mgr/models/user_md.dart';
+import 'mgr/services/network_service.dart';
 import 'navigation/router.dart';
 
 void main() async {
@@ -71,21 +72,24 @@ class AnNoorApp extends GetView<AppController> {
           backButtonDispatcher: goRouter.backButtonDispatcher,
           builder: (context, child) {
             child = botToastBuilder(context, child);
-            return Stack(
-              children: [
-                ErrorBoundary(child: child),
-                Obx(() {
-                  if (AppController.to.globalLoading.value) {
-                    return Container(
-                      color: Colors.black.withOpacity(0.5),
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }),
-              ],
+            return NetworkAwareWidget(
+              networkService: NetworkService(),
+              child: Stack(
+                children: [
+                  ErrorBoundary(child: child),
+                  Obx(() {
+                    if (AppController.to.globalLoading.value) {
+                      return Container(
+                        color: Colors.black.withOpacity(0.5),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  }),
+                ],
+              ),
             );
           },
         ),

@@ -13,6 +13,8 @@ import '../models/jamah_md.dart';
 import '../models/supplier_md.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
+import 'network_service.dart';
+
 class ApiException implements Exception {
   final String message;
   final String? code;
