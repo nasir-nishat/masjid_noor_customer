@@ -17,6 +17,7 @@ import 'package:masjid_noor_customer/presentation/pages/product/product_controll
 import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';
 import 'package:masjid_noor_customer/presentation/theme/app_theme.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'mgr/dependency/supabase_dep.dart';
 import 'mgr/models/user_md.dart';
@@ -24,7 +25,8 @@ import 'navigation/router.dart';
 
 void main() async {
   await runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
     FlutterError.onError = (details) {
       FlutterError.presentError(details);
       showErrorDialog('An unexpected error occurred: ${details.exception}');

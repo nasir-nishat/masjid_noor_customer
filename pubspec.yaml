@@ -48,6 +48,7 @@ dependencies:
   geocoding: ^3.0.0
   connectivity_plus: ^6.0.3
   mobile_scanner: ^5.1.1
+  flutter_native_splash: ^2.4.1
 
 
 dev_dependencies:
@@ -56,6 +57,10 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   build_runner: ^2.4.11
   hive_generator: ^2.0.1
+
+flutter_native_splash:
+   color : "#ffffff"
+   image: assets/favicon.png
 
 flutter:
   uses-material-design: true
