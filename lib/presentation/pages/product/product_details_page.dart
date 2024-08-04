@@ -2,6 +2,8 @@ import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 
+import '../../widgets/multi_images_viewer.dart';
+
 class ProductDetailsPage extends GetView<ProductController> {
   final String id;
   final String parentRoute;
@@ -48,6 +50,7 @@ class ProductDetailsPage extends GetView<ProductController> {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16..w),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Align(
                 alignment: Alignment.topRight,
@@ -70,32 +73,7 @@ class ProductDetailsPage extends GetView<ProductController> {
                   ),
                 )
               else
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                  child: CachedNetworkImage(
-                    imageUrl: prod.images?.firstOrNull,
-                    errorWidget: (context, url, error) {
-                      return Container(
-                        width: 200.w,
-                        height: 200.h,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                        ),
-                        child: const Center(
-                          child: Text('No Image'),
-                        ),
-                      );
-                    },
-                    placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: Container(
-                          height: 200.h,
-                          width: 200.w,
-                          decoration: BoxDecoration(color: Colors.grey[200]),
-                        )),
-                  ),
-                ),
+                MultiImagesViewer(imageUrls: prod.images ?? []),
               SizedBox(height: 20.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w),

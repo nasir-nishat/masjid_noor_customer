@@ -7,7 +7,7 @@ class ProductMd extends Equatable {
   double sellPrice;
   String? description;
   int? stockQty;
-  List? images;
+  List<String>? images;
   double? purchasePrice;
   String? barcode;
 
@@ -15,9 +15,9 @@ class ProductMd extends Equatable {
   // DateTime? startDate;
   // DateTime? endDate;
   bool? isNew;
-  bool? isPopular;
   int? suppId;
-  // int? cartQty;
+  bool? isActive;
+  bool? isPopular;
 
   ProductMd({
     this.id,
@@ -33,9 +33,9 @@ class ProductMd extends Equatable {
     // this.startDate,
     // this.endDate,
     this.isNew,
-    this.isPopular,
     this.suppId,
-    // this.cartQty,
+    this.isActive,
+    this.isPopular,
   });
 
   @override
@@ -53,9 +53,9 @@ class ProductMd extends Equatable {
         // startDate,
         // endDate,
         isNew,
-        isPopular,
         suppId,
-        // cartQty,
+        isActive,
+        isPopular,
       ];
 
   factory ProductMd.fromJson(Map<String, dynamic> json) {
@@ -66,7 +66,9 @@ class ProductMd extends Equatable {
         name: json['name'],
         description: json['description'],
         stockQty: json['stock_qty'],
-        images: json['images'],
+        images: json['images'] != null
+            ? List<String>.from(json['images'].map((x) => x))
+            : [],
         sellPrice: json['sell_price'],
         purchasePrice: json['purchase_price'],
         barcode: json['barcode'],
@@ -74,9 +76,9 @@ class ProductMd extends Equatable {
         // startDate: json['start_date'],
         // endDate: json['end_date'],
         isNew: json['is_new'],
-        isPopular: json['is_popular'],
         suppId: json['supp_id'],
-        // cartQty: json['cart_qty'],
+        isActive: json['is_active'],
+        isPopular: json['is_popular'],
       );
     } on TypeError catch (e, st) {
       print("Error: $e, $st");
@@ -91,7 +93,7 @@ class ProductMd extends Equatable {
       'name': name,
       'description': description,
       'stock_qty': stockQty,
-      'images': images,
+      'images': images != null ? List<dynamic>.from(images!.map((x) => x)) : [],
       'sell_price': sellPrice,
       'purchase_price': purchasePrice,
       'barcode': barcode,
@@ -99,47 +101,9 @@ class ProductMd extends Equatable {
       // 'start_date': startDate,
       // 'end_date': endDate,
       'is_new': isNew,
-      'is_popular': isPopular,
       'supp_id': suppId,
-      // 'cart_qty': cartQty,
+      'is_active': isActive,
+      'is_popular': isPopular,
     };
-  }
-
-  ProductMd copyWith({
-    int? id,
-    int? categoryId,
-    String? name,
-    String? description,
-    int? stockQty,
-    List? images,
-    double? sellPrice,
-    double? purchasePrice,
-    String? barcode,
-    // double? discount,
-    // DateTime? startDate,
-    // DateTime? endDate,
-    bool? isNew,
-    bool? isPopular,
-    int? suppId,
-    // int? cartQty,
-  }) {
-    return ProductMd(
-      id: id ?? this.id,
-      categoryId: categoryId ?? this.categoryId,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      stockQty: stockQty ?? this.stockQty,
-      images: images ?? this.images,
-      sellPrice: sellPrice ?? this.sellPrice,
-      purchasePrice: purchasePrice ?? this.purchasePrice,
-      barcode: barcode ?? this.barcode,
-      // discount: discount ?? this.discount,
-      // startDate: startDate ?? this.startDate,
-      // endDate: endDate ?? this.endDate,
-      isNew: isNew ?? this.isNew,
-      isPopular: isPopular ?? this.isPopular,
-      suppId: suppId ?? this.suppId,
-      // cartQty: cartQty ?? this.cartQty,
-    );
   }
 }

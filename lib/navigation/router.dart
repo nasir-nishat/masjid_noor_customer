@@ -3,6 +3,7 @@ import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/orders_page.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/jamah_times_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../presentation/pages/all_export.dart';
 import '../presentation/pages/cart/barcode_scanner.dart';
 import '../presentation/pages/cart/cart_page_v2.dart';

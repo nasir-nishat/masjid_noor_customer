@@ -14,6 +14,7 @@ import '../models/supplier_md.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'network_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ApiException implements Exception {
   final String message;

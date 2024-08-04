@@ -1,4 +1,5 @@
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -27,7 +27,6 @@ export 'package:bot_toast/bot_toast.dart';
 export 'package:flutter/foundation.dart';
 
 export 'package:masjid_noor_customer/presentation/constants.dart';
-export 'package:supabase_flutter/supabase_flutter.dart';
 
 export 'package:masjid_noor_customer/presentation/widgets/spaced_row.dart';
 export 'package:masjid_noor_customer/mgr/models/category_md.dart';
