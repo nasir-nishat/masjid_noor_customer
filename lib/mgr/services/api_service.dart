@@ -1,19 +1,11 @@
 import 'package:masjid_noor_customer/mgr/models/bank_md.dart';
-import 'package:masjid_noor_customer/mgr/models/category_md.dart';
 import 'package:masjid_noor_customer/mgr/models/order_item_md.dart';
 import 'package:masjid_noor_customer/mgr/models/order_md.dart';
-import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
-import 'package:masjid_noor_customer/mgr/models/product_md.dart';
-import 'package:masjid_noor_customer/mgr/models/user_md.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
-import '../dependency/supabase_dep.dart';
 import '../models/feedback_md.dart';
 import '../models/jamah_md.dart';
 import '../models/supplier_md.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-
-import 'network_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ApiException implements Exception {
@@ -199,7 +191,7 @@ class ApiService {
 
   Future<List<ProductMd>> searchProducts(
       String query, int limit, int page) async {
-    print("Searching products for: $query");
+    debugPrint("Searching products for: $query");
     final response = await _supabaseClient
         .from('products')
         .select()
@@ -208,7 +200,7 @@ class ApiService {
 
     List<ProductMd> products =
         (response as List).map((item) => ProductMd.fromJson(item)).toList();
-    print(products);
+    debugPrint(products.toString());
     return products;
   }
 
@@ -261,7 +253,7 @@ class ApiService {
 
       return orderId.toString();
     } catch (error) {
-      print('Error placing order: $error');
+      debugPrint('Error placing order: $error');
       return null;
     }
   }
@@ -279,7 +271,7 @@ class ApiService {
         ''').eq('user_id', userId).order('created_at', ascending: false).wait();
 
       if (response.error != null) {
-        print('Error fetching orders: ${response.error!.message}');
+        debugPrint('Error fetching orders: ${response.error!.message}');
         return [];
       }
 
@@ -296,29 +288,29 @@ class ApiService {
 
       // Print and check results
       for (var order in orders) {
-        print('Order ID: ${order.id}');
-        print('Contact Number: ${order.contactNumber}');
-        print('Total Amount: ${order.totalAmount}');
-        print('Status: ${order.status}');
-        print('Note: ${order.note}');
-        print('Created At: ${order.createdAt}');
-        print('Updated At: ${order.updatedAt}');
-        print('Payment Type: ${order.paymentType}');
-        print('User ID: ${order.userId}');
+        debugPrint('Order ID: ${order.id}');
+        debugPrint('Contact Number: ${order.contactNumber}');
+        debugPrint('Total Amount: ${order.totalAmount}');
+        debugPrint('Status: ${order.status}');
+        debugPrint('Note: ${order.note}');
+        debugPrint('Created At: ${order.createdAt}');
+        debugPrint('Updated At: ${order.updatedAt}');
+        debugPrint('Payment Type: ${order.paymentType}');
+        debugPrint('User ID: ${order.userId}');
 
         for (var item in order.items) {
-          print('  Item ID: ${item.id}');
-          print('  Product ID: ${item.productId ?? 'Unknown'}');
-          print('  Product Name: ${item.productName}');
-          print('  Quantity: ${item.quantity}');
-          print('  Unit Price: ${item.unitPrice}');
-          print('  Total Price: ${item.totalPrice}');
+          debugPrint('  Item ID: ${item.id}');
+          debugPrint('  Product ID: ${item.productId ?? 'Unknown'}');
+          debugPrint('  Product Name: ${item.productName}');
+          debugPrint('  Quantity: ${item.quantity}');
+          debugPrint('  Unit Price: ${item.unitPrice}');
+          debugPrint('  Total Price: ${item.totalPrice}');
         }
       }
 
       return orders;
     } catch (e) {
-      print('Error fetching orders: $e');
+      debugPrint('Error fetching orders: $e');
       return [];
     }
   }
@@ -361,7 +353,7 @@ class ApiService {
       final response =
           await _supabaseClient.from('jamah_times').select("*").eq("id", id);
 
-      print(response);
+      debugPrint(response.toString());
       return JamahMd.fromJson(response[0]);
     });
   }
@@ -371,7 +363,7 @@ class ApiService {
       final response =
           await _supabaseClient.from('banks').select("*").eq("id", id);
 
-      print(response);
+      debugPrint(response.toString());
       return BankMd.fromJson(response[0]);
     });
   }

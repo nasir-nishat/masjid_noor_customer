@@ -11,10 +11,10 @@ class PrayerTimesBanner extends StatefulWidget {
   const PrayerTimesBanner({super.key});
 
   @override
-  _PrayerTimesBannerState createState() => _PrayerTimesBannerState();
+  PrayerTimesBannerState createState() => PrayerTimesBannerState();
 }
 
-class _PrayerTimesBannerState extends State<PrayerTimesBanner> {
+class PrayerTimesBannerState extends State<PrayerTimesBanner> {
   final controller = Get.find<PrayerTimesController>();
 
   @override

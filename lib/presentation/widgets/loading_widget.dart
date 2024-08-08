@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class LoadingWidget extends StatelessWidget {
   final VoidCallback? onClose;
   final String? message;
-  const LoadingWidget({Key? key, this.onClose, this.message}) : super(key: key);
+  const LoadingWidget({super.key, this.onClose, this.message});
 
   @override
   Widget build(BuildContext context) {

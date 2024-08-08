@@ -9,17 +9,17 @@ class MultiImagesViewer extends StatefulWidget {
   final double? width;
 
   const MultiImagesViewer({
-    Key? key,
+    super.key,
     required this.imageUrls,
     this.height,
     this.width,
-  }) : super(key: key);
+  });
 
   @override
-  _MultiImagesViewerState createState() => _MultiImagesViewerState();
+  MultiImagesViewerState createState() => MultiImagesViewerState();
 }
 
-class _MultiImagesViewerState extends State<MultiImagesViewer> {
+class MultiImagesViewerState extends State<MultiImagesViewer> {
   late PageController _pageController;
   int _currentPage = 0;
 
@@ -51,16 +51,16 @@ class _MultiImagesViewerState extends State<MultiImagesViewer> {
 
   @override
   Widget build(BuildContext context) {
-    double _w = widget.width ?? 340.w;
-    double _h = widget.height ?? 250.h;
+    double w = widget.width ?? 340.w;
+    double h = widget.height ?? 250.h;
 
     return Center(
       child: Stack(
         alignment: Alignment.center,
         children: [
           SizedBox(
-            width: _w,
-            height: _h,
+            width: w,
+            height: h,
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               child: PageView.builder(
@@ -84,8 +84,8 @@ class _MultiImagesViewerState extends State<MultiImagesViewer> {
                       baseColor: Colors.grey[300]!,
                       highlightColor: Colors.grey[100]!,
                       child: Container(
-                        width: _w,
-                        height: _h,
+                        width: w,
+                        height: h,
                         decoration: BoxDecoration(color: Colors.grey[200]),
                       ),
                     ),
@@ -119,7 +119,7 @@ class _MultiImagesViewerState extends State<MultiImagesViewer> {
               style: ButtonStyle(
                 backgroundColor:
                     WidgetStateProperty.all(Colors.black.withOpacity(0.2)),
-                fixedSize: MaterialStateProperty.all(const Size(20, 20)),
+                fixedSize: WidgetStateProperty.all(const Size(20, 20)),
               ),
               icon: const Icon(Icons.chevron_left_rounded, color: Colors.white),
               onPressed: _previousPage,

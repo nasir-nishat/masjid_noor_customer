@@ -9,10 +9,10 @@ class ProductController extends GetxController {
   var newProducts = <ProductMd>[].obs;
   var popularProducts = <ProductMd>[].obs;
   var products = <ProductMd>[].obs;
-  var selectedProduct = ProductMd(name: "", sellPrice: 0).obs;
+  var selectedProduct = const ProductMd(name: "", sellPrice: 0).obs;
 
   var categories = <CategoryMd>[].obs;
-  var selectedCategory = CategoryMd(name: "").obs;
+  var selectedCategory = const CategoryMd(name: "").obs;
 
   var isLoading = true.obs;
   var isSearchLoading = false.obs;
@@ -23,7 +23,6 @@ class ProductController extends GetxController {
 
   bool get isLoadingMoreEnabled =>
       products.length >= pageSize && !isLoading.value;
-
 
   @override
   void onInit() {
@@ -43,7 +42,7 @@ class ProductController extends GetxController {
         fetchProductsByCategory();
       }
     } catch (e) {
-      print("Error fetching categories: $e");
+      debugPrint("Error fetching categories: $e");
     }
   }
 
@@ -98,7 +97,7 @@ class ProductController extends GetxController {
               value: selectedCategory.value.id.toString()));
       products.value = fetchedProducts;
     } catch (e) {
-      print("Error fetching products by category: $e");
+      debugPrint("Error fetching products by category: $e");
     } finally {
       isLoading.value = false;
     }
@@ -124,7 +123,7 @@ class ProductController extends GetxController {
 
       products.addAll(fetchedProducts);
     } catch (e) {
-      print("Error loading more products: $e");
+      debugPrint("Error loading more products: $e");
     } finally {
       isLoading.value = false;
     }
@@ -134,7 +133,7 @@ class ProductController extends GetxController {
     try {
       return await ApiService().searchProductByBarcode(barcode);
     } catch (e) {
-      print("Error searching product by barcode: $e");
+      debugPrint("Error searching product by barcode: $e");
       return null;
     }
   }

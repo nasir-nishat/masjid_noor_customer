@@ -1,25 +1,27 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class ProductMd extends Equatable {
-  int? id;
-  int? categoryId;
-  String name;
-  double sellPrice;
-  String? description;
-  int? stockQty;
-  List<String>? images;
-  double? purchasePrice;
-  String? barcode;
+  final int? id;
+  final int? categoryId;
+  final String name;
+  final double sellPrice;
+  final String? description;
+  final int? stockQty;
+  final List<String>? images;
+  final double? purchasePrice;
+  final String? barcode;
 
   // double? discount;
   // DateTime? startDate;
   // DateTime? endDate;
-  bool? isNew;
-  int? suppId;
-  bool? isActive;
-  bool? isPopular;
+  final bool? isNew;
+  final int? suppId;
+  final bool? isActive;
+  final bool? isPopular;
 
-  ProductMd({
+  const ProductMd({
     this.id,
     this.categoryId,
     required this.name,
@@ -81,7 +83,7 @@ class ProductMd extends Equatable {
         isPopular: json['is_popular'],
       );
     } on TypeError catch (e, st) {
-      print("Error: $e, $st");
+      debugPrint("Error: $e, $st");
       rethrow;
     }
   }

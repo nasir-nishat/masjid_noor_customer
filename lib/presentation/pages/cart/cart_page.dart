@@ -13,8 +13,6 @@ import 'package:masjid_noor_customer/mgr/models/cart_md.dart';
 import 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-import 'barcode_scanner.dart';
-
 class CartPage extends GetView<CartController> {
   const CartPage({super.key});
 
@@ -231,7 +229,7 @@ class CartPage extends GetView<CartController> {
       BuildContext context) async {
     final phoneController = TextEditingController();
     // final nameController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     final maskFormatter = MaskTextInputFormatter(
       mask: '### #### ####',
@@ -244,7 +242,7 @@ class CartPage extends GetView<CartController> {
         return AlertDialog(
           title: const Text('Due Payment Information'),
           content: Form(
-            key: _formKey,
+            key: formKey,
             child: SpacedColumn(
               mainAxisSize: MainAxisSize.min,
               verticalSpace: 10.h,
@@ -281,7 +279,7 @@ class CartPage extends GetView<CartController> {
           actions: [
             TextButton(
               onPressed: () {
-                if (_formKey.currentState?.validate() == true) {
+                if (formKey.currentState?.validate() == true) {
                   Map<String, String> data = {
                     'phone': phoneController.text.removeAllWhitespace,
                     // 'name': nameController.text,

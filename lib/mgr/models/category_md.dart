@@ -1,13 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
+@immutable
 class CategoryMd extends Equatable {
-  int? id;
-  String name;
-  String? description;
-  String? image;
-  bool? isActive;
+  final int? id;
+  final String name;
+  final String? description;
+  final String? image;
+  final bool? isActive;
 
-  CategoryMd({
+  const CategoryMd({
     this.id,
     required this.name,
     this.description,
@@ -34,7 +36,7 @@ class CategoryMd extends Equatable {
         isActive: json['is_active'],
       );
     } on TypeError catch (e, st) {
-      print("Error: $e, $st");
+      debugPrint("Error: $e, $st");
       rethrow;
     }
   }

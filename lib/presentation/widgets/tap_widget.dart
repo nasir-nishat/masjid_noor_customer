@@ -8,8 +8,7 @@ class TapWidget extends StatelessWidget {
   final String? tooltip;
 
   const TapWidget(
-      {Key? key, required this.child, this.onTap, this.onHover, this.tooltip})
-      : super(key: key);
+      {super.key, required this.child, this.onTap, this.onHover, this.tooltip});
 
   @override
   Widget build(BuildContext context) {

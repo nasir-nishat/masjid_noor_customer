@@ -43,7 +43,8 @@ class AuthenticationNotifier {
 
   Future<AuthResponse> googleSignIn() async {
     const webClientId = GOOGLE_WEB_CLIENT_ID;
-    const iosClientId = 'my-ios.apps.googleusercontent.com';
+    // TODO: Add IOS
+    // const iosClientId = 'my-ios.apps.googleusercontent.com';
 
     final GoogleSignIn googleSignIn = GoogleSignIn(
       serverClientId: webClientId,
@@ -66,22 +67,22 @@ class AuthenticationNotifier {
       accessToken: accessToken,
     );
 
-    UserMd userLog = UserMd(
-      userId: authResponse.user!.id,
-      email: authResponse.user!.userMetadata!["email"],
-      passwordHash: '',
-      phoneNumber: '',
-      createdAt: DateTime.now(),
-      firstName: authResponse.user!.userMetadata!["full_name"]
-          .toString()
-          .split(' ')[0],
-      lastName: authResponse.user!.userMetadata!["full_name"]
-          .toString()
-          .split(' ')[1],
-      username:
-          authResponse.user!.userMetadata!["email"].toString().split('@')[0],
-      profilePic: authResponse.user!.userMetadata!["avatar_url"],
-    );
+    // UserMd userLog = UserMd(
+    //   userId: authResponse.user!.id,
+    //   email: authResponse.user!.userMetadata!["email"],
+    //   passwordHash: '',
+    //   phoneNumber: '',
+    //   createdAt: DateTime.now(),
+    //   firstName: authResponse.user!.userMetadata!["full_name"]
+    //       .toString()
+    //       .split(' ')[0],
+    //   lastName: authResponse.user!.userMetadata!["full_name"]
+    //       .toString()
+    //       .split(' ')[1],
+    //   username:
+    //       authResponse.user!.userMetadata!["email"].toString().split('@')[0],
+    //   profilePic: authResponse.user!.userMetadata!["avatar_url"],
+    // );
 
     UserMd? curUserMd = await ApiService().getUser(authResponse.user!.id);
     if (curUserMd != null) {
@@ -204,7 +205,7 @@ final GoRouter goRouter = GoRouter(
           },
           pageBuilder: (context, state) {
             return defaultTransition(
-                child: LoginPage(), routeName: Routes.login);
+                child: const LoginPage(), routeName: Routes.login);
           },
         ),
       ],

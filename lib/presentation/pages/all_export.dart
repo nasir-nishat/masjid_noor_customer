@@ -1,6 +1,5 @@
 export 'package:masjid_noor_customer/presentation/pages/cart/cart_page.dart';
 export 'package:masjid_noor_customer/presentation/pages/home/home_page.dart';
-export 'package:masjid_noor_customer/presentation/pages/order/order_details_page.dart';
 export 'package:masjid_noor_customer/presentation/pages/product/product_details_page.dart';
 export 'package:masjid_noor_customer/presentation/pages/product/product_list_page.dart';
 export 'package:masjid_noor_customer/presentation/pages/user/login_page.dart';
