@@ -43,7 +43,9 @@ class HomePage extends GetView<ProductController> {
               Text(title,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
-                  style: context.textTheme.labelMedium),
+                  style: context.textTheme.labelMedium!.copyWith(
+                      color: const Color(0xFF454F5A),
+                      fontWeight: FontWeight.bold)),
               TextButton(
                   onPressed: () {
                     controller.getCategories();
@@ -52,7 +54,7 @@ class HomePage extends GetView<ProductController> {
                   child: Text(
                     'See All',
                     style: context.textTheme.labelSmall
-                        ?.copyWith(color: Colors.blue),
+                        ?.copyWith(color: context.theme.primaryColor),
                   )),
             ],
           ),

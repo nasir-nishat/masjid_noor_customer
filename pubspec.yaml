@@ -23,7 +23,6 @@ dependencies:
   cached_network_image: ^3.3.1
   image_picker: ^1.1.2
   permission_handler: ^9.2.0
-  flutter_native_image: ^0.0.6+1
   heroicons: ^0.10.0
   flutter_svg: ^2.0.10+1
   supabase_flutter: ^2.5.5
@@ -50,6 +49,7 @@ dependencies:
   mobile_scanner: ^5.1.1
   flutter_native_splash: ^2.4.1
   logging: ^1.2.0
+  app_settings: ^5.1.1
 
 
 dev_dependencies:

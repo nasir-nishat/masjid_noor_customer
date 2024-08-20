@@ -6,8 +6,10 @@ import 'dart:convert';
 
 import 'package:masjid_noor_customer/mgr/models/jamah_md.dart';
 import 'package:masjid_noor_customer/mgr/services/api_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../mgr/models/bank_md.dart';
+import 'package:app_settings/app_settings.dart';
 
 class PrayerTime {
   final String name;
@@ -26,17 +28,31 @@ class PrayerTimesController extends GetxController {
   Rx<Position?> currentPosition = Rx<Position?>(null);
   Rx<BankMd?> bankDetails = Rx<BankMd?>(null);
 
-  Future<void> getCurrentLocation(BuildContext context) async {
+  Future<bool> getCurrentLocation(BuildContext context) async {
+    isLoading.value = true;
     final hasPermission = await handleLocationPermission(context);
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
+    if (!hasPermission) return false;
+
+    try {
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
       currentPosition.value = position;
-      fetchPrayerTimes(
-          latitude: position.latitude, longitude: position.longitude);
-    }).catchError((e) {
-      debugPrint(e);
-    });
+      await fetchPrayerTimes(
+        latitude: position.latitude,
+        longitude: position.longitude,
+      );
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> openAppSettings() async {
+    await AppSettings.openAppSettings(type: AppSettingsType.location);
   }
 
   Future<void> fetchPrayerTimes(
