@@ -67,7 +67,7 @@ class PrayerTimesBannerState extends State<PrayerTimesBanner> {
               Border.all(color: context.theme.primaryColor.withOpacity(0.5)),
           borderRadius: BorderRadius.circular(8.r),
           color: context.theme.primaryColor
-              .withOpacity(0.1), // Light background color
+              .withOpacity(0.05), // Light background color
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

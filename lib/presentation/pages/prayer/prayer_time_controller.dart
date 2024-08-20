@@ -6,7 +6,6 @@ import 'dart:convert';
 
 import 'package:masjid_noor_customer/mgr/models/jamah_md.dart';
 import 'package:masjid_noor_customer/mgr/services/api_service.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../mgr/models/bank_md.dart';
 import 'package:app_settings/app_settings.dart';
@@ -30,24 +29,38 @@ class PrayerTimesController extends GetxController {
 
   Future<bool> getCurrentLocation(BuildContext context) async {
     isLoading.value = true;
+    debugPrint("getCurrentLocation: Loading started");
+
     final hasPermission = await handleLocationPermission(context);
-    if (!hasPermission) return false;
+    if (!hasPermission) {
+      debugPrint("getCurrentLocation: Permission denied");
+      isLoading.value = false;
+      return false;
+    }
 
     try {
+      debugPrint("getCurrentLocation: Fetching position");
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+      debugPrint("getCurrentLocation: Position fetched: $position");
+
       currentPosition.value = position;
+
+      debugPrint("getCurrentLocation: Fetching prayer times");
       await fetchPrayerTimes(
         latitude: position.latitude,
         longitude: position.longitude,
       );
+      debugPrint("getCurrentLocation: Prayer times fetched");
+
       return true;
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("getCurrentLocation: Error - ${e.toString()}");
       return false;
     } finally {
       isLoading.value = false;
+      debugPrint("getCurrentLocation: Loading ended");
     }
   }
 
@@ -110,8 +123,14 @@ class PrayerTimesController extends GetxController {
     if (permission == LocationPermission.deniedForever) {
       if (!context.mounted) return false;
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          duration: Duration(milliseconds: 500),
           content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
+              'Location permissions are permanently denied. Please enable the permissions from the settings',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.bold,
+                  height: 1.5))));
       return false;
     }
     return true;
