@@ -12,7 +12,7 @@ const _SUPABASE_ANON_KEY =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zeWZsZ293anFhdW5mYmVjaHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk5OTU5MjEsImV4cCI6MjAzNTU3MTkyMX0.7DBJ7mEdcvxzGI1qj4OwbpugWUc_kcVCv3AVIXjdfag";
 
 const GOOGLE_WEB_CLIENT_ID =
-    '490296933607-r6fm8rsqg06d094p6srgr8vm5c8unmmr.apps.googleusercontent.com';
+    '1075918505837-73v37dovbq6tna0hj43kfn2iivsuf2hf.apps.googleusercontent.com';
 
 class SupabaseDep {
   //create a singleton

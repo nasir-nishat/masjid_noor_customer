@@ -24,10 +24,10 @@ if (flutterVersionName == null) {
 }
 
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file("key.properties")
+def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
-        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-    }
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 android {
     namespace = "mehonot.org.masjid_noor_customer"
@@ -53,16 +53,16 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('../signature/upload-keystore.jks')
-            storePassword = 'Masjidnoor'
-            keyAlias = 'upload'
-            keyPassword = 'Masjidnoor'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
         debug {
-            storeFile file('../signature/upload-keystore.jks')
-            storePassword = 'Masjidnoor'
-            keyAlias = 'upload'
-            keyPassword = 'Masjidnoor'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
 

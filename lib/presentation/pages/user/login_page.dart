@@ -101,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           } catch (e) {
                             // showSnackBar(context, 'Error: $e');
+                            print('Error: $e');
                             showToast('Error: $e', isSuccess: false);
                           }
                         },
