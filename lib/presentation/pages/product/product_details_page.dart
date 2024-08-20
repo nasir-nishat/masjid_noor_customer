@@ -52,13 +52,23 @@ class ProductDetailsPage extends GetView<ProductController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                    onPressed: () {
-                      context.go(parentRoute);
-                    },
-                    icon: const Icon(Icons.close)),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Product Details",
+                    style: context.textTheme.headlineSmall,
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                        onPressed: () {
+                          context.go(parentRoute);
+                        },
+                        icon: const Icon(Icons.close)),
+                  ),
+                ],
               ),
               if (prod.images == null || prod.images!.isEmpty)
                 Container(

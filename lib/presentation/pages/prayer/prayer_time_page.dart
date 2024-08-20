@@ -188,6 +188,12 @@ class PrayerTimeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+            color: context.theme.primaryColor.withOpacity(0.5), width: 1),
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      elevation: 0,
       margin: EdgeInsets.all(8.r),
       child: Container(
         width: 120,
