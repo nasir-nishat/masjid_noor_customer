@@ -3,6 +3,8 @@ import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_contr
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_page.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 
+import 'donation_section.dart';
+
 class HomePage extends GetView<ProductController> {
   const HomePage({super.key});
 
@@ -18,7 +20,7 @@ class HomePage extends GetView<ProductController> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const PrayerTimesBanner(),
-                SizedBox(height: 10.h),
+                const DonationSection(),
                 _buildProductSection(
                     'New Products', controller.newProducts, context),
                 _buildProductSection(
