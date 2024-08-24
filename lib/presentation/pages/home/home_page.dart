@@ -52,7 +52,7 @@ class HomePage extends GetView<ProductController> {
               TextButton(
                   onPressed: () {
                     controller.getCategories();
-                    context.go(Routes.products);
+                    context.push(Routes.products);
                   },
                   child: Text(
                     'See All',
