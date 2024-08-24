@@ -161,6 +161,20 @@ class OrdersPage extends GetView<OrderController> {
                   ),
                 ),
               ),
+              if (order.status == OrderStatus.pending) SizedBox(height: 20.h),
+              if (order.status == OrderStatus.pending)
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await controller.cancelOrder(order.id);
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: const Text('Cancel Order'),
+                  ),
+                ),
             ],
           ),
         );

@@ -319,7 +319,7 @@ class ApiService {
     await _handleRequest(() async {
       await _supabaseClient
           .from('orders')
-          .update({'status': status}).eq('order_id', id);
+          .update({'status': status}).eq('id', id);
     });
   }
 

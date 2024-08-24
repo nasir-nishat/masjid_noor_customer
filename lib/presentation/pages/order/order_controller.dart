@@ -44,4 +44,9 @@ class OrderController extends GetxController {
           .toList());
     }
   }
+
+  Future<void> cancelOrder(int orderId) async {
+    await ApiService().updateOrderStatus(orderId, OrderStatus.cancelled.name);
+    fetchOrders();
+  }
 }
