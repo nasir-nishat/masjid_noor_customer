@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../presentation/pages/all_export.dart';
 import '../presentation/pages/cart/barcode_scanner.dart';
 import '../presentation/pages/cart/cart_page_v2.dart';
+import '../presentation/pages/user/privacy_policy.dart';
 import '../presentation/utills/extensions.dart';
 
 class AuthenticationNotifier {
@@ -177,6 +178,14 @@ final GoRouter goRouter = GoRouter(
             );
           },
         ),
+        GoRoute(
+          path: Routes.privacyPolicy,
+          pageBuilder: (context, state) {
+            return const NoTransitionPage(
+              child: PrivacyPolicy(),
+            );
+          },
+        ),
       ],
     ),
     GoRoute(
@@ -303,6 +312,7 @@ abstract class Routes {
   static const inventory = '/inventory';
   static const profile = '/profile';
   static const jamahTimes = '/jamah-times';
+  static const privacyPolicy = '/privacy-policy';
 
   static const productCreate = '/create';
   static const forgotPassword = '/forgot-password';

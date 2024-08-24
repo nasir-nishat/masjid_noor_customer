@@ -50,6 +50,7 @@ dependencies:
   flutter_native_splash: ^2.4.1
   logging: ^1.2.0
   app_settings: ^5.1.1
+  webview_flutter: ^4.9.0
 
 
 dev_dependencies:
@@ -60,8 +61,8 @@ dev_dependencies:
   hive_generator: ^2.0.1
 
 flutter_native_splash:
-   color : "#ffffff"
-   image: assets/favicon.png
+  color: "#ffffff"
+  image: assets/favicon.png
 
 flutter:
   uses-material-design: true
