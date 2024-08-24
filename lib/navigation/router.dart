@@ -140,9 +140,6 @@ final GoRouter goRouter = GoRouter(
       routes: [
         GoRoute(
           onExit: (context, state) async {
-            print('Exiting home route');
-            print('State: $state');
-
             final shouldExit = await _showExitConfirmationDialog(context);
             if (shouldExit == true) {
               return true;
