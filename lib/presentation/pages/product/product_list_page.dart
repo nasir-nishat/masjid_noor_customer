@@ -23,92 +23,94 @@ class ProductListPage extends GetView<ProductController> {
     });
 
     return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(
-            height: 50.h,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: controller.categories.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w),
-                  child: Obx(() {
-                    bool isSelected = controller.selectedCategory.value ==
-                        controller.categories[index];
-                    return ChoiceChip(
+      body: Obx(
+        () => RefreshIndicator(
+          onRefresh: () async {
+            controller.getCategories();
+            controller.fetchProductsByCategory();
+          },
+          child: Column(
+            children: [
+              SizedBox(
+                height: 50.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.categories.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      backgroundColor:
-                          isSelected ? Colors.blue : Colors.transparent,
-                      selectedColor: Colors.blue,
-                      side: isSelected
-                          ? BorderSide.none
-                          : const BorderSide(color: Colors.grey),
-                      showCheckmark: false,
-                      label: Text(
-                        controller.categories[index].name,
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.black,
-                        ),
-                      ),
-                      selected: isSelected,
-                      onSelected: (isSelected) {
-                        if (isSelected) {
-                          controller.selectedCategory.value =
-                              controller.categories[index];
-                          controller.fetchProductsByCategory();
-                        }
-                      },
+                      child: getCats(index),
                     );
-                  }),
-                );
-              },
-            ),
+                  },
+                ),
+              ),
+              SizedBox(height: 10.h),
+              Expanded(child: getProds()),
+            ],
           ),
-          SizedBox(height: 10.h),
-          Expanded(
-            child: Obx(() {
-              if (controller.isLoading.value && controller.products.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                return RefreshIndicator(
-                  onRefresh: () => controller.fetchProductsByCategory(),
-                  child: controller.products.isEmpty
-                      ? const Center(child: Text('No products found'))
-                      : GridView.builder(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10.w,
-                            mainAxisSpacing: 10.h,
-                            childAspectRatio: 0.8,
-                          ),
-                          itemCount: controller.products.length +
-                              (controller.isLoading.value ? 2 : 0),
-                          itemBuilder: (context, index) {
-                            if (index >= controller.products.length) {
-                              if (controller.isLoading.value) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              } else {
-                                return const SizedBox.shrink();
-                              }
-                            }
-                            return ProductItem(
-                              product: controller.products[index],
-                              parentRoute: Routes.products,
-                            );
-                          },
-                          controller: _scrollController,
-                        ),
-                );
-              }
-            }),
-          )
-        ],
+        ),
       ),
     );
+  }
+
+  Widget getCats(int index) {
+    bool isSelected =
+        controller.selectedCategory.value == controller.categories[index];
+    return ChoiceChip(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      backgroundColor: isSelected ? Colors.blue : Colors.transparent,
+      selectedColor: Colors.blue,
+      side: isSelected ? BorderSide.none : const BorderSide(color: Colors.grey),
+      showCheckmark: false,
+      label: Text(
+        controller.categories[index].name,
+        style: TextStyle(
+          color: isSelected ? Colors.white : Colors.black,
+        ),
+      ),
+      selected: isSelected,
+      onSelected: (isSelected) {
+        if (isSelected) {
+          controller.selectedCategory.value = controller.categories[index];
+          controller.fetchProductsByCategory();
+        }
+      },
+    );
+  }
+
+  Widget getProds() {
+    if (controller.isLoading.value && controller.products.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      return controller.products.isEmpty
+          ? const Center(child: Text('No products found'))
+          : GridView.builder(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10.w,
+                mainAxisSpacing: 10.h,
+                childAspectRatio: 0.8,
+              ),
+              itemCount: controller.products.length +
+                  (controller.isLoading.value ? 2 : 0),
+              itemBuilder: (context, index) {
+                if (index >= controller.products.length) {
+                  if (controller.isLoading.value) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }
+                return ProductItem(
+                  product: controller.products[index],
+                  parentRoute: Routes.products,
+                );
+              },
+              controller: _scrollController,
+            );
+    }
   }
 }

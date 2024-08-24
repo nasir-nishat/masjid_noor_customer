@@ -25,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
           IconButton(
             onPressed: () {
               context.pop();
+              context.go(Routes.home);
               // AppController.to.currentRoute.value = Routes.home;
             },
             icon: const Icon(Icons.close),
