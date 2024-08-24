@@ -28,7 +28,14 @@ class _MainLayoutState extends State<MainLayout> {
           child: Header(currentRoute: getCurrentRoute(context)),
         ),
       ),
-      body: Padding(padding: EdgeInsets.all(10.w), child: widget.child),
+      body: Padding(
+          padding: EdgeInsets.only(
+            right: 10.w,
+            left: 10.w,
+            bottom: 10.h,
+            top: 0.h,
+          ),
+          child: widget.child),
       bottomNavigationBar: showBottomNav(context)
           ? BottomNavigationBar(
               selectedFontSize: 0,
@@ -82,28 +89,24 @@ class _MainLayoutState extends State<MainLayout> {
     switch (index) {
       case 0:
         if (currentRoute != Routes.home) {
-          // AppController.to.currentRoute.value = Routes.home;
           context.go(Routes.home);
         }
         break;
       case 1:
         if (currentRoute != Routes.products) {
-          // AppController.to.currentRoute.value = Routes.products;
-          context.go(Routes.products);
+          context.push(Routes.products);
         }
         break;
       case 2:
         if (currentRoute != Routes.search) {
-          // AppController.to.currentRoute.value = Routes.search;
-          context.go(Routes.search);
+          context.push(Routes.search);
         }
         break;
       case 3:
         if (currentRoute != Routes.profile) {
           if (loggedIn) {
             UserController.to.fetchUser();
-            // AppController.to.currentRoute.value = Routes.profile;
-            context.go(Routes.profile);
+            context.push(Routes.profile);
           } else {
             context.push(Routes.login);
           }

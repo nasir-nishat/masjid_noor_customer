@@ -54,37 +54,40 @@ class AnNoorApp extends GetView<AppController> {
         return true;
       },
       minTextAdapt: true,
-      builder: (_, child) => SafeArea(
-        child: GetMaterialApp.router(
-          initialBinding: InitialBindings(),
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.defaultTheme,
-          routeInformationParser: goRouter.routeInformationParser,
-          routeInformationProvider: goRouter.routeInformationProvider,
-          routerDelegate: goRouter.routerDelegate,
-          backButtonDispatcher: goRouter.backButtonDispatcher,
-          builder: (context, child) {
-            child = botToastBuilder(context, child);
-            return NetworkAwareWidget(
-              networkService: NetworkService(),
-              child: Stack(
-                children: [
-                  ErrorBoundary(child: child),
-                  Obx(() {
-                    if (AppController.to.globalLoading.value) {
-                      return Container(
-                        color: Colors.black.withOpacity(0.5),
-                        child: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  }),
-                ],
-              ),
-            );
-          },
+      builder: (_, child) => PopScope(
+        canPop: false,
+        child: SafeArea(
+          child: GetMaterialApp.router(
+            initialBinding: InitialBindings(),
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.defaultTheme,
+            routeInformationParser: goRouter.routeInformationParser,
+            routeInformationProvider: goRouter.routeInformationProvider,
+            routerDelegate: goRouter.routerDelegate,
+            backButtonDispatcher: goRouter.backButtonDispatcher,
+            builder: (context, child) {
+              child = botToastBuilder(context, child);
+              return NetworkAwareWidget(
+                networkService: NetworkService(),
+                child: Stack(
+                  children: [
+                    ErrorBoundary(child: child),
+                    Obx(() {
+                      if (AppController.to.globalLoading.value) {
+                        return Container(
+                          color: Colors.black.withOpacity(0.5),
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    }),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

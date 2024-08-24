@@ -97,8 +97,30 @@ class AuthenticationNotifier {
   }
 }
 
-String getCurrentRoute(BuildContext context) =>
-    GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+String getCurrentRoute(BuildContext context) {
+  String currentPath = GoRouter.of(context)
+      .routerDelegate
+      .currentConfiguration
+      .last
+      .route
+      .path
+      .toString();
+
+  switch (currentPath) {
+    case var path when path.contains(Routes.productDetails):
+      return Routes.productDetails;
+    case var path when path.contains(Routes.products):
+      return Routes.products;
+    case var path when path.contains(Routes.home):
+      return Routes.home;
+    case var path when path.contains(Routes.search):
+      return Routes.search;
+    case var path when path.contains(Routes.profile):
+      return Routes.profile;
+    default:
+      return "";
+  }
+}
 
 final GoRouter goRouter = GoRouter(
   initialLocation: Routes.home,
@@ -117,9 +139,21 @@ final GoRouter goRouter = GoRouter(
       },
       routes: [
         GoRoute(
+          onExit: (context, state) async {
+            print('Exiting home route');
+            print('State: $state');
+
+            final shouldExit = await _showExitConfirmationDialog(context);
+            if (shouldExit == true) {
+              return true;
+            } else {
+              return false;
+            }
+          },
           path: Routes.home,
           pageBuilder: (context, state) {
-            return const NoTransitionPage(child: HomePage());
+            return const NoTransitionPage(
+                child: PopScope(canPop: false, child: HomePage()));
           },
         ),
         GoRoute(
@@ -212,6 +246,32 @@ final GoRouter goRouter = GoRouter(
     ),
   ],
 );
+
+Future<bool?> _showExitConfirmationDialog(BuildContext context) async {
+  return showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Exit'),
+        content: const Text('Are you sure you want to exit?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true); // User confirms exit
+            },
+            child: const Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false); // User cancels exit
+            },
+            child: const Text('No'),
+          ),
+        ],
+      );
+    },
+  );
+}
 
 CustomTransitionPage defaultTransition(
     {required Widget child, required String routeName}) {

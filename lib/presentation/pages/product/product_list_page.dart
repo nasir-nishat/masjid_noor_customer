@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 import '../../../navigation/router.dart';
+import '../../widgets/header.dart';
 import '../../widgets/product_item.dart';
 
 class ProductListPage extends GetView<ProductController> {
@@ -32,26 +33,24 @@ class ProductListPage extends GetView<ProductController> {
       }
     });
 
-    return Scaffold(
-      body: Obx(
-        () => RefreshIndicator(
-          onRefresh: () async {
-            controller.getCategories();
-            controller.fetchProductsByCategory();
-          },
-          child: Column(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                height: _showCategories.value ? 50.h : 0,
-                child: SingleChildScrollView(
-                  child: _buildCategories(),
-                ),
+    return Obx(
+      () => RefreshIndicator(
+        onRefresh: () async {
+          controller.getCategories();
+          controller.fetchProductsByCategory();
+        },
+        child: Column(
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              height: _showCategories.value ? 50.h : 0,
+              child: SingleChildScrollView(
+                child: _buildCategories(),
               ),
-              SizedBox(height: 10.h),
-              Expanded(child: _buildProductGrid()),
-            ],
-          ),
+            ),
+            SizedBox(height: 10.h),
+            Expanded(child: _buildProductGrid()),
+          ],
         ),
       ),
     );
