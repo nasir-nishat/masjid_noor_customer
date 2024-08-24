@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:shimmer/shimmer.dart';
 
 class PrivacyPolicy extends StatefulWidget {
   const PrivacyPolicy({super.key});
@@ -24,8 +23,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
     _controller.setNavigationDelegate(
       NavigationDelegate(
         onPageFinished: (url) {
-          //wait 2 seconds to remove shimmer effect
-          Future.delayed(const Duration(seconds: 2)).then((value) {
+          Future.delayed(const Duration(seconds: 1)).then((value) {
             setState(() {
               _isLoading = false;
             });
@@ -69,7 +67,6 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
     );
   }
 
-  //make shimmer page
   Widget shimmerPage() {
     return SizedBox(
       height: double.infinity,
