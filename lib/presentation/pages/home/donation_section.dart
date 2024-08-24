@@ -9,7 +9,7 @@ class DonationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 10.w),
+      padding: EdgeInsets.symmetric(vertical: 16.h),
       child: GestureDetector(
         onTap: () {
           showBankDetailsDialog(context);

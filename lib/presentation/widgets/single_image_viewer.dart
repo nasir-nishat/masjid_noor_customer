@@ -45,7 +45,7 @@ class SingleImagesViewer extends StatelessWidget {
                 decoration: BoxDecoration(color: Colors.grey[200]),
               ),
             ),
-            fit: BoxFit.cover,
+            fit: BoxFit.fitHeight,
           )),
     );
   }

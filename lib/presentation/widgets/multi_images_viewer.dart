@@ -62,7 +62,7 @@ class MultiImagesViewerState extends State<MultiImagesViewer> {
             width: w,
             height: h,
             child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: widget.imageUrls.length,
@@ -89,54 +89,58 @@ class MultiImagesViewerState extends State<MultiImagesViewer> {
                         decoration: BoxDecoration(color: Colors.grey[200]),
                       ),
                     ),
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitHeight,
                   );
                 },
               ),
             ),
           ),
-          Positioned(
-            bottom: 10.h,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                widget.imageUrls.length,
-                (index) => Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4.0.w),
-                  width: 8.w,
-                  height: 8.h,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentPage == index ? Colors.blue : Colors.grey,
+          if (widget.imageUrls.length > 1)
+            Positioned(
+              bottom: 10.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  widget.imageUrls.length,
+                  (index) => Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4.0.w),
+                    width: 8.w,
+                    height: 8.h,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentPage == index ? Colors.blue : Colors.grey,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            left: 2.w,
-            child: IconButton(
-              style: ButtonStyle(
-                backgroundColor:
-                    WidgetStateProperty.all(Colors.black.withOpacity(0.2)),
-                fixedSize: WidgetStateProperty.all(const Size(20, 20)),
+          if (widget.imageUrls.length > 1)
+            Positioned(
+              left: 2.w,
+              child: IconButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      WidgetStateProperty.all(Colors.black.withOpacity(0.2)),
+                  fixedSize: WidgetStateProperty.all(const Size(20, 20)),
+                ),
+                icon:
+                    const Icon(Icons.chevron_left_rounded, color: Colors.white),
+                onPressed: _previousPage,
               ),
-              icon: const Icon(Icons.chevron_left_rounded, color: Colors.white),
-              onPressed: _previousPage,
             ),
-          ),
-          Positioned(
-            right: 2.w,
-            child: IconButton(
-              style: ButtonStyle(
-                backgroundColor:
-                    WidgetStateProperty.all(Colors.black.withOpacity(0.2)),
+          if (widget.imageUrls.length > 1)
+            Positioned(
+              right: 2.w,
+              child: IconButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      WidgetStateProperty.all(Colors.black.withOpacity(0.2)),
+                ),
+                icon: const Icon(Icons.chevron_right_rounded,
+                    color: Colors.white),
+                onPressed: _nextPage,
               ),
-              icon:
-                  const Icon(Icons.chevron_right_rounded, color: Colors.white),
-              onPressed: _nextPage,
             ),
-          ),
         ],
       ),
     );

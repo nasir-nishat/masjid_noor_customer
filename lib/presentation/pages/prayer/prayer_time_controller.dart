@@ -13,8 +13,14 @@ import 'package:app_settings/app_settings.dart';
 class PrayerTime {
   final String name;
   final String time;
+  String? jamahTime;
+  String? jamahLocation;
 
-  PrayerTime({required this.name, required this.time});
+  PrayerTime(
+      {required this.name,
+      required this.time,
+      this.jamahTime,
+      this.jamahLocation});
 }
 
 class PrayerTimesController extends GetxController {
