@@ -2,6 +2,7 @@ import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_page.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
+import '../prayer/jamah_times_banner.dart';
 import 'donation_section.dart';
 
 class HomePage extends GetView<ProductController> {
@@ -11,14 +12,15 @@ class HomePage extends GetView<ProductController> {
   Widget build(BuildContext context) {
     return Obx(() => RefreshIndicator(
           onRefresh: () async {
-            await PrayerTimesController.to.getCurrentLocation(context);
+            // await PrayerTimesController.to.getCurrentLocation(context);
             await PrayerTimesController.to.getBankDetails();
           },
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const PrayerTimesBanner(),
+                SizedBox(height: 150.h, child: const JamahTimesBanner()),
+                // const PrayerTimesBanner(),
                 const DonationSection(),
                 _buildProductSection(
                     'New Products', controller.newProducts, context),

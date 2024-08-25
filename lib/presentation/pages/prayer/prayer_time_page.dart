@@ -48,9 +48,9 @@ class PrayerTimesBannerState extends State<PrayerTimesBanner> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
-              color: context.theme.primaryColor.withOpacity(0.5),
+              color: context.theme.primaryColor.withOpacity(0.1),
             ),
-            color: context.theme.primaryColor.withOpacity(0.05),
+            color: context.theme.primaryColor.withOpacity(0.02),
           ),
           padding: EdgeInsets.all(8.r),
           height: 80,
