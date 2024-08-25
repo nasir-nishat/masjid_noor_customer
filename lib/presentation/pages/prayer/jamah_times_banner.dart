@@ -88,7 +88,8 @@ class JamahTimesBannerState extends State<JamahTimesBanner> {
           border: Border.all(
             color: context.theme.primaryColor.withOpacity(0.1),
           ),
-          color: Colors.teal.withOpacity(0.03),
+          // color: Colors.teal.withOpacity(0.03),
+          color: context.theme.primaryColor.withOpacity(0.03),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
