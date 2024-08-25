@@ -14,6 +14,7 @@ class HomePage extends GetView<ProductController> {
           onRefresh: () async {
             // await PrayerTimesController.to.getCurrentLocation(context);
             await PrayerTimesController.to.getBankDetails();
+            await PrayerTimesController.to.getJamah();
           },
           child: SingleChildScrollView(
             child: Column(
