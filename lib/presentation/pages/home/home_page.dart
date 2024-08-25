@@ -2,8 +2,6 @@ import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_page.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
-
-import '../../widgets/header.dart';
 import 'donation_section.dart';
 
 class HomePage extends GetView<ProductController> {

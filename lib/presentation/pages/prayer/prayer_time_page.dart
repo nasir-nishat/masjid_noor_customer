@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:masjid_noor_customer/mgr/models/jamah_md.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 import 'package:masjid_noor_customer/presentation/widgets/prayer_card.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../navigation/router.dart';
 
 class PrayerTimesBanner extends StatefulWidget {

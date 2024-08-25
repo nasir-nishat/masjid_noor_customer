@@ -108,7 +108,7 @@ class AuthenticationNotifier {
       _logger.info('User registration/retrieval successful');
       usermd = curUserMd;
       await _userBox.put('user', usermd!);
-      UserController.to.user?.value = usermd!;
+      UserController.to.user.value = usermd!;
       _logger.info('Google Sign-In process completed successfully');
       return authResponse;
     } catch (e) {

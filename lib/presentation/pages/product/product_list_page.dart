@@ -4,11 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 import '../../../navigation/router.dart';
-import '../../widgets/header.dart';
 import '../../widgets/product_item.dart';
 
 class ProductListPage extends GetView<ProductController> {
-  ProductListPage({Key? key}) : super(key: key);
+  ProductListPage({super.key});
 
   final ScrollController _scrollController = ScrollController();
   final RxBool _showCategories = true.obs;

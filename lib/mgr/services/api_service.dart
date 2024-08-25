@@ -1,4 +1,3 @@
-import 'package:logging/logging.dart';
 import 'package:masjid_noor_customer/mgr/models/bank_md.dart';
 import 'package:masjid_noor_customer/mgr/models/order_item_md.dart';
 import 'package:masjid_noor_customer/mgr/models/order_md.dart';
@@ -85,11 +84,11 @@ class ApiService {
 
       return UserMd.fromJson(response);
     } catch (e) {
-      print('Error during user registration: $e');
+      debugPrint('Error during user registration: $e');
       if (e is PostgrestException && e.code == '23505') {
-        print('Duplicate entry for email: ${user.email}');
+        debugPrint('Duplicate entry for email: ${user.email}');
       }
-      return null; // Handle error accordingly
+      return null;
     }
   }
 

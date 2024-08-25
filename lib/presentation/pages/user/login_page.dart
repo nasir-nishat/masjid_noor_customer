@@ -97,12 +97,10 @@ class _LoginPageState extends State<LoginPage> {
                               if (!context.mounted) return;
                               context.go(Routes.home);
                             } else {
-                              // showSnackBar(context, 'Failed to sign in');
                               showToast('Failed to sign in', isSuccess: false);
                             }
                           } catch (e) {
-                            // showSnackBar(context, 'Error: $e');
-                            print('Error: $e');
+                            debugPrint('Error: $e');
                             showToast('Error: $e', isSuccess: false);
                           }
                         },
