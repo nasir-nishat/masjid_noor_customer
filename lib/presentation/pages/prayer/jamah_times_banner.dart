@@ -88,7 +88,7 @@ class JamahTimesBannerState extends State<JamahTimesBanner> {
           border: Border.all(
             color: context.theme.primaryColor.withOpacity(0.1),
           ),
-          color: Colors.teal.withOpacity(0.05),
+          color: Colors.teal.withOpacity(0.03),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -120,7 +120,7 @@ class JamahTimesBannerState extends State<JamahTimesBanner> {
         Text(
           spotName,
           style: TextStyle(
-            fontSize: 12.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
             color: Colors.teal.shade800,
           ),
