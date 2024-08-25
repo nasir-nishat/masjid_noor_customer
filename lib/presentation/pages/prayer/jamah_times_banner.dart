@@ -177,7 +177,7 @@ class JamahTimesBannerState extends State<JamahTimesBanner> {
     return SpacedRow(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
-      horizontalSpace: 10.w,
+      horizontalSpace: 20.w,
       children: otherJamah.map((j) {
         TimeOfDay time = TimeOfDay(
           hour: int.parse(j['time'].split(':')[0]),
