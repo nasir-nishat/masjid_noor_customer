@@ -10,8 +10,9 @@ class PrivacyPolicy extends StatefulWidget {
 }
 
 class _PrivacyPolicyState extends State<PrivacyPolicy> {
-  late final WebViewController _controller;
+  WebViewController _controller = WebViewController();
   bool _isLoading = true;
+  bool _isDisposed = false;
 
   @override
   void initState() {
@@ -22,9 +23,11 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
       NavigationDelegate(
         onPageFinished: (url) {
           Future.delayed(const Duration(seconds: 1)).then((value) {
-            setState(() {
-              _isLoading = false;
-            });
+            if (!_isDisposed) {
+              setState(() {
+                _isLoading = false;
+              });
+            }
           });
         },
       ),
@@ -32,20 +35,25 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   }
 
   @override
+  void dispose() {
+    _isDisposed = true; // Mark the widget as disposed
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          title: const Text('Privacy Policy'),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
-        body: _isLoading
-            ? shimmerPage()
-            : WebViewWidget(controller: _controller));
+        title: const Text('Privacy Policy'),
+      ),
+      body: _isLoading ? shimmerPage() : WebViewWidget(controller: _controller),
+    );
   }
 
   Widget shimmer() {
@@ -69,9 +77,10 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
     return SizedBox(
       height: double.infinity,
       child: SpacedColumn(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          verticalSpace: 10.h,
-          children: List.generate(15, (index) => shimmer())),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        verticalSpace: 10.h,
+        children: List.generate(15, (index) => shimmer()),
+      ),
     );
   }
 }
