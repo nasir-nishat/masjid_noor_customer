@@ -27,6 +27,7 @@ class UserMdAdapter extends TypeAdapter<UserMd> {
       phoneNumber: fields[7] as String,
       username: fields[8] as String?,
       profilePic: fields[9] as String?,
+      isDeleted: fields[10] as bool?,
     );
   }
 
@@ -53,7 +54,9 @@ class UserMdAdapter extends TypeAdapter<UserMd> {
       ..writeByte(8)
       ..write(obj.username)
       ..writeByte(9)
-      ..write(obj.profilePic);
+      ..write(obj.profilePic)
+      ..writeByte(10)
+      ..write(obj.isDeleted);
   }
 
   @override

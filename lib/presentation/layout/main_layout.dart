@@ -14,8 +14,6 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  bool get loggedIn => SupabaseDep.impl.auth.currentUser != null;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +82,7 @@ class _MainLayoutState extends State<MainLayout> {
     }
   }
 
-  void _onItemTapped(int index, BuildContext context) {
+  void _onItemTapped(int index, BuildContext context) async {
     String currentRoute = getCurrentRoute(context);
     switch (index) {
       case 0:
@@ -104,11 +102,14 @@ class _MainLayoutState extends State<MainLayout> {
         break;
       case 3:
         if (currentRoute != Routes.profile) {
-          if (loggedIn) {
-            UserController.to.fetchUser();
-            context.push(Routes.profile);
-          } else {
-            context.push(Routes.login);
+          bool exist = await UserController.to.fetchUser();
+          if (context.mounted) {
+            setState(() {});
+            if (exist) {
+              context.push(Routes.profile);
+            } else {
+              context.push(Routes.login);
+            }
           }
         }
         break;
@@ -123,11 +124,15 @@ class _MainLayoutState extends State<MainLayout> {
       return true;
     } else if (currentRoute.contains(Routes.search)) {
       return true;
-    } else if (currentRoute == Routes.profile && loggedIn) {
+    } else if (currentRoute == Routes.profile && isUserLoggedIn()) {
       return true;
     } else if (currentRoute == Routes.products) {
       return true;
     }
     return false;
+  }
+
+  bool isUserLoggedIn() {
+    return Hive.box<UserMd>('user_box').values.toList().isNotEmpty;
   }
 }

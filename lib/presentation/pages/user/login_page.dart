@@ -83,11 +83,11 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         onPressed: () async {
                           try {
-                            AuthResponse auth = await AuthenticationNotifier
+                            AuthResponse? auth = await AuthenticationNotifier
                                 .instance
                                 .googleSignIn();
 
-                            if (auth.user != null) {
+                            if (auth?.user != null) {
                               Hive.box<UserMd>('user_box')
                                   .values
                                   .toList()

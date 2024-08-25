@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:masjid_noor_customer/mgr/models/bank_md.dart';
 import 'package:masjid_noor_customer/mgr/models/order_item_md.dart';
 import 'package:masjid_noor_customer/mgr/models/order_md.dart';
@@ -52,26 +53,44 @@ class ApiService {
     });
   }
 
-  Future<UserMd> registerUser(UserMd user) async {
-    final existingUser = await getUser(user.userId!);
-    if (existingUser != null) return existingUser;
+  Future<UserMd?> registerUser(UserMd user) async {
+    try {
+      final existingUserResponse = await _supabaseClient
+          .from('users')
+          .select()
+          .eq('email', user.email)
+          .single()
+          .wait();
 
-    return _handleRequest(() async {
-      final response = await _supabaseClient.from('users').insert({
-        'user_id': user.userId,
-        'email': user.email,
-        'password_hash': user.passwordHash,
-        'first_name': user.firstName,
-        'last_name': user.lastName,
-        'is_admin': false,
-        'phone_number': user.phoneNumber,
-        'username': user.username,
-        'profile_pic': user.profilePic,
-        'created_at': DateTime.now().toIso8601String(),
-      }).select();
+      if (existingUserResponse.data != null) {
+        return UserMd.fromJson(existingUserResponse.data![0]);
+      }
 
-      return UserMd.fromJson(response[0]);
-    });
+      final response = await _supabaseClient
+          .from('users')
+          .insert({
+            'user_id': user.userId,
+            'email': user.email,
+            'password_hash': user.passwordHash,
+            'first_name': user.firstName,
+            'last_name': user.lastName,
+            'is_admin': false,
+            'phone_number': user.phoneNumber,
+            'username': user.username,
+            'profile_pic': user.profilePic,
+            'created_at': DateTime.now().toIso8601String(),
+          })
+          .select()
+          .single();
+
+      return UserMd.fromJson(response);
+    } catch (e) {
+      print('Error during user registration: $e');
+      if (e is PostgrestException && e.code == '23505') {
+        print('Duplicate entry for email: ${user.email}');
+      }
+      return null; // Handle error accordingly
+    }
   }
 
   Future updateUserPhoneNumber(String phoneNumber) async {

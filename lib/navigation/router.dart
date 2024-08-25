@@ -1,8 +1,10 @@
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logging/logging.dart';
 import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/orders_page.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/jamah_times_page.dart';
+import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../presentation/pages/all_export.dart';
 import '../presentation/pages/cart/barcode_scanner.dart';
@@ -30,6 +32,8 @@ class AuthenticationNotifier {
 
   UserMd? get usermd => _userBox.get('user');
 
+  final _logger = Logger('GoogleSignIn');
+
   set usermd(UserMd? user) {
     if (user != null) {
       _userBox.put('user', user);
@@ -42,59 +46,78 @@ class AuthenticationNotifier {
         .wait();
   }
 
-  Future<AuthResponse> googleSignIn() async {
-    const webClientId = GOOGLE_WEB_CLIENT_ID;
-    // TODO: Add IOS
-    // const iosClientId = 'my-ios.apps.googleusercontent.com';
+  Future<AuthResponse?> googleSignIn() async {
+    AppController.to.showGlobalLoading();
 
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      serverClientId: webClientId,
-    );
-    final googleUser = await googleSignIn.signIn();
-    final googleAuth = await googleUser!.authentication;
-    final accessToken = googleAuth.accessToken;
-    final idToken = googleAuth.idToken;
+    try {
+      const webClientId = GOOGLE_WEB_CLIENT_ID;
+      _logger.info('Initiating Google Sign-In');
 
-    if (accessToken == null) {
-      throw 'No Access Token found.';
-    }
-    if (idToken == null) {
-      throw 'No ID Token found.';
-    }
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        serverClientId: webClientId,
+      );
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        _logger.warning('Google Sign-In was cancelled by the user');
+        throw 'Google Sign-In was cancelled';
+      }
 
-    final authResponse = await SupabaseDep.impl.auth.signInWithIdToken(
-      provider: OAuthProvider.google,
-      idToken: idToken,
-      accessToken: accessToken,
-    );
+      _logger.info('Google Sign-In successful, obtaining authentication');
+      final googleAuth = await googleUser.authentication;
+      final accessToken = googleAuth.accessToken;
+      final idToken = googleAuth.idToken;
 
-    // UserMd userLog = UserMd(
-    //   userId: authResponse.user!.id,
-    //   email: authResponse.user!.userMetadata!["email"],
-    //   passwordHash: '',
-    //   phoneNumber: '',
-    //   createdAt: DateTime.now(),
-    //   firstName: authResponse.user!.userMetadata!["full_name"]
-    //       .toString()
-    //       .split(' ')[0],
-    //   lastName: authResponse.user!.userMetadata!["full_name"]
-    //       .toString()
-    //       .split(' ')[1],
-    //   username:
-    //       authResponse.user!.userMetadata!["email"].toString().split('@')[0],
-    //   profilePic: authResponse.user!.userMetadata!["avatar_url"],
-    // );
+      if (accessToken == null) throw 'No Access Token found.';
+      if (idToken == null) throw 'No ID Token found.';
 
-    UserMd? curUserMd = await ApiService().getUser(authResponse.user!.id);
-    if (curUserMd != null) {
+      _logger.info('Signing in with Supabase using Google credentials');
+      final authResponse = await SupabaseDep.impl.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
+      _logger.info('Supabase sign-in successful, checking for existing user');
+      UserMd? curUserMd = await ApiService().getUser(authResponse.user!.id);
+      if (curUserMd == null) {
+        _logger.info('User not found in database, creating new user');
+        final fullName =
+            authResponse.user!.userMetadata!["full_name"].toString();
+        final nameParts = fullName.split(' ');
+        final firstName = nameParts.first;
+        final lastName = nameParts.length > 1 ? nameParts.last : '';
+
+        UserMd userLog = UserMd(
+          userId: authResponse.user!.id,
+          email: authResponse.user!.userMetadata!["email"],
+          phoneNumber: '',
+          createdAt: DateTime.now(),
+          firstName: firstName,
+          lastName: lastName,
+          username: authResponse.user!.userMetadata!["email"]
+              .toString()
+              .split('@')[0],
+          profilePic: authResponse.user!.userMetadata!["avatar_url"],
+          passwordHash: '',
+        );
+
+        _logger.info('Attempting to register new user');
+        curUserMd = await ApiService().registerUser(userLog);
+      }
+
+      _logger.info('User registration/retrieval successful');
       usermd = curUserMd;
-    } else {
-      await ApiService().registerUser(usermd!);
+      await _userBox.put('user', usermd!);
+      UserController.to.user?.value = usermd!;
+      _logger.info('Google Sign-In process completed successfully');
+      return authResponse;
+    } catch (e) {
+      _logger.severe('Error during Google Sign-In: $e');
+      showToast('Sign-in failed: ${e.toString()}', isSuccess: false);
+    } finally {
+      AppController.to.hideGlobalLoading();
     }
-
-    _userBox.put('user', usermd!);
-
-    return authResponse;
+    return null;
   }
 }
 
