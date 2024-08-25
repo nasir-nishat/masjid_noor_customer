@@ -40,12 +40,22 @@ class JamahTimesBannerState extends State<JamahTimesBanner> {
   void _startAutoScroll() {
     _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
       if (_pageController.hasClients) {
-        _currentPage++;
-        _pageController.animateToPage(
-          _currentPage,
-          duration: const Duration(seconds: 1),
-          curve: Curves.linear,
-        );
+        final currentPath = GoRouter.of(context)
+            .routerDelegate
+            .currentConfiguration
+            .last
+            .route
+            .path
+            .toString();
+
+        if (currentPath.contains('home')) {
+          _currentPage++;
+          _pageController.animateToPage(
+            _currentPage,
+            duration: const Duration(seconds: 1),
+            curve: Curves.linear,
+          );
+        }
       }
     });
   }
@@ -69,6 +79,8 @@ class JamahTimesBannerState extends State<JamahTimesBanner> {
               return _buildBanner(jamah, context);
             },
             onPageChanged: (index) {
+              print(
+                  'Page changed to: ${GoRouter.of(context).routerDelegate.currentConfiguration.last.route.path.toString()}');
               setState(() {
                 _currentPage = index;
               });
@@ -88,7 +100,6 @@ class JamahTimesBannerState extends State<JamahTimesBanner> {
           border: Border.all(
             color: context.theme.primaryColor.withOpacity(0.1),
           ),
-          // color: Colors.teal.withOpacity(0.03),
           color: context.theme.primaryColor.withOpacity(0.03),
         ),
         child: Padding(
@@ -186,7 +197,6 @@ class JamahTimesBannerState extends State<JamahTimesBanner> {
         return Padding(
           padding: EdgeInsets.only(top: 8.h),
           child: SpacedColumn(
-            // horizontalSpace: 10.w,
             children: [
               Text(
                 j['name'] ?? '',
