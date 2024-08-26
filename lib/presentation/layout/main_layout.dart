@@ -102,7 +102,7 @@ class _MainLayoutState extends State<MainLayout> {
         break;
       case 3:
         if (currentRoute != Routes.profile) {
-          bool exist = await UserController.to.fetchUser();
+          bool exist = UserController.to.userExist();
           if (context.mounted) {
             setState(() {});
             if (exist) {

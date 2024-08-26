@@ -19,6 +19,18 @@ class UserController extends GetxController {
   final _logger = Logger('UserController');
   Rx<UserMd> user = UserMd(email: '', phoneNumber: '').obs;
 
+  bool userExist() {
+    final userBox = AuthenticationNotifier().usermd;
+    if (userBox != null) {
+      user.value = userBox;
+      update();
+      return user.value.email.isEmpty ? false : true;
+    }
+    user = UserMd(email: '', phoneNumber: '').obs;
+    update();
+    return false;
+  }
+
   Future<bool> fetchUser() async {
     AppController.to.showGlobalLoading();
     final userBox = AuthenticationNotifier().usermd;
