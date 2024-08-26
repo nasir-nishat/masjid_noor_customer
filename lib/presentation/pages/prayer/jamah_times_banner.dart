@@ -79,8 +79,6 @@ class JamahTimesBannerState extends State<JamahTimesBanner> {
               return _buildBanner(jamah, context);
             },
             onPageChanged: (index) {
-              print(
-                  'Page changed to: ${GoRouter.of(context).routerDelegate.currentConfiguration.last.route.path.toString()}');
               setState(() {
                 _currentPage = index;
               });
