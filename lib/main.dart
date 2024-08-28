@@ -11,6 +11,9 @@ import 'package:masjid_noor_customer/presentation/pages/internet/internet_bindin
 import 'package:masjid_noor_customer/presentation/theme/app_theme.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'constants.dart';
+// import 'main_kiosk.dart';
+import 'main_kiosk.dart';
 import 'mgr/dependency/supabase_dep.dart';
 import 'mgr/models/user_md.dart';
 import 'mgr/services/network_service.dart';
@@ -22,8 +25,12 @@ void main() async {
     FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
     FlutterError.onError = (details) {
       FlutterError.presentError(details);
-      showErrorDialog('An unexpected error occurred: ${details.exception}');
+      showAppErrorDialog('An unexpected error occurred: ${details.exception}');
     };
+    if (Constants.isKiosk) {
+      runApp(const AnNoorKioskApp());
+      return;
+    }
     await Hive.initFlutter();
     Hive.registerAdapter(UserMdAdapter());
     await Hive.openBox<UserMd>('user_box');
@@ -37,7 +44,7 @@ void main() async {
   }, (error, stackTrace) {
     debugPrint('Caught Dart error: $error');
     debugPrint('Stack trace: $stackTrace');
-    showErrorDialog('An unexpected error occurred: $error');
+    showAppErrorDialog('An unexpected error occurred: $error');
   });
 }
 

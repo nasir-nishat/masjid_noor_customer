@@ -415,7 +415,7 @@ void showToast(String message, {bool isSuccess = true, bool? isWarning}) {
   );
 }
 
-void showErrorDialog(String message,
+void showAppErrorDialog(String message,
     {Function(CancelFunc)? onClose, bool isSuccess = false}) {
   BotToast.showEnhancedWidget(
       clickClose: false,
