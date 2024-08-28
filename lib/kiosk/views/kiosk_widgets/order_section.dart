@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +8,9 @@ import 'package:masjid_noor_customer/presentation/widgets/cart_item.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class OrderSection extends GetView<CartController> {
-  const OrderSection({super.key});
+  OrderSection({super.key});
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,28 +19,24 @@ class OrderSection extends GetView<CartController> {
       padding: EdgeInsets.all(8.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Your Order',
-            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Your Order',
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+              ),
+              Obx(() => _buildTotalItemsBadge(controller.cartItems.length)),
+            ],
           ),
+          SizedBox(height: 4.h),
           Expanded(
-            child: Obx(() => ListView.separated(
-                  separatorBuilder: (context, index) =>
-                      const Divider(color: Colors.grey),
-                  itemCount: controller.cartItems.length,
-                  itemBuilder: (context, index) {
-                    final item = controller.cartItems[index];
-                    return CartItem(
-                      cartProd: item,
-                      onDecrease: () => controller.decreaseQuantity(item),
-                      onIncrease: () => controller.increaseQuantity(item),
-                      onRemove: () => controller.removeFromCart(item),
-                      isKiosk: true,
-                    );
-                  },
-                )),
-          ),
+              child: Obx(() => (controller.cartItems.isEmpty)
+                  ? _buildEmptyCartUI(context)
+                  : _buildCartItem(context))),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8.w),
             decoration: BoxDecoration(
@@ -72,7 +71,7 @@ class OrderSection extends GetView<CartController> {
                 ElevatedButton(
                   onPressed: () => _paymentFunc(context),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 50.h),
+                    minimumSize: Size(double.infinity, 40.h),
                   ),
                   child: Text(
                     'Confirm Order',
@@ -85,6 +84,81 @@ class OrderSection extends GetView<CartController> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCartItem(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+    return ListView.separated(
+      controller: _scrollController,
+      separatorBuilder: (context, index) => const Divider(color: Colors.grey),
+      itemCount: controller.cartItems.length,
+      itemBuilder: (context, index) {
+        final item = controller.cartItems[index];
+        return CartItem(
+          cartProd: item,
+          onDecrease: () => controller.decreaseQuantity(item),
+          onIncrease: () => controller.increaseQuantity(item),
+          onRemove: () => controller.removeFromCart(item),
+          isKiosk: true,
+        );
+      },
+    );
+  }
+
+  Widget _buildEmptyCartUI(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          HeroIcon(
+            HeroIcons.shoppingCart,
+            size: 80.sp,
+            color: Colors.grey,
+          ),
+          SizedBox(height: 20.h),
+          Text(
+            'Your cart is empty',
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.black54,
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Text(
+            'Add items to your cart to see them here.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.black45,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTotalItemsBadge(int totalItems) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(4.r),
+      ),
+      child: Text(
+        '$totalItems items',
+        style: TextStyle(
+          fontSize: 12.sp,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

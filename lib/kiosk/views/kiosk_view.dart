@@ -12,10 +12,10 @@ class KioskView extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.h),
-        child: const Row(
+        child: Row(
           children: [
-            Expanded(flex: 1, child: CategoriesSection()),
-            Expanded(flex: 4, child: ItemsListSection()),
+            const Expanded(flex: 1, child: CategoriesSection()),
+            const Expanded(flex: 4, child: ItemsListSection()),
             Expanded(flex: 2, child: OrderSection()),
           ],
         ),
