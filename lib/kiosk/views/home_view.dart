@@ -40,9 +40,8 @@ class HomeView extends StatelessWidget {
                     height: 250.h,
                   ),
                   items: [
-                    'https://picsum.photos/800/400?random=1',
-                    'https://picsum.photos/800/400?random=2',
-                    'https://picsum.photos/800/400?random=3',
+                    'https://i.pinimg.com/1200x/bd/cd/62/bdcd6274d43ef682ad8da8eddf3790a7.jpg',
+                    'https://i.pinimg.com/1200x/d8/ea/ab/d8eaaba5923b5576fae39bf9783133d7.jpg',
                   ].map((imageUrl) {
                     return Builder(
                       builder: (BuildContext context) {
