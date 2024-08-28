@@ -16,19 +16,20 @@ class AnNoorKioskApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(1920, 1080),
-      enableScaleText: () {
-        return true;
-      },
-      builder: (_, child) => GetMaterialApp(
-        initialBinding: InitialBindings(),
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.defaultTheme.copyWith(
-          scaffoldBackgroundColor: Colors.white,
+    return MaterialApp(
+      builder: BotToastInit(),
+      navigatorObservers: [BotToastNavigatorObserver()],
+      home: ScreenUtilInit(
+        designSize: const Size(812, 375),
+        builder: (_, child) => GetMaterialApp(
+          initialBinding: InitialBindings(),
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.defaultTheme.copyWith(
+            scaffoldBackgroundColor: Colors.white,
+          ),
+          initialRoute: KioskAppPages.INITIAL,
+          getPages: KioskAppPages.kioskRoutes,
         ),
-        initialRoute: KioskAppPages.INITIAL,
-        getPages: KioskAppPages.kioskRoutes,
       ),
     );
   }

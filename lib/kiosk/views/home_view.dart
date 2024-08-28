@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
+import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 import '../routes/app_pages.dart';
 
 class HomeView extends StatelessWidget {
@@ -8,9 +11,12 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(812, 375),
-      builder: (_, __) => Scaffold(
+    return BarcodeKeyboardListener(
+      onBarcodeScanned: (String barcode) {
+        ProductController.to.addProductToCartByBarcode(barcode);
+        Get.toNamed(KioskRoutes.KIOSK);
+      },
+      child: Scaffold(
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -21,7 +27,10 @@ class HomeView extends StatelessWidget {
               ),
               SizedBox(height: 40.h),
               ElevatedButton(
-                onPressed: () => Get.toNamed(KioskRoutes.KIOSK),
+                onPressed: () {
+                  CartController.to.clearCart();
+                  Get.toNamed(KioskRoutes.KIOSK);
+                },
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),

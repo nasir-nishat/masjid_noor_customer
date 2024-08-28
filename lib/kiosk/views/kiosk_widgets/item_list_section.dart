@@ -56,7 +56,7 @@ class ItemsListSection extends GetView<ProductController> {
               return _buildShimmerItem();
             }
             final product = controller.products[index];
-            return _buildProductCard(product);
+            return _buildProductCard(product, context);
           },
         ),
         if (controller.isLoading.value)
@@ -72,7 +72,7 @@ class ItemsListSection extends GetView<ProductController> {
     );
   }
 
-  Widget _buildProductCard(ProductMd product) {
+  Widget _buildProductCard(ProductMd product, BuildContext context) {
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
@@ -119,11 +119,13 @@ class ItemsListSection extends GetView<ProductController> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  ElevatedButton(
+                  OutlinedButton(
                     onPressed: () {
                       CartController.to.addToCart(product);
                     },
                     style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          context.theme.primaryColor.withOpacity(0.1),
                       minimumSize: Size(double.infinity, 26.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),

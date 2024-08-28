@@ -16,22 +16,30 @@ class OrderSection extends GetView<CartController> {
   Widget build(BuildContext context) {
     return Container(
       width: 400.w,
-      padding: EdgeInsets.all(8.w),
+      padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 8.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Your Order',
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-              ),
-              Obx(() =>
-                  _buildTotalItemsBadge(controller.cartItems.length, context)),
-            ],
+          Container(
+            decoration: BoxDecoration(
+              color: context.theme.primaryColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(4.r),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Your Order',
+                  style:
+                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                ),
+                Obx(() => _buildTotalItemsBadge(
+                    controller.cartItems.length, context)),
+              ],
+            ),
           ),
           SizedBox(height: 4.h),
           Expanded(
@@ -49,11 +57,11 @@ class OrderSection extends GetView<CartController> {
                 SizedBox(height: 2.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       'Total:',
-                      style: TextStyle(fontSize: 20.sp),
+                      style: TextStyle(fontSize: 16.sp),
                     ),
                     Obx(() => SizedBox(
                           width: 120.w,
@@ -63,7 +71,7 @@ class OrderSection extends GetView<CartController> {
                             textAlign: TextAlign.right,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.bold),
+                                fontSize: 18.sp, fontWeight: FontWeight.bold),
                           ),
                         )),
                   ],
@@ -72,12 +80,12 @@ class OrderSection extends GetView<CartController> {
                 ElevatedButton(
                   onPressed: () => _paymentFunc(context),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 40.h),
+                    minimumSize: Size(double.infinity, 30.h),
                   ),
                   child: Text(
                     'Confirm Order',
                     style:
-                        TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(height: 4.h),
@@ -149,15 +157,11 @@ class OrderSection extends GetView<CartController> {
   Widget _buildTotalItemsBadge(int totalItems, BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: context.theme.primaryColor,
-        borderRadius: BorderRadius.circular(4.r),
-      ),
       child: Text(
         '$totalItems items',
         style: TextStyle(
-          fontSize: 12.sp,
-          color: Colors.white,
+          fontSize: 8.sp,
+          color: context.theme.primaryColor,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -216,13 +220,24 @@ class OrderSection extends GetView<CartController> {
           mainAxisSize: MainAxisSize.min,
           children: PaymentMethod.values
               .map((method) => ListTile(
-                    title: Text(method.toString().split('.').last),
+                    title: getMethods(method),
                     onTap: () => Navigator.of(context).pop(method),
                   ))
               .toList(),
         ),
       ),
     );
+  }
+
+  Text getMethods(PaymentMethod method) {
+    switch (method) {
+      case PaymentMethod.bankTransfer:
+        return const Text('Bank Transfer');
+      case PaymentMethod.due:
+        return const Text('Due Payment');
+      case PaymentMethod.cash:
+        return const Text('Cash');
+    }
   }
 
   Future<Map<String, String>?> showDuePaymentDialog(

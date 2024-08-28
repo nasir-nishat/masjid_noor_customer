@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 
+import '../cart/cart_controller.dart';
+
 class ProductController extends GetxController {
   static ProductController get to {
     if (!Get.isRegistered<ProductController>()) {
@@ -140,6 +142,16 @@ class ProductController extends GetxController {
     } catch (e) {
       debugPrint("Error searching product by barcode: $e");
       return null;
+    }
+  }
+
+  //add product to cart by barcode
+  void addProductToCartByBarcode(String barcode) async {
+    ProductMd? product = await searchProductByBarcode(barcode);
+    if (product != null) {
+      CartController.to.addToCart(product);
+    } else {
+      showToast('Product not found', isWarning: true);
     }
   }
 }
