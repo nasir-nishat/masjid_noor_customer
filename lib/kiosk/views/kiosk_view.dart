@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'controllers/kiosk_controller.dart';
 import 'kiosk_widgets/categories_section.dart';
 import 'kiosk_widgets/item_list_section.dart';
 import 'kiosk_widgets/order_section.dart';
 
-class KioskView extends GetView<KioskController> {
-  const KioskView({Key? key}) : super(key: key);
+class KioskView extends StatelessWidget {
+  const KioskView({super.key});
 
   @override
   Widget build(BuildContext context) {

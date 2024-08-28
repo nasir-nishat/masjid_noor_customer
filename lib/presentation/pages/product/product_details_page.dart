@@ -77,9 +77,10 @@ class ProductDetailsPage extends GetView<ProductController> {
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: const Center(
-                    child: Text('No Image'),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/no_image.png') as ImageProvider,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 )
               else

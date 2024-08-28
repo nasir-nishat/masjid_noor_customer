@@ -76,8 +76,9 @@ class MultiImagesViewerState extends State<MultiImagesViewer> {
                   return CachedNetworkImage(
                     imageUrl: imageUrl,
                     errorWidget: (context, url, error) {
-                      return const Center(
-                        child: Text('No Image'),
+                      return Image.asset(
+                        'assets/no_image.png',
+                        fit: BoxFit.cover,
                       );
                     },
                     placeholder: (context, url) => Shimmer.fromColors(

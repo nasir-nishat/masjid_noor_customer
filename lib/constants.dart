@@ -7,5 +7,5 @@ class Constants {
 
   //-----------------------------------------
   static const version = "1.0.0";
-  static const isKiosk = true;
+  static const isKiosk = false;
 }

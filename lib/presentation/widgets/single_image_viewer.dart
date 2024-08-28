@@ -30,9 +30,10 @@ class SingleImagesViewer extends StatelessWidget {
                 height: height ?? 100.h,
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
-                ),
-                child: const Center(
-                  child: Text('No Image'),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/no_image.png') as ImageProvider,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               );
             },
