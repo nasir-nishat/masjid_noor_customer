@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
+import 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
 import '../routes/app_pages.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -18,14 +20,48 @@ class HomeView extends StatelessWidget {
       },
       child: Scaffold(
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: SpacedColumn(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            verticalSpace: 20.h,
             children: [
+              SizedBox(height: 10.h),
               Text(
                 'Welcome to An-Noor Kiosk',
-                style: TextStyle(fontSize: 48.sp, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 40.h),
+              Expanded(
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    autoPlayInterval: const Duration(seconds: 10),
+                    autoPlayAnimationDuration: const Duration(seconds: 1),
+                    viewportFraction: 1.0,
+                    height: 250.h,
+                  ),
+                  items: [
+                    'https://picsum.photos/800/400?random=1',
+                    'https://picsum.photos/800/400?random=2',
+                    'https://picsum.photos/800/400?random=3',
+                  ].map((imageUrl) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                          width: double.infinity,
+                          margin: EdgeInsets.symmetric(horizontal: 100.w),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(imageUrl),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                        );
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
               ElevatedButton(
                 onPressed: () {
                   CartController.to.clearCart();
@@ -40,6 +76,7 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 10.h),
             ],
           ),
         ),

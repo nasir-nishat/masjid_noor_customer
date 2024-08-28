@@ -259,6 +259,9 @@ class OrderSection extends GetView<CartController> {
             controller: phoneController,
             decoration: InputDecoration(
               labelText: 'Phone Number',
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 8.w, horizontal: 16.w),
+              hintStyle: TextStyle(fontSize: 16.sp),
               prefix: Text('+82 ',
                   style: TextStyle(fontSize: 16.sp, color: Colors.black)),
             ),
