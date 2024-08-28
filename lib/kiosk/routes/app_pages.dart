@@ -12,16 +12,16 @@ class KioskAppPages {
 
   static const INITIAL = KioskRoutes.HOME;
 
-  static final routes = [
+  static final kioskRoutes = [
     GetPage(
       name: _Paths.HOME,
       page: () => const HomeView(),
-      binding: HomeBinding(),
+      // binding: HomeBinding(),
     ),
     GetPage(
       name: _Paths.KIOSK,
       page: () => const KioskView(),
-      binding: KioskBinding(),
+      // binding: KioskBinding(),
     ),
   ];
 }

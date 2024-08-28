@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'kiosk/routes/app_pages.dart';
 
 class AnNoorKioskApp extends StatelessWidget {
-  const AnNoorKioskApp({super.key});
+  AnNoorKioskApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class AnNoorKioskApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
         ),
         initialRoute: KioskAppPages.INITIAL,
-        getPages: KioskAppPages.routes,
+        getPages: KioskAppPages.kioskRoutes,
       ),
     );
   }

@@ -9,27 +9,35 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Welcome to An-Noor Kiosk',
-              style: TextStyle(fontSize: 48.sp, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 40.h),
-            ElevatedButton(
-              onPressed: () => Get.toNamed(KioskRoutes.KIOSK),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
-                child: Text(
-                  'Order Now',
-                  style: TextStyle(fontSize: 24.sp),
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.toNamed(KioskRoutes.KIOSK);
+    });
+
+    return ScreenUtilInit(
+      designSize: const Size(812, 375), // Horizontal orientation
+      builder: (_, __) => Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Welcome to An-Noor Kiosk',
+                style: TextStyle(fontSize: 48.sp, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 40.h),
+              ElevatedButton(
+                onPressed: () => Get.toNamed(KioskRoutes.KIOSK),
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
+                  child: Text(
+                    'Order Now',
+                    style: TextStyle(fontSize: 24.sp),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -12,7 +12,6 @@ import 'package:masjid_noor_customer/presentation/theme/app_theme.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'constants.dart';
-// import 'main_kiosk.dart';
 import 'main_kiosk.dart';
 import 'mgr/dependency/supabase_dep.dart';
 import 'mgr/models/user_md.dart';
@@ -21,31 +20,50 @@ import 'navigation/router.dart';
 
 void main() async {
   await runZonedGuarded(() async {
-    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-    FlutterError.onError = (details) {
-      FlutterError.presentError(details);
-      showAppErrorDialog('An unexpected error occurred: ${details.exception}');
-    };
     if (Constants.isKiosk) {
-      runApp(const AnNoorKioskApp());
-      return;
+      runApp(AnNoorKioskApp());
+    } else {
+      mainRunner();
     }
-    await Hive.initFlutter();
-    Hive.registerAdapter(UserMdAdapter());
-    await Hive.openBox<UserMd>('user_box');
-
-    setPathUrlStrategy();
-    GoRouter.optionURLReflectsImperativeAPIs = true;
-    await SupabaseDep.impl.initialize();
-    await Future.delayed(const Duration(seconds: 2));
-
-    runApp(AnNoorApp());
   }, (error, stackTrace) {
     debugPrint('Caught Dart error: $error');
     debugPrint('Stack trace: $stackTrace');
-    showAppErrorDialog('An unexpected error occurred: $error');
+    Constants.isKiosk == false
+        ? showAppErrorDialog('An unexpected error occurred: $error')
+        : null;
   });
+}
+
+void mainKioskRunner() async {
+  debugPrint('Running Kiosk App');
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserMdAdapter());
+  await Hive.openBox<UserMd>('user_box');
+  setPathUrlStrategy();
+  GoRouter.optionURLReflectsImperativeAPIs = true;
+  await SupabaseDep.impl.initialize();
+
+  runApp(AnNoorKioskApp());
+}
+
+void mainRunner() async {
+  debugPrint('Running Regular App');
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    showAppErrorDialog('An unexpected error occurred: ${details.exception}');
+  };
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserMdAdapter());
+  await Hive.openBox<UserMd>('user_box');
+  setPathUrlStrategy();
+  GoRouter.optionURLReflectsImperativeAPIs = true;
+  await SupabaseDep.impl.initialize();
+  await Future.delayed(const Duration(seconds: 2));
+
+  runApp(AnNoorApp());
 }
 
 class AnNoorApp extends GetView<AppController> {
