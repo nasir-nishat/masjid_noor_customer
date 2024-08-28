@@ -29,7 +29,8 @@ class OrderSection extends GetView<CartController> {
                 'Your Order',
                 style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
               ),
-              Obx(() => _buildTotalItemsBadge(controller.cartItems.length)),
+              Obx(() =>
+                  _buildTotalItemsBadge(controller.cartItems.length, context)),
             ],
           ),
           SizedBox(height: 4.h),
@@ -145,11 +146,11 @@ class OrderSection extends GetView<CartController> {
     );
   }
 
-  Widget _buildTotalItemsBadge(int totalItems) {
+  Widget _buildTotalItemsBadge(int totalItems, BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: context.theme.primaryColor,
         borderRadius: BorderRadius.circular(4.r),
       ),
       child: Text(

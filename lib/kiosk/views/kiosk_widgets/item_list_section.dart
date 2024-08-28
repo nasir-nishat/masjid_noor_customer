@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:masjid_noor_customer/mgr/models/jamah_md.dart';
+import 'package:masjid_noor_customer/mgr/models/product_md.dart';
+import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
 import 'dart:async';
 import 'package:shimmer/shimmer.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 import '../../../presentation/pages/cart/cart_controller.dart';
 
 class ItemsListSection extends GetView<ProductController> {
-  ItemsListSection({Key? key}) : super(key: key);
+  ItemsListSection({super.key});
 
   final ScrollController _scrollController = ScrollController();
   Timer? _debounce;
@@ -35,28 +38,41 @@ class ItemsListSection extends GetView<ProductController> {
   }
 
   Widget _buildItemList() {
-    return GridView.builder(
-      controller: _scrollController,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      padding: const EdgeInsets.all(10),
-      itemCount:
-          controller.products.length + (controller.isLoading.value ? 3 : 0),
-      itemBuilder: (context, index) {
-        if (index >= controller.products.length) {
-          return _buildShimmerItem();
-        }
-        final product = controller.products[index];
-        return _buildProductCard(product);
-      },
+    return Stack(
+      children: [
+        GridView.builder(
+          controller: _scrollController,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 0.75,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+          padding: const EdgeInsets.all(10),
+          itemCount:
+              controller.products.length + (controller.isLoading.value ? 3 : 0),
+          itemBuilder: (context, index) {
+            if (index >= controller.products.length) {
+              return _buildShimmerItem();
+            }
+            final product = controller.products[index];
+            return _buildProductCard(product);
+          },
+        ),
+        if (controller.isLoading.value)
+          const Positioned(
+            bottom: 20.0,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+      ],
     );
   }
 
-  Widget _buildProductCard(dynamic product) {
+  Widget _buildProductCard(ProductMd product) {
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(
@@ -96,7 +112,7 @@ class ItemsListSection extends GetView<ProductController> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '\$${product.sellPrice.toStringAsFixed(2)}',
+                    product.sellPrice.toCurrency(),
                     style: TextStyle(
                       color: Colors.green,
                       fontSize: 12.sp,
