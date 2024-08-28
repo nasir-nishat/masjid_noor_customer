@@ -18,6 +18,9 @@ class AnNoorKioskApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(1920, 1080),
+      enableScaleText: () {
+        return true;
+      },
       builder: (_, child) => GetMaterialApp(
         initialBinding: InitialBindings(),
         debugShowCheckedModeBanner: false,

@@ -6,7 +6,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'constants.dart';
-import 'main_kiosk.dart';
+import 'noor_app.dart';
 import 'mgr/dependency/supabase_dep.dart';
 import 'mgr/models/user_md.dart';
 import 'navigation/router.dart';

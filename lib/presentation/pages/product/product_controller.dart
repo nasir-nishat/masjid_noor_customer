@@ -4,7 +4,12 @@ import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
 
 class ProductController extends GetxController {
-  static ProductController get to => Get.find();
+  static ProductController get to {
+    if (!Get.isRegistered<ProductController>()) {
+      Get.lazyPut<ProductController>(() => ProductController());
+    }
+    return Get.find<ProductController>();
+  }
 
   var newProducts = <ProductMd>[].obs;
   var popularProducts = <ProductMd>[].obs;

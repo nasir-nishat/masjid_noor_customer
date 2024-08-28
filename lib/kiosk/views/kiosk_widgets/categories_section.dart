@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 
@@ -7,10 +8,10 @@ class CategoriesSection extends GetView<ProductController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 300,
-      color: Colors.grey[100],
-      child: Obx(() => ListView.builder(
+      child: Obx(() => ListView.separated(
+            separatorBuilder: (context, index) => SizedBox(height: 4.h),
             itemCount: controller.categories.length,
             itemBuilder: (context, index) {
               final category = controller.categories[index];
@@ -19,14 +20,22 @@ class CategoriesSection extends GetView<ProductController> {
                       color: controller.selectedCategory.value == category
                           ? Colors.blue.withOpacity(0.1)
                           : Colors.transparent,
-                      border: Border(
-                        bottom: BorderSide(color: Colors.grey[300]!, width: 1),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(4.r),
+                        bottomRight: Radius.circular(4.r),
                       ),
                     ),
                     child: ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(4.r),
+                          bottomRight: Radius.circular(4.r),
+                        ),
+                      ),
                       title: Text(
                         category.name,
                         style: TextStyle(
+                          fontSize: 14.sp,
                           fontWeight:
                               controller.selectedCategory.value == category
                                   ? FontWeight.bold

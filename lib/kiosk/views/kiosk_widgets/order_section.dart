@@ -7,24 +7,24 @@ import 'package:masjid_noor_customer/presentation/widgets/cart_item.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class OrderSection extends GetView<CartController> {
-  const OrderSection({Key? key}) : super(key: key);
+  const OrderSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 400.w,
-      color: Colors.grey[100],
+      padding: EdgeInsets.all(8.w),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.all(16.w),
-            child: Text(
-              'Your Order',
-              style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
-            ),
+          Text(
+            'Your Order',
+            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
           ),
           Expanded(
-            child: Obx(() => ListView.builder(
+            child: Obx(() => ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      const Divider(color: Colors.grey),
                   itemCount: controller.cartItems.length,
                   itemBuilder: (context, index) {
                     final item = controller.cartItems[index];
@@ -38,30 +38,40 @@ class OrderSection extends GetView<CartController> {
                   },
                 )),
           ),
-          Padding(
-            padding: EdgeInsets.all(16.w),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            decoration: BoxDecoration(
+              color: context.theme.primaryColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(4.r),
+            ),
             child: Column(
               children: [
+                SizedBox(height: 2.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Total:',
-                      style: TextStyle(
-                          fontSize: 20.sp, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 20.sp),
                     ),
-                    Obx(() => Text(
-                          '₩${controller.totalPrice}',
-                          style: TextStyle(
-                              fontSize: 20.sp, fontWeight: FontWeight.bold),
+                    Obx(() => SizedBox(
+                          width: 120.w,
+                          child: Text(
+                            '₩${controller.totalPrice}',
+                            maxLines: 2,
+                            textAlign: TextAlign.right,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 20.sp, fontWeight: FontWeight.bold),
+                          ),
                         )),
                   ],
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 8.h),
                 ElevatedButton(
                   onPressed: () => _paymentFunc(context),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
                     minimumSize: Size(double.infinity, 50.h),
                   ),
                   child: Text(
@@ -70,6 +80,7 @@ class OrderSection extends GetView<CartController> {
                         TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                   ),
                 ),
+                SizedBox(height: 4.h),
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 // lib/app/routes/app_pages.dart
 import 'package:get/get.dart';
+import 'package:masjid_noor_customer/presentation/pages/internet/internet_binding.dart';
 import '../views/home_view.dart';
 import '../views/kiosk_view.dart';
 
@@ -16,8 +17,8 @@ class KioskAppPages {
       page: () => const HomeView(),
     ),
     GetPage(
-      name: _Paths.KIOSK,
-      page: () => const KioskView(),
-    ),
+        name: _Paths.KIOSK,
+        page: () => const KioskView(),
+        bindings: [InitialBindings()]),
   ];
 }
