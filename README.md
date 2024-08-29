@@ -2,7 +2,9 @@
 
 
 ## TODO
-- [ ] `Can not exit the app`
-- [ ] `Can not swipe the notification or swipe bottom bar`
+- DONE-`Can not exit the app`
+- DONE - (PIN app) `Can not swipe the notification or swipe bottom bar`
 - [ ] `Test app with the Scanner of the KIOSK`
 - [ ] `Test Cutomer APP`
+- [ ] `Settings to show only scanning and payment`
+- [ ] `Settings to show vertical & horizontal`
