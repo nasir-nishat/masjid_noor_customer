@@ -38,7 +38,7 @@ void mainKioskRunner() async {
   GoRouter.optionURLReflectsImperativeAPIs = true;
   await SupabaseDep.impl.initialize();
 
-  runApp(AnNoorKioskApp());
+  runApp(const AnNoorKioskApp());
 }
 
 //This is for Customer's Retail app

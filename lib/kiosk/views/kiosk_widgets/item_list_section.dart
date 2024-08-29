@@ -99,7 +99,7 @@ class ItemsListSection extends GetView<ProductController> {
           Expanded(
             flex: 3,
             child: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,13 +126,13 @@ class ItemsListSection extends GetView<ProductController> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           context.theme.primaryColor.withOpacity(0.1),
-                      minimumSize: Size(double.infinity, 26.h),
+                      minimumSize: Size(double.infinity, 22.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
                     child:
-                        Text('Add to Order', style: TextStyle(fontSize: 12.sp)),
+                        Text('Add to Order', style: TextStyle(fontSize: 10.sp)),
                   ),
                 ],
               ),
