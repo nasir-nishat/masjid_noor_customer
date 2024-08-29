@@ -102,7 +102,7 @@ class ItemsListSection extends GetView<ProductController> {
               padding: EdgeInsets.symmetric(horizontal: 8.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
                     product.name,
@@ -119,6 +119,7 @@ class ItemsListSection extends GetView<ProductController> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const Spacer(),
                   OutlinedButton(
                     onPressed: () {
                       CartController.to.addToCart(product);
@@ -134,6 +135,7 @@ class ItemsListSection extends GetView<ProductController> {
                     child:
                         Text('Add to Order', style: TextStyle(fontSize: 10.sp)),
                   ),
+                  SizedBox(height: 4.h),
                 ],
               ),
             ),

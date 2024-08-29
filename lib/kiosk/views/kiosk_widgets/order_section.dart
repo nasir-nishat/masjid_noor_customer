@@ -4,6 +4,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
 import 'package:masjid_noor_customer/presentation/widgets/cart_item.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -64,14 +65,14 @@ class OrderSection extends GetView<CartController> {
                       style: TextStyle(fontSize: 16.sp),
                     ),
                     Obx(() => SizedBox(
-                          width: 120.w,
+                          width: 150.w,
                           child: Text(
-                            '₩${controller.totalPrice}',
+                            (controller.totalPrice ?? 0).toCurrency(),
                             maxLines: 2,
                             textAlign: TextAlign.right,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 18.sp, fontWeight: FontWeight.bold),
+                                fontSize: 16.sp, fontWeight: FontWeight.bold),
                           ),
                         )),
                   ],
