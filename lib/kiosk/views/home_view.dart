@@ -17,12 +17,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (canPop, result) async {
-        print("_____________________");
-        print('canPop: $canPop, result: $result');
-        //add _showExitPinDialog
-        bool shouldExit = await _showExitPinDialog(context);
-        print('shouldExit: $shouldExit');
+      onPopInvokedWithResult: (canPop, result) {
+        _showExitPinDialog(context);
       },
       child: BarcodeKeyboardListener(
         onBarcodeScanned: (String barcode) {
@@ -38,7 +34,7 @@ class HomeView extends StatelessWidget {
               children: [
                 SizedBox(height: 10.h),
                 Text(
-                  'Welcome to An-Noor Kiosk',
+                  'Noor Mart',
                   style:
                       TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold),
                 ),
@@ -96,7 +92,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Future<bool> _showExitPinDialog(BuildContext context) async {
+  _showExitPinDialog(BuildContext context) async {
     String pin = '';
     const correctPin = '1234'; // Set your PIN here
 

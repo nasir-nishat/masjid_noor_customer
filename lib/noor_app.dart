@@ -11,7 +11,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'mgr/services/network_service.dart';
 import 'navigation/router.dart';
 
-//This is for KIOSK app
 class AnNoorKioskApp extends StatelessWidget {
   const AnNoorKioskApp({super.key});
 
@@ -19,6 +18,7 @@ class AnNoorKioskApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight]);
+    _setImmersiveMode();
 
     return MaterialApp(
       builder: BotToastInit(),
@@ -35,6 +35,16 @@ class AnNoorKioskApp extends StatelessWidget {
           getPages: KioskAppPages.kioskRoutes,
         ),
       ),
+    );
+  }
+
+  void _setImmersiveMode() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.immersiveSticky,
+      overlays: [
+        SystemUiOverlay.bottom,
+        SystemUiOverlay.top,
+      ],
     );
   }
 }
