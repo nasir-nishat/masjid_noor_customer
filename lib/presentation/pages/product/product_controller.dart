@@ -29,7 +29,7 @@ class ProductController extends GetxController {
   Rx<Filter> selectedFilter = Filter(type: '', value: '').obs;
 
   bool get isLoadingMoreEnabled =>
-      products.length >= pageSize && !isLoading.value;
+      (products.length >= pageSize) && !isLoading.value;
 
   @override
   void onInit() {
@@ -111,12 +111,14 @@ class ProductController extends GetxController {
   }
 
   Future<void> loadMoreProducts({bool? showPrev}) async {
-    if (!isLoadingMoreEnabled && showPrev != true) return;
+    if ((showPrev != true) && !isLoadingMoreEnabled) return;
 
     isLoading.value = true;
+    print("loadMoreProducts");
 
-    if (showPrev != null && showPrev) {
+    if (showPrev == true) {
       currentPage.value--;
+      print("loadMoreProducts");
     } else {
       currentPage.value++;
     }
@@ -132,8 +134,14 @@ class ProductController extends GetxController {
           value: selectedCategory.value.id.toString(),
         ),
       );
+      print("fetchedProducts.length ${fetchedProducts.length}");
 
       if (Constants.isKiosk) {
+        if (fetchedProducts.isEmpty) {
+          currentPage.value--;
+          showToast('No more products available');
+          return;
+        }
         products.clear();
         products.addAll(fetchedProducts);
       } else {

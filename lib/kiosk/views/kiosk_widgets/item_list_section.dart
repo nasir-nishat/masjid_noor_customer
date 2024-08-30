@@ -10,7 +10,7 @@ import 'package:masjid_noor_customer/presentation/pages/product/product_controll
 import '../../../presentation/pages/cart/cart_controller.dart';
 
 class ItemsListSection extends GetView<ProductController> {
-  ItemsListSection({super.key});
+  const ItemsListSection({super.key});
 
   @override
   Widget build(BuildContext context) {
