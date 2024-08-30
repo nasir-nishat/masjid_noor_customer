@@ -30,9 +30,14 @@ class HomeView extends StatelessWidget {
             child: SpacedColumn(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
-              verticalSpace: 20.h,
+              verticalSpace: 10.h,
               children: [
                 SizedBox(height: 10.h),
+                Text(
+                  'السلام عليكم',
+                  style:
+                      TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
+                ),
                 Text(
                   'Noor Mart',
                   style:
@@ -69,6 +74,7 @@ class HomeView extends StatelessWidget {
                     }).toList(),
                   ),
                 ),
+                SizedBox(height: 10.h),
                 ElevatedButton(
                   onPressed: () {
                     CartController.to.clearCart();

@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:masjid_noor_customer/kiosk/routes/app_pages.dart';
+import 'package:masjid_noor_customer/mgr/models/bank_md.dart';
+import 'package:masjid_noor_customer/navigation/router.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
+import 'package:masjid_noor_customer/presentation/pages/user/profile_page.dart';
 import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
 import 'package:masjid_noor_customer/presentation/widgets/cart_item.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -199,8 +203,11 @@ class OrderSection extends GetView<CartController> {
         case PaymentMethod.bankTransfer:
           await _handleBankTransfer(context);
           break;
+        case PaymentMethod.cash:
+          await _handleCash(context);
+          break;
         default:
-          await _processOrder(context);
+          break;
       }
     }
   }
@@ -217,12 +224,14 @@ class OrderSection extends GetView<CartController> {
             builder: (context) => AlertDialog(
               title: const Text('Order Placed'),
               content: const Text(
-                  'Your order has been placed successfully, Please pay the due amount as soon as possible'),
+                  'Your order has been placed successfully,\nPlease pay the due amount as soon as possible'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    _navigateToHome(context);
+                    CartController.to.clearCart();
+                    Get.back();
+                    showToast('JazaakAllahu Khair');
                   },
                   child: const Text('OK'),
                 ),
@@ -235,19 +244,72 @@ class OrderSection extends GetView<CartController> {
   }
 
   Future<void> _handleBankTransfer(BuildContext context) async {
+    BankMd? bankDetails = PrayerTimesController.to.bankDetails.value;
     bool orderDone = await _processOrder(context);
     if (orderDone && context.mounted) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Order Placed'),
-          content: const Text(
-              'Please transfer the total amount to the bank account provided'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                  'Please transfer the total amount \nto the following bank account.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 8.h),
+              buildBankDetailRow(
+                context,
+                'Bank Name:',
+                bankDetails?.bankName ?? '',
+                isCopyable: false,
+              ),
+              buildBankDetailRow(
+                context,
+                'Account Name:',
+                bankDetails?.accountName ?? '',
+                isCopyable: false,
+              ),
+              buildBankDetailRow(
+                context,
+                'Account Number:',
+                bankDetails?.accountNumber ?? '',
+                isCopyable: false,
+              ),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                _navigateToHome(context);
+                CartController.to.clearCart();
+                Get.back();
+                showToast('JazaakAllahu Khair');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleCash(BuildContext context) async {
+    bool orderDone = await _processOrder(context);
+    if (orderDone && context.mounted) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Order Placed'),
+          content: const Text('Please pay the total amount to the cashier'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                CartController.to.clearCart();
+                Get.back();
+                showToast('JazaakAllahu Khair');
               },
               child: const Text('OK'),
             ),
@@ -371,39 +433,5 @@ class OrderSection extends GetView<CartController> {
         ],
       ),
     );
-  }
-
-  void _navigateToHome(BuildContext context) {
-    if (CartController.to.cartItems.isNotEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Warning'),
-            content:
-                const Text('Your cart is not empty. Do you want to proceed?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child:
-                    const Text('Cancel', style: TextStyle(color: Colors.black)),
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  CartController.to.clearCart();
-                  Get.back();
-                },
-                child: const Text('Go Home'),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      Get.toNamed(KioskRoutes.HOME);
-    }
   }
 }

@@ -86,8 +86,8 @@ class CategoriesSection extends GetView<ProductController> {
         builder: (context) {
           return AlertDialog(
             title: const Text('Warning'),
-            content:
-                const Text('Your cart is not empty. Do you want to proceed?'),
+            content: const Text(
+                'Your cart will be cleared. Do you want to proceed?'),
             actions: [
               TextButton(
                 onPressed: () {
