@@ -24,7 +24,7 @@ class ProductController extends GetxController {
   var isLoading = true.obs;
   var isSearchLoading = false.obs;
 
-  int pageSize = 10;
+  int pageSize = Constants.isKiosk ? 8 : 10;
   RxInt currentPage = 1.obs;
   Rx<Filter> selectedFilter = Filter(type: '', value: '').obs;
 
@@ -110,11 +110,16 @@ class ProductController extends GetxController {
     }
   }
 
-  Future<void> loadMoreProducts() async {
-    if (!isLoadingMoreEnabled) return;
+  Future<void> loadMoreProducts({bool? showPrev}) async {
+    if (!isLoadingMoreEnabled && showPrev != true) return;
 
     isLoading.value = true;
-    currentPage.value++;
+
+    if (showPrev != null && showPrev) {
+      currentPage.value--;
+    } else {
+      currentPage.value++;
+    }
 
     int offset = (currentPage.value - 1) * pageSize;
 
@@ -128,7 +133,12 @@ class ProductController extends GetxController {
         ),
       );
 
-      products.addAll(fetchedProducts);
+      if (Constants.isKiosk) {
+        products.clear();
+        products.addAll(fetchedProducts);
+      } else {
+        products.addAll(fetchedProducts);
+      }
     } catch (e) {
       debugPrint("Error loading more products: $e");
     } finally {

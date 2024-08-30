@@ -25,26 +25,37 @@ class OrderSection extends GetView<CartController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: context.theme.primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(4.r),
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Your Order',
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+          Obx(() => Container(
+                decoration: BoxDecoration(
+                  color: context.theme.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
-                Obx(() => _buildTotalItemsBadge(
-                    controller.cartItems.length, context)),
-              ],
-            ),
-          ),
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Your Orders',
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.bold),
+                    ),
+                    if (controller.cartItems.isNotEmpty)
+                      InkWell(
+                          onTap: () => controller.clearCart(),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            child: Text('Clear All',
+                                style: TextStyle(
+                                    fontSize: 8.sp,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold)),
+                          )),
+                    SizedBox(height: 4.h),
+                    _buildTotalItemsBadge(controller.cartItems.length, context),
+                  ],
+                ),
+              )),
           SizedBox(height: 4.h),
           Expanded(
               child: Obx(() => (controller.cartItems.isEmpty)
@@ -67,6 +78,8 @@ class OrderSection extends GetView<CartController> {
                       'Total:',
                       style: TextStyle(fontSize: 16.sp),
                     ),
+                    //add clear all button
+
                     Obx(() => SizedBox(
                           width: 150.w,
                           child: Text(

@@ -12,63 +12,74 @@ import '../../../presentation/pages/cart/cart_controller.dart';
 class ItemsListSection extends GetView<ProductController> {
   ItemsListSection({super.key});
 
-  final ScrollController _scrollController = ScrollController();
-  Timer? _debounce;
-
   @override
   Widget build(BuildContext context) {
-    _scrollController.addListener(() {
-      if (controller.isLoadingMoreEnabled &&
-          _scrollController.position.pixels ==
-              _scrollController.position.maxScrollExtent) {
-        _debounce?.cancel();
-        _debounce = Timer(const Duration(seconds: 1), () {
-          controller.loadMoreProducts();
-        });
-      }
-    });
-
     return Obx(
       () => controller.isLoading.value && controller.products.isEmpty
           ? _buildShimmerLoading()
           : controller.products.isEmpty
               ? _buildEmptyListUI()
-              : _buildItemList(),
+              : _buildItemList(context),
     );
   }
 
-  Widget _buildItemList() {
-    return Stack(
+  Widget _buildItemList(BuildContext context) {
+    return Column(
       children: [
-        GridView.builder(
-          controller: _scrollController,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 0.75,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          padding: const EdgeInsets.all(10),
-          itemCount:
-              controller.products.length + (controller.isLoading.value ? 3 : 0),
-          itemBuilder: (context, index) {
-            if (index >= controller.products.length) {
-              return _buildShimmerItem();
-            }
-            final product = controller.products[index];
-            return _buildProductCard(product, context);
-          },
-        ),
-        if (controller.isLoading.value)
-          const Positioned(
-            bottom: 20.0,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: CircularProgressIndicator(),
+        Expanded(
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              childAspectRatio: 0.58,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
             ),
+            padding: const EdgeInsets.all(10),
+            itemCount: controller.products.length,
+            itemBuilder: (context, index) {
+              final product = controller.products[index];
+              return _buildProductCard(product, context);
+            },
           ),
+        ),
+        _buildPaginationControls(context),
       ],
+    );
+  }
+
+  Widget _buildPaginationControls(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 8.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(80.w, 20.h),
+            ),
+            onPressed: controller.currentPage.value > 1
+                ? () {
+                    controller.loadMoreProducts(showPrev: true);
+                  }
+                : null,
+            child: const Text('Previous'),
+          ),
+          SizedBox(width: 20.w),
+          Obx(() => Text('Page ${controller.currentPage.value}')),
+          SizedBox(width: 20.w),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(80.w, 20.h),
+            ),
+            onPressed: controller.isLoadingMoreEnabled
+                ? () {
+                    controller.loadMoreProducts();
+                  }
+                : null,
+            child: const Text('Next'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -102,15 +113,19 @@ class ItemsListSection extends GetView<ProductController> {
               padding: EdgeInsets.symmetric(horizontal: 8.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    product.name,
-                    style:
-                        TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  Padding(
+                    padding: EdgeInsets.only(top: 4.h),
+                    child: Text(
+                      product.name,
+                      style: TextStyle(
+                          fontSize: 10.sp, fontWeight: FontWeight.bold),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
+                  const Spacer(),
                   Text(
                     product.sellPrice.toCurrency(),
                     style: TextStyle(
@@ -119,7 +134,6 @@ class ItemsListSection extends GetView<ProductController> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Spacer(),
                   OutlinedButton(
                     onPressed: () {
                       CartController.to.addToCart(product);
@@ -127,7 +141,7 @@ class ItemsListSection extends GetView<ProductController> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           context.theme.primaryColor.withOpacity(0.1),
-                      minimumSize: Size(double.infinity, 22.h),
+                      minimumSize: Size(double.infinity, 26.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
@@ -148,13 +162,13 @@ class ItemsListSection extends GetView<ProductController> {
   Widget _buildShimmerLoading() {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 0.75,
+        crossAxisCount: 4,
+        childAspectRatio: 0.58,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
       padding: const EdgeInsets.all(10),
-      itemCount: 9, // Show 9 shimmer items while loading
+      itemCount: controller.pageSize,
       itemBuilder: (_, __) => _buildShimmerItem(),
     );
   }

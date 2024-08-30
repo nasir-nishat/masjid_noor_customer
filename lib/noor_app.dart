@@ -24,7 +24,7 @@ class AnNoorKioskApp extends StatelessWidget {
       builder: BotToastInit(),
       navigatorObservers: [BotToastNavigatorObserver()],
       home: ScreenUtilInit(
-        designSize: const Size(812, 375),
+        designSize: const Size(860, 395),
         builder: (_, child) => GetMaterialApp(
           initialBinding: InitialBindings(),
           debugShowCheckedModeBanner: false,
