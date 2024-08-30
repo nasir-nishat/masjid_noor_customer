@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:masjid_noor_customer/kiosk/routes/app_pages.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
 import 'package:masjid_noor_customer/presentation/widgets/cart_item.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+import 'number_pad.dart';
 
 class OrderSection extends GetView<CartController> {
   OrderSection({super.key});
@@ -194,7 +197,26 @@ class OrderSection extends GetView<CartController> {
     if (dueInfo != null) {
       controller.contactNumber = dueInfo['phone']!;
       if (context.mounted) {
-        await _processOrder(context);
+        bool orderDone = await _processOrder(context);
+        if (orderDone && context.mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Order Placed'),
+              content: const Text(
+                  'Your order has been placed successfully, Please pay the due amount as soon as possible'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _navigateToHome(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
       }
     }
   }
@@ -202,14 +224,29 @@ class OrderSection extends GetView<CartController> {
   Future<void> _handleBankTransfer(BuildContext context) async {
     bool orderDone = await _processOrder(context);
     if (orderDone && context.mounted) {
-      // TODO: Implement showBankDetailsDialog
-      // showBankDetailsDialog(context);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Order Placed'),
+          content: const Text(
+              'Please transfer the total amount to the bank account provided'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _navigateToHome(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
   Future<bool> _processOrder(BuildContext context) async {
     if (!context.mounted) return false;
-    return await controller.processOrder(context);
+    return await controller.processKioskOrder(controller.contactNumber);
   }
 
   Future<PaymentMethod?> showPaymentDialog(BuildContext context) {
@@ -254,25 +291,61 @@ class OrderSection extends GetView<CartController> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Due Payment Information'),
-        content: Form(
-          key: formKey,
-          child: TextFormField(
-            controller: phoneController,
-            decoration: InputDecoration(
-              labelText: 'Phone Number',
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 8.w, horizontal: 16.w),
-              hintStyle: TextStyle(fontSize: 16.sp),
-              prefix: Text('+82 ',
-                  style: TextStyle(fontSize: 16.sp, color: Colors.black)),
-            ),
-            inputFormatters: [maskFormatter],
-            keyboardType: TextInputType.phone,
-            validator: (value) =>
-                (value?.isEmpty ?? true) ? 'Phone number is required' : null,
+        content: SizedBox(
+          width: 300.w,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Form(
+                key: formKey,
+                child: TextFormField(
+                  controller: phoneController,
+                  decoration: InputDecoration(
+                    labelText: 'Phone Number',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 8.w, horizontal: 16.w),
+                    hintStyle: TextStyle(fontSize: 16.sp),
+                    prefix: Text('+82 ',
+                        style: TextStyle(fontSize: 16.sp, color: Colors.black)),
+                  ),
+                  inputFormatters: [maskFormatter],
+                  keyboardType: TextInputType.phone,
+                  validator: (value) => (value?.isEmpty ?? true)
+                      ? 'Phone number is required'
+                      : null,
+                  readOnly: true,
+                ),
+              ),
+              SizedBox(height: 16.h),
+              NumberPad(
+                onNumberTap: (number) {
+                  if (phoneController.text.length < 11) {
+                    phoneController.text += number;
+                    maskFormatter.formatEditUpdate(
+                      TextEditingValue(text: phoneController.text),
+                      TextEditingValue(text: phoneController.text + number),
+                    );
+                  }
+                },
+                onBackspace: () {
+                  if (phoneController.text.isNotEmpty) {
+                    phoneController.text = phoneController.text
+                        .substring(0, phoneController.text.length - 1);
+                    maskFormatter.formatEditUpdate(
+                      TextEditingValue(text: "${phoneController.text} "),
+                      TextEditingValue(text: phoneController.text),
+                    );
+                  }
+                },
+              ),
+            ],
           ),
         ),
         actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
           TextButton(
             onPressed: () {
               if (formKey.currentState?.validate() ?? false) {
@@ -285,5 +358,39 @@ class OrderSection extends GetView<CartController> {
         ],
       ),
     );
+  }
+
+  void _navigateToHome(BuildContext context) {
+    if (CartController.to.cartItems.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Warning'),
+            content:
+                const Text('Your cart is not empty. Do you want to proceed?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child:
+                    const Text('Cancel', style: TextStyle(color: Colors.black)),
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  CartController.to.clearCart();
+                  Get.back();
+                },
+                child: const Text('Go Home'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      Get.toNamed(KioskRoutes.HOME);
+    }
   }
 }

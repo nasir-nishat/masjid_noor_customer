@@ -6,6 +6,7 @@ enum OrderStatus {
   processing,
   completed,
   cancelled,
+  kiosk,
 }
 
 extension OrderStatusParseToString on OrderStatus {
@@ -93,7 +94,8 @@ class OrderItemDetailsMd {
     return OrderItemDetailsMd(
       id: json['id'] as int? ?? 0,
       orderId: json['order_id'] as int? ?? 0,
-      productId: json['product_id'] as int?, // Changed to int?
+      productId: json['product_id'] as int?,
+      // Changed to int?
       quantity: json['quantity'] as int? ?? 0,
       unitPrice: (json['unit_price'] as num?)?.toDouble() ?? 0.0,
       totalPrice: (json['total_price'] as num?)?.toDouble() ?? 0.0,

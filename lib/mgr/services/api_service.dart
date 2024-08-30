@@ -234,6 +234,7 @@ class ApiService {
     required String userId,
     required String note,
     required PaymentMethod paymentMethod,
+    OrderStatus? status,
   }) async {
     final totalAmount = cartItems.fold<double>(
       0.0,
@@ -247,7 +248,7 @@ class ApiService {
           .insert({
             'contact_number': contactNumber,
             'total_amount': totalAmount,
-            'status': 'pending',
+            'status': status != null ? status.toShortString() : 'pending',
             'note': note,
             'user_id': userId,
             'payment_method': paymentMethod.toShortString(),

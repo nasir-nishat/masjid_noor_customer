@@ -1,3 +1,4 @@
+import 'package:masjid_noor_customer/mgr/models/order_md.dart';
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 
 class CartController extends GetxController {
@@ -83,6 +84,32 @@ class CartController extends GetxController {
       if (context.mounted) {
         context.pop();
       }
+      AppController.to.hideGlobalLoading();
+      return true;
+    }
+    AppController.to.hideGlobalLoading();
+    return false;
+  }
+
+  Future<bool> processKioskOrder(String? phoneNum) async {
+    if (cartItems.isEmpty) {
+      return false;
+    }
+    AppController.to.showGlobalLoading();
+
+    String userId = Constants.noorMartId;
+
+    final String? orderId = await ApiService().placeOrder(
+      cartItems: cartItems,
+      contactNumber: phoneNum ?? '',
+      userId: userId,
+      note: '',
+      paymentMethod: paymentMethod ?? PaymentMethod.cash,
+      status: OrderStatus.kiosk,
+    );
+
+    if (orderId != null && orderId.isNotEmpty) {
+      clearCart();
       AppController.to.hideGlobalLoading();
       return true;
     }
