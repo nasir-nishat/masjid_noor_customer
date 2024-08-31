@@ -114,11 +114,9 @@ class ProductController extends GetxController {
     if ((showPrev != true) && !isLoadingMoreEnabled) return;
 
     isLoading.value = true;
-    print("loadMoreProducts");
 
     if (showPrev == true) {
       currentPage.value--;
-      print("loadMoreProducts");
     } else {
       currentPage.value++;
     }
@@ -134,7 +132,6 @@ class ProductController extends GetxController {
           value: selectedCategory.value.id.toString(),
         ),
       );
-      print("fetchedProducts.length ${fetchedProducts.length}");
 
       if (Constants.isKiosk) {
         if (fetchedProducts.isEmpty) {

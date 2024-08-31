@@ -30,7 +30,7 @@ class ItemsListSection extends GetView<ProductController> {
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
-              childAspectRatio: 0.58,
+              childAspectRatio: 0.55,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
@@ -121,7 +121,7 @@ class ItemsListSection extends GetView<ProductController> {
                       product.name,
                       style: TextStyle(
                           fontSize: 10.sp, fontWeight: FontWeight.bold),
-                      maxLines: 3,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -134,6 +134,7 @@ class ItemsListSection extends GetView<ProductController> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  SizedBox(height: 4.h),
                   OutlinedButton(
                     onPressed: () {
                       CartController.to.addToCart(product);
@@ -141,13 +142,15 @@ class ItemsListSection extends GetView<ProductController> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           context.theme.primaryColor.withOpacity(0.1),
-                      minimumSize: Size(double.infinity, 26.h),
+                      minimumSize: Size(double.infinity, 24.h),
+                      padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
-                    child:
-                        Text('Add to Order', style: TextStyle(fontSize: 10.sp)),
+                    child: Text('Add to Order',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 9.sp)),
                   ),
                   SizedBox(height: 4.h),
                 ],

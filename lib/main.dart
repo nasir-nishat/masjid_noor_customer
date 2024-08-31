@@ -37,6 +37,7 @@ void mainKioskRunner() async {
   setPathUrlStrategy();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   await SupabaseDep.impl.initialize();
+  await Future.delayed(const Duration(seconds: 2));
 
   runApp(const AnNoorKioskApp());
 }

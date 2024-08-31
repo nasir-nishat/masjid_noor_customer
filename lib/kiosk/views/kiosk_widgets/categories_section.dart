@@ -15,7 +15,7 @@ class CategoriesSection extends GetView<ProductController> {
         SizedBox(height: 10.h),
         Expanded(
           child: Obx(() => ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(height: 4.h),
+                separatorBuilder: (context, index) => SizedBox(height: 2.h),
                 itemCount: controller.categories.length,
                 itemBuilder: (context, index) {
                   final category = controller.categories[index];
@@ -39,7 +39,7 @@ class CategoriesSection extends GetView<ProductController> {
                           title: Text(
                             category.name,
                             style: TextStyle(
-                              fontSize: 14.sp,
+                              fontSize: 12.sp,
                               fontWeight:
                                   controller.selectedCategory.value == category
                                       ? FontWeight.bold
