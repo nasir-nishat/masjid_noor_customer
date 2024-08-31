@@ -1,6 +1,7 @@
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
+import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
 
 import '../../widgets/multi_images_viewer.dart';
 
@@ -93,16 +94,12 @@ class ProductDetailsPage extends GetView<ProductController> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Divider(
-                    //     color: Colors.blueGrey,
-                    //     height: 0.5.h,
-                    //     thickness: 0.5.h),
                     Text(
                       prod.name,
                       style: context.textTheme.headlineLarge,
                     ),
                     Text(
-                      "₩ ${prod.sellPrice.toString()}",
+                      prod.sellPrice.toCurrency(),
                       style: context.textTheme.headlineMedium
                           ?.copyWith(color: const Color(0xFFB00020)),
                     ),
