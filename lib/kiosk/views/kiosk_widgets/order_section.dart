@@ -92,14 +92,18 @@ class OrderSection extends GetView<CartController> {
                             textAlign: TextAlign.right,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 16.sp, fontWeight: FontWeight.bold),
+                                color: const Color(0xFF701515),
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold),
                           ),
                         )),
                   ],
                 ),
                 SizedBox(height: 8.h),
                 ElevatedButton(
-                  onPressed: () => _paymentFunc(context),
+                  onPressed: () {
+                    _paymentFunc(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 30.h),
                   ),
@@ -190,6 +194,11 @@ class OrderSection extends GetView<CartController> {
   }
 
   Future<void> _paymentFunc(BuildContext context) async {
+    if (controller.cartItems.isEmpty) {
+      showToast('Your cart is empty', isWarning: true);
+      return;
+    }
+
     final paymentMethod = await showPaymentDialog(context);
     if (paymentMethod == null) return;
 
@@ -243,12 +252,85 @@ class OrderSection extends GetView<CartController> {
     }
   }
 
+  Future<bool> _processOrder(BuildContext context) async {
+    if (!context.mounted) return false;
+    try {
+      final res =
+          await controller.processKioskOrder(controller.contactNumber).wait();
+      if (res.isError) {
+        showToast(res.error!.message, isWarning: true);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      showToast(
+          'An error occurred, please try again\n Please contact the Parson In Charge',
+          isWarning: true);
+      return false;
+    }
+  }
+
+  Future<PaymentMethod?> showPaymentDialog(BuildContext context) {
+    return showDialog<PaymentMethod>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Payment Method'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: PaymentMethod.values
+              .map((method) => ListTile(
+                    title: getMethods(method),
+                    onTap: () => Navigator.of(context).pop(method),
+                  ))
+              .toList(),
+        ),
+      ),
+    );
+  }
+
+  Text getMethods(PaymentMethod method) {
+    switch (method) {
+      case PaymentMethod.bankTransfer:
+        return const Text('Bank Transfer');
+      case PaymentMethod.due:
+        return const Text('Due Payment');
+      case PaymentMethod.cash:
+        return const Text('Cash');
+    }
+  }
+
+  Future<void> _handleCash(BuildContext context) async {
+    bool orderDone = await _processOrder(context);
+    if (orderDone && context.mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: const Text('Order Placed'),
+          content: const Text('Please pay the total amount to the cashier'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                CartController.to.clearCart();
+                Get.back();
+                showToast('JazaakAllahu Khair');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   Future<void> _handleBankTransfer(BuildContext context) async {
     BankMd? bankDetails = PrayerTimesController.to.bankDetails.value;
     bool orderDone = await _processOrder(context);
     if (orderDone && context.mounted) {
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) => AlertDialog(
           title: const Text('Order Placed'),
           content: Column(
@@ -295,64 +377,6 @@ class OrderSection extends GetView<CartController> {
     }
   }
 
-  Future<void> _handleCash(BuildContext context) async {
-    bool orderDone = await _processOrder(context);
-    if (orderDone && context.mounted) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Order Placed'),
-          content: const Text('Please pay the total amount to the cashier'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                CartController.to.clearCart();
-                Get.back();
-                showToast('JazaakAllahu Khair');
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-  }
-
-  Future<bool> _processOrder(BuildContext context) async {
-    if (!context.mounted) return false;
-    return await controller.processKioskOrder(controller.contactNumber);
-  }
-
-  Future<PaymentMethod?> showPaymentDialog(BuildContext context) {
-    return showDialog<PaymentMethod>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Payment Method'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: PaymentMethod.values
-              .map((method) => ListTile(
-                    title: getMethods(method),
-                    onTap: () => Navigator.of(context).pop(method),
-                  ))
-              .toList(),
-        ),
-      ),
-    );
-  }
-
-  Text getMethods(PaymentMethod method) {
-    switch (method) {
-      case PaymentMethod.bankTransfer:
-        return const Text('Bank Transfer');
-      case PaymentMethod.due:
-        return const Text('Due Payment');
-      case PaymentMethod.cash:
-        return const Text('Cash');
-    }
-  }
-
   Future<Map<String, String>?> showDuePaymentDialog(
       BuildContext context) async {
     final phoneController = TextEditingController();
@@ -364,8 +388,9 @@ class OrderSection extends GetView<CartController> {
 
     return showDialog<Map<String, String>>(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Due Payment Information'),
+        title: const Text('Add your phone number please.'),
         content: SizedBox(
           width: 300.w,
           child: Column(

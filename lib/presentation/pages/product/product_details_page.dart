@@ -64,7 +64,7 @@ class ProductDetailsPage extends GetView<ProductController> {
                     alignment: Alignment.topRight,
                     child: IconButton(
                         onPressed: () {
-                          context.go(parentRoute);
+                          context.pop();
                         },
                         icon: const Icon(Icons.close)),
                   ),

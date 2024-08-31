@@ -129,7 +129,7 @@ class ItemsListSection extends GetView<ProductController> {
                   Text(
                     product.sellPrice.toCurrency(),
                     style: TextStyle(
-                      color: Colors.green,
+                      color: const Color(0xFF701515),
                       fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
                     ),

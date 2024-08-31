@@ -15,7 +15,7 @@ class KioskView extends StatelessWidget {
         child: Row(
           children: [
             const Expanded(flex: 1, child: CategoriesSection()),
-            Expanded(flex: 4, child: ItemsListSection()),
+            const Expanded(flex: 4, child: ItemsListSection()),
             Expanded(flex: 2, child: OrderSection()),
           ],
         ),
