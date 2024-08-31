@@ -25,14 +25,17 @@ class AnNoorKioskApp extends StatelessWidget {
       navigatorObservers: [BotToastNavigatorObserver()],
       home: ScreenUtilInit(
         designSize: const Size(860, 395),
-        builder: (_, child) => GetMaterialApp(
-          initialBinding: InitialBindings(),
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.defaultTheme.copyWith(
-            scaffoldBackgroundColor: Colors.white,
+        builder: (_, child) => NetworkAwareWidget(
+          networkService: NetworkService(),
+          child: GetMaterialApp(
+            initialBinding: InitialBindings(),
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.defaultTheme.copyWith(
+              scaffoldBackgroundColor: Colors.white,
+            ),
+            initialRoute: KioskAppPages.INITIAL,
+            getPages: KioskAppPages.kioskRoutes,
           ),
-          initialRoute: KioskAppPages.INITIAL,
-          getPages: KioskAppPages.kioskRoutes,
         ),
       ),
     );
