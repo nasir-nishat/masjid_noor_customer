@@ -20,9 +20,9 @@ class PrayerTimesBannerState extends State<PrayerTimesBanner> {
   @override
   void initState() {
     super.initState();
-    if (controller.currentPosition.value == null) {
-      controller.getCurrentLocation(context);
-    }
+    // if (controller.currentPosition.value == null) {
+    //   controller.getCurrentLocation(context);
+    // }
   }
 
   @override
@@ -36,9 +36,9 @@ class PrayerTimesBannerState extends State<PrayerTimesBanner> {
         return Center(child: Text(controller.error.value));
       }
 
-      if (controller.currentPosition.value == null) {
-        return _buildLocationPrompt();
-      }
+      // if (controller.currentPosition.value == null) {
+      //   return _buildLocationPrompt();
+      // }
 
       return GestureDetector(
         onTap: () {
@@ -116,12 +116,12 @@ class PrayerTimesBannerState extends State<PrayerTimesBanner> {
             SizedBox(height: 8.h),
             TextButton.icon(
               onPressed: () async {
-                // Try to get the current location, if it fails, navigate to settings
-                final locationEnabled =
-                    await controller.getCurrentLocation(context);
-                if (!locationEnabled) {
-                  await controller.openAppSettings();
-                }
+                // // Try to get the current location, if it fails, navigate to settings
+                // final locationEnabled =
+                //     await controller.getCurrentLocation(context);
+                // if (!locationEnabled) {
+                //   await controller.openAppSettings();
+                // }
               },
               icon: Icon(Icons.location_on,
                   size: 14.sp, color: context.theme.primaryColor),
