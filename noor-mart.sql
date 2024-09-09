@@ -1,0 +1,289 @@
+
+create table
+public.users (
+user_id uuid not null default auth.uid (),
+username text not null,
+email text not null,
+password_hash text not null,
+first_name text null,
+last_name text null,
+is_admin boolean null default false,
+created_at timestamp without time zone null default now(),
+phone_number text null,
+profile_pic text null,
+is_deleted boolean null,
+constraint users_pkey primary key (user_id),
+constraint users_email_key unique (email)
+) tablespace pg_default;
+
+
+
+create table
+  public.suppliers (
+    id serial not null,
+    name character varying(255) not null,
+    email character varying(255) null,
+    phone character varying(50) null,
+    address text null,
+    note text null,
+    is_active boolean null default true,
+    constraint suppliers_pkey primary key (id)
+  ) tablespace pg_default;
+
+
+
+create table
+public.profiles (
+profile_id uuid not null default gen_random_uuid (),
+user_id uuid null,
+address text null,
+created_at timestamp without time zone null default now(),
+constraint profiles_pkey primary key (profile_id),
+constraint profiles_user_id_fkey foreign key (user_id) references users (user_id) on delete cascade
+) tablespace pg_default;
+
+create table
+  public.inventory (
+    id serial not null,
+    image_receipt text null,
+    description text null,
+    supp_id integer null,
+    total_purchase_price numeric(10, 2) not null,
+    total_sale_price numeric(10, 2) not null,
+    expected_profit numeric(10, 2) not null,
+    created_at timestamp with time zone null default current_timestamp,
+    updated_at timestamp with time zone null default current_timestamp,
+    buy_date timestamp with time zone null,
+    constraint inventory_pkey primary key (id),
+    constraint inventory_supp_id_fkey foreign key (supp_id) references suppliers (id) on delete set null
+  ) tablespace pg_default;
+
+
+create table
+  public.categories (
+    id serial not null,
+    name character varying(255) not null,
+    is_active boolean null default true,
+    image character varying null,
+    description text null,
+    constraint categories_pkey primary key (id)
+  ) tablespace pg_default;
+
+  create table
+  public.products (
+    id serial not null,
+    name character varying(255) not null,
+    description text null,
+    barcode character varying(255) null,
+    sell_price numeric(10, 2) not null,
+    purchase_price numeric(10, 2) not null,
+    stock_qty integer not null default 0,
+    category_id integer null,
+    images text[] null,
+    is_new boolean null default true,
+    supp_id integer null,
+    is_active boolean null default true,
+    is_popular boolean null default false,
+    constraint products_pkey primary key (id),
+    constraint products_category_id_fkey foreign key (category_id) references categories (id) on delete set null,
+    constraint products_supp_id_fkey foreign key (supp_id) references suppliers (id) on delete set null
+  ) tablespace pg_default;
+
+
+
+
+create table
+  public.product_log (
+    id serial not null,
+    product_id integer null,
+    action character varying(50) not null,
+    details jsonb null,
+    created_at timestamp with time zone null default current_timestamp,
+    constraint product_log_pkey primary key (id)
+  ) tablespace pg_default;
+
+  create table
+  public.orders (
+    id serial not null,
+    contact_number character varying(50) null,
+    total_amount numeric(10, 2) not null,
+    status character varying(50) not null,
+    created_at timestamp with time zone null default current_timestamp,
+    updated_at timestamp with time zone null default current_timestamp,
+    note text null,
+    receipt_img text null,
+    user_id uuid not null,
+    payment_method text not null,
+    constraint orders_pkey primary key (id)
+  ) tablespace pg_default;
+
+
+
+create table
+  public.order_items (
+    id serial not null,
+    order_id integer null,
+    product_id integer null,
+    quantity integer not null,
+    unit_price numeric(10, 2) not null,
+    total_price numeric(10, 2) not null,
+    product_name text not null default ''::text,
+    constraint order_items_pkey primary key (id),
+    constraint order_items_order_id_fkey foreign key (order_id) references orders (id) on delete cascade,
+    constraint order_items_product_id_fkey foreign key (product_id) references products (id) on delete set null
+  ) tablespace pg_default;
+
+  create table
+  public.jamah_times (
+    id serial not null,
+    spot_name character varying(255) not null,
+    spot_location character varying(255) null,
+    updated_at timestamp without time zone null,
+    fajr time without time zone null,
+    duhr time without time zone null,
+    asr time without time zone null,
+    magrib time without time zone null,
+    isha time without time zone null,
+    other_jamah jsonb[] null,
+    constraint prayer_times_pkey primary key (id)
+  ) tablespace pg_default;
+
+
+create table
+  public.banks (
+    id bigint generated by default as identity not null,
+    created_at timestamp with time zone not null default now(),
+    masjid_id integer null,
+    acc_name text null,
+    acc_no text null,
+    bank_name text null,
+    constraint banks_pkey primary key (id),
+    constraint banks_masjid_id_fkey foreign key (masjid_id) references jamah_times (id) on update cascade on delete cascade
+  ) tablespace pg_default;
+
+
+
+create table
+  public.feedbacks (
+    id serial not null,
+    feedback text null,
+    user_id uuid null,
+    rating integer null,
+    image_url text null,
+    created_at timestamp without time zone null default now(),
+    constraint feedbacks_pkey primary key (id),
+    constraint feedbacks_user_id_fkey foreign key (user_id) references users (user_id),
+    constraint feedbacks_rating_check check (
+      (
+        (rating >= 1)
+        and (rating <= 5)
+      )
+    )
+  ) tablespace pg_default;
+
+
+
+create table
+  public.app_version (
+    id bigint generated by default as identity not null,
+    created_at timestamp with time zone not null default now(),
+    curr_version integer null default 1,
+    updated_version integer null default 1,
+    app_name character varying not null default 'kiosk'::character varying,
+    constraint app_version_pkey primary key (id)
+  ) tablespace pg_default;
+
+create view
+  public.active_suppliers as
+select
+  suppliers.id,
+  suppliers.name,
+  suppliers.email,
+  suppliers.phone,
+  suppliers.address,
+  suppliers.note,
+  suppliers.is_active
+from
+  suppliers
+where
+  suppliers.is_active = true;
+
+
+
+create view
+  public.active_products as
+select
+  products.id,
+  products.name,
+  products.description,
+  products.barcode,
+  products.sell_price,
+  products.purchase_price,
+  products.stock_qty,
+  products.category_id,
+  products.images,
+  products.is_new,
+  products.supp_id,
+  products.is_active
+from
+  products
+where
+  products.is_active = true;
+
+  create view
+  public.active_categories as
+select
+  categories.id,
+  categories.name,
+  categories.is_active
+from
+  categories
+where
+  categories.is_active = true;
+
+
+ 
+
+
+ BEGIN
+  INSERT INTO profiles (user_id, created_at)
+  VALUES (NEW.user_id, NOW());
+  RETURN NEW;
+END;
+
+
+
+BEGIN
+    RETURN QUERY
+    SELECT o.id, o.order_date, o.total_amount, o.status
+    FROM orders o
+    JOIN user_orders uo ON o.id = uo.order_ref_id
+    WHERE uo.user_id = user_uuid;
+END;
+
+
+
+
+create trigger after_user_insert
+after insert on users for each row
+execute function create_profile ();
+
+create trigger before_user_insert before insert on users for each row
+execute function hash_password_before_insert ();
+
+create trigger update_inventory_modtime before
+update on inventory for each row
+execute function update_modified_column ();
+
+
+create trigger soft_delete_product_trigger before delete on products for each row
+execute function soft_delete_product ();
+create trigger log_product_changes_trigger
+after insert
+or
+update on products for each row
+execute function log_product_changes ();
+
+create trigger update_orders_modtime before
+update on orders for each row
+execute function update_modified_column ();
