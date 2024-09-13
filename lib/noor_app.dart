@@ -17,7 +17,8 @@ class AnNoorKioskApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
     _setImmersiveMode();
 
     return MaterialApp(
@@ -60,6 +61,11 @@ class AnNoorApp extends GetView<AppController> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       enableScaleText: () {

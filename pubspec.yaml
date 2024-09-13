@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   ionicons: ^0.2.2
   hive_flutter: ^1.1.0
@@ -43,8 +43,6 @@ dependencies:
   share_plus: ^9.0.0
   hive: ^2.2.3
   http: ^1.2.1
-  #  geolocator: ^12.0.0
-  #  geocoding: ^3.0.0
   connectivity_plus: ^6.0.3
   mobile_scanner: ^5.1.1
   flutter_native_splash: ^2.4.1
@@ -59,7 +57,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
   build_runner: ^2.4.11
   hive_generator: ^2.0.1
 

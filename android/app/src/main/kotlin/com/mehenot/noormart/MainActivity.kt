@@ -1,4 +1,4 @@
-package mehonot.org.masjid_noor_customer
+package com.mehenot.noormart
 
 import io.flutter.embedding.android.FlutterActivity
 
