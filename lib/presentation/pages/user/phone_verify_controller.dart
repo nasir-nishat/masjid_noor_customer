@@ -24,6 +24,8 @@ class PhoneVerificationController extends GetxController {
           }
         },
         verificationFailed: (FirebaseAuthException e) {
+          print('Verification failed');
+          print('===>>>Error: ${e.message}');
           showToast(e.message ?? 'Verification failed', isSuccess: false);
         },
         codeSent: (String verId, int? resendToken) {

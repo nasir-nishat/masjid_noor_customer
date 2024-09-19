@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1075918505837-73v37dovbq6tna0hj43kfn2iivsuf2hf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mehenot.noormart",
+            "certificate_hash": "e05740ec64bfb7874f2672d658a82d3c5e43b468"
+          }
+        },
+        {
           "client_id": "1075918505837-tnct2975klvr12qbf58p4jhro7lf8s61.apps.googleusercontent.com",
           "client_type": 3
         }

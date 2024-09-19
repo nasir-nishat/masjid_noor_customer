@@ -16,3 +16,4 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+implementation 'com.google.android.play:integrity:1.4.0'
