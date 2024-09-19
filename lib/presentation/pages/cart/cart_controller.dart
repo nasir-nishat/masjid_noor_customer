@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:masjid_noor_customer/mgr/models/order_md.dart';
-import 'package:masjid_noor_customer/mgr/models/cart_md.dart'; // Ensure correct import path
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 
 class CartController extends GetxController {

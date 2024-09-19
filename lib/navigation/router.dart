@@ -4,6 +4,7 @@ import 'package:masjid_noor_customer/presentation/layout/authentic_layout.dart';
 import 'package:masjid_noor_customer/presentation/layout/main_layout.dart';
 import 'package:masjid_noor_customer/presentation/pages/order/orders_page.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/jamah_times_page.dart';
+import 'package:masjid_noor_customer/presentation/pages/user/phone_verify.dart';
 import 'package:masjid_noor_customer/presentation/pages/user/user_controller.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../presentation/pages/all_export.dart';
@@ -202,6 +203,22 @@ final GoRouter goRouter = GoRouter(
           },
         ),
         GoRoute(
+          path: Routes.inputPhone,
+          pageBuilder: (context, state) {
+            return NoTransitionPage(
+              child: InputPhoneScreen(),
+            );
+          },
+        ),
+        GoRoute(
+          path: Routes.verifyOtp,
+          pageBuilder: (context, state) {
+            return NoTransitionPage(
+              child: VerifyOTPScreen(),
+            );
+          },
+        ),
+        GoRoute(
           path: Routes.privacyPolicy,
           pageBuilder: (context, state) {
             return const NoTransitionPage(
@@ -344,6 +361,9 @@ abstract class Routes {
   static const search = '/search';
   static const signup = '/sign-up';
   static const barcodeScanner = '/barcode-scanner';
+  static const inputPhone = '/input-phone';
+  static const verifyOtp = '/verify-otp';
+
   static const all = {
     login,
     inventory,
@@ -360,6 +380,8 @@ abstract class Routes {
     signup,
     jamahTimes,
     barcodeScanner,
+    inputPhone,
+    verifyOtp,
   };
 
   static void goToHomePage(BuildContext context) {

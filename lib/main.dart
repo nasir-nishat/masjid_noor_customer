@@ -10,21 +10,28 @@ import 'noor_app.dart';
 import 'mgr/dependency/supabase_dep.dart';
 import 'mgr/models/user_md.dart';
 import 'navigation/router.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
-  await runZonedGuarded(() async {
-    if (Constants.isKiosk) {
-      mainKioskRunner();
-    } else {
-      mainRunner();
-    }
-  }, (error, stackTrace) {
-    debugPrint('Caught Dart error: $error');
-    debugPrint('Stack trace: $stackTrace');
-    Constants.isKiosk == false
-        ? showAppErrorDialog('An unexpected error occurred: $error')
-        : null;
-  });
+  if (kIsWeb) {
+    // Web-specific initialization
+  } else {
+    await runZonedGuarded(() async {
+      if (Constants.isKiosk) {
+        mainKioskRunner();
+      } else {
+        mainRunner();
+      }
+    }, (error, stackTrace) {
+      debugPrint('Caught Dart error: $error');
+      debugPrint('Stack trace: $stackTrace');
+      Constants.isKiosk == false
+          ? showAppErrorDialog('An unexpected error occurred: $error')
+          : null;
+    });
+  }
 }
 
 //This is for KIOSK app
@@ -54,8 +61,12 @@ void mainRunner() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserMdAdapter());
   await Hive.openBox<UserMd>('user_box');
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.android,
+  );
   setPathUrlStrategy();
   GoRouter.optionURLReflectsImperativeAPIs = true;
+
   await SupabaseDep.impl.initialize();
   await Future.delayed(const Duration(seconds: 2));
 
