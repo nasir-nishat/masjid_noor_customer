@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:masjid_noor_customer/presentation/pages/user/phone_verify_controller.dart';
+import 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class InputPhoneScreen extends StatelessWidget {
   final controller = Get.put(PhoneVerificationController());
@@ -12,22 +15,28 @@ class InputPhoneScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Enter Phone Number')),
       body: Padding(
         padding: EdgeInsets.all(16.w),
-        child: Column(
+        child: SpacedColumn(
+          verticalSpace: 20.h,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text("Verify your phone number", style: TextStyle(fontSize: 20.sp)),
+            SizedBox(height: 10.h),
+            const Text('Enter your phone number to receive OTP'),
+            SizedBox(height: 10.h),
             TextField(
               onChanged: (value) => controller.phoneNumber.value = value,
-              decoration: const InputDecoration(labelText: 'Phone Number'),
+              decoration: InputDecoration(
+                  labelText: 'Phone Number',
+                  prefixText: '+82 010 ',
+                  prefixStyle: TextStyle(color: Colors.black, fontSize: 16.sp)),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(8),
+                MaskTextInputFormatter(
+                    mask: '####-####', filter: {"#": RegExp(r'[0-9]')})
+              ],
               keyboardType: TextInputType.phone,
             ),
-            SizedBox(height: 20.h),
-            Obx(() => ElevatedButton(
-                  onPressed: controller.isLoading.value
-                      ? null
-                      : () => _showCaptchaDialog(context),
-                  child: const Text('Verify CAPTCHA'),
-                )),
-            SizedBox(height: 20.h),
             Obx(() => ElevatedButton(
                   onPressed: () {
                     controller.sendOTP(context);
@@ -96,7 +105,14 @@ class VerifyOTPScreen extends StatelessWidget {
           children: [
             TextField(
               onChanged: (value) => controller.otp.value = value,
-              decoration: const InputDecoration(labelText: 'Enter OTP'),
+              decoration: const InputDecoration(
+                labelText: 'Enter OTP',
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(6),
+              ],
+              textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 20.h),

@@ -11,11 +11,13 @@ class PhoneVerificationController extends GetxController {
   var otp = ''.obs;
   var isLoading = false.obs;
 
+  String get phoneNumberFormatted => '+82010${phoneNumber.replaceAll('-', '')}';
+
   Future<void> sendOTP(BuildContext context) async {
     isLoading.value = true;
     try {
       await _auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber.value,
+        phoneNumber: phoneNumberFormatted,
         verificationCompleted: (PhoneAuthCredential credential) async {
           await _auth.signInWithCredential(credential);
           await _updateSupabaseUser();
@@ -57,6 +59,7 @@ class PhoneVerificationController extends GetxController {
       await _updateSupabaseUser();
       if (context.mounted) {
         context.go(Routes.home);
+        showToast('Phone number verified successfully');
       }
     } catch (e) {
       showToast('Invalid OTP', isSuccess: false);
@@ -69,7 +72,7 @@ class PhoneVerificationController extends GetxController {
     final user = _auth.currentUser;
     if (user != null) {
       await _supabase.from('users').update({
-        'phone_number': user.phoneNumber,
+        'phone_number': phoneNumberFormatted,
         'is_verified_phone': true,
       }).eq('email', AuthenticationNotifier().usermd!.email);
     }
