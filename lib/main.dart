@@ -13,6 +13,7 @@ import 'navigation/router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:in_app_update/in_app_update.dart';
 
 void main() async {
   if (kIsWeb) {

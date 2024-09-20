@@ -10,6 +10,7 @@ import 'package:masjid_noor_customer/presentation/pages/internet/internet_bindin
 import 'package:bot_toast/bot_toast.dart';
 import 'mgr/services/network_service.dart';
 import 'navigation/router.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 class AnNoorKioskApp extends StatelessWidget {
   const AnNoorKioskApp({super.key});
@@ -53,11 +54,11 @@ class AnNoorKioskApp extends StatelessWidget {
   }
 }
 
-//This is for Customer's Retail app
 class AnNoorApp extends GetView<AppController> {
   AnNoorApp({super.key});
 
   final botToastBuilder = BotToastInit();
+  AppUpdateInfo? _updateInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +66,9 @@ class AnNoorApp extends GetView<AppController> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    // Trigger the app update check
+    _checkForUpdate();
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -109,5 +113,20 @@ class AnNoorApp extends GetView<AppController> {
         ),
       ),
     );
+  }
+
+  Future<void> _checkForUpdate() async {
+    try {
+      final info = await InAppUpdate.checkForUpdate();
+      _updateInfo = info;
+      debugPrint('Update info: $info');
+      if (info.updateAvailability == UpdateAvailability.updateAvailable) {
+        InAppUpdate.performImmediateUpdate().catchError((e) {
+          print('Error performing immediate update: $e');
+        });
+      }
+    } catch (e) {
+      print('Error checking for updates: $e');
+    }
   }
 }
