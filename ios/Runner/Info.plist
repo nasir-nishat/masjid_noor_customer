@@ -57,7 +57,6 @@
 		<key>UIStatusBarHidden</key>
 		<false/>
 		<key>GIDClientID</key>
-		<string>YOUR_GOOGLE_CLIENT_ID</string>
 		<string>1075918505837-73v37dovbq6tna0hj43kfn2iivsuf2hf.apps.googleusercontent.com</string>
         <key>CFBundleURLTypes</key>
         <array>
@@ -71,6 +70,10 @@
           </dict>
         </array>
         <!-- End of the Google Sign-in Section -->
+		<key>NSCameraUsageDescription</key>
+		<string>This app needs camera access to scan Barcodes</string>
 
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>This app needs photos access to get Barcode from photo library</string>
 	</dict>
 </plist>

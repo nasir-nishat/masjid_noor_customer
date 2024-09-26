@@ -14,6 +14,9 @@ const _SUPABASE_ANON_KEY =
 const GOOGLE_WEB_CLIENT_ID =
     '1075918505837-tnct2975klvr12qbf58p4jhro7lf8s61.apps.googleusercontent.com';
 
+const IOS_CLIENT_ID =
+    "1075918505837-rdm1ma1d8g9m04phep0u8odregdui781.apps.googleusercontent.com";
+
 class SupabaseDep {
   //create a singleton
   static final SupabaseDep _instance = SupabaseDep._internal();

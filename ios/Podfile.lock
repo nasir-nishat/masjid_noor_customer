@@ -127,6 +127,7 @@ DEPENDENCIES:
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
+  - GoogleSignIn
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - images_picker (from `.symlinks/plugins/images_picker/ios`)
   - mobile_scanner (from `.symlinks/plugins/mobile_scanner/ios`)
@@ -233,6 +234,6 @@ SPEC CHECKSUMS:
   webview_flutter_wkwebview: 0982481e3d9c78fd5c6f62a002fcd24fc791f1e4
   ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a
 
-PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
+PODFILE CHECKSUM: dcb843761ac8693bbce4d2b5d1b6fb4a0505fd63
 
 COCOAPODS: 1.15.2
