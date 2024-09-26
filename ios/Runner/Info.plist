@@ -56,5 +56,21 @@
 		<string>This app needs access to location to get Prayer times.</string>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>GIDClientID</key>
+		<string>YOUR_GOOGLE_CLIENT_ID</string>
+		<string>1075918505837-73v37dovbq6tna0hj43kfn2iivsuf2hf.apps.googleusercontent.com</string>
+        <key>CFBundleURLTypes</key>
+        <array>
+          <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+              <string>com.googleusercontent.apps.1075918505837-rdm1ma1d8g9m04phep0u8odregdui781</string>
+            </array>
+          </dict>
+        </array>
+        <!-- End of the Google Sign-in Section -->
+
 	</dict>
 </plist>
