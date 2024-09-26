@@ -202,22 +202,22 @@ final GoRouter goRouter = GoRouter(
             );
           },
         ),
-        GoRoute(
-          path: Routes.inputPhone,
-          pageBuilder: (context, state) {
-            return NoTransitionPage(
-              child: InputPhoneScreen(),
-            );
-          },
-        ),
-        GoRoute(
-          path: Routes.verifyOtp,
-          pageBuilder: (context, state) {
-            return NoTransitionPage(
-              child: VerifyOTPScreen(),
-            );
-          },
-        ),
+        // GoRoute(
+        //   path: Routes.inputPhone,
+        //   pageBuilder: (context, state) {
+        //     return NoTransitionPage(
+        //       child: InputPhoneScreen(),
+        //     );
+        //   },
+        // ),
+        // GoRoute(
+        //   path: Routes.verifyOtp,
+        //   pageBuilder: (context, state) {
+        //     return NoTransitionPage(
+        //       child: VerifyOTPScreen(),
+        //     );
+        //   },
+        // ),
         GoRoute(
           path: Routes.privacyPolicy,
           pageBuilder: (context, state) {

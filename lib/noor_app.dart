@@ -11,6 +11,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'mgr/services/network_service.dart';
 import 'navigation/router.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'dart:io' show Platform;
 
 class AnNoorKioskApp extends StatelessWidget {
   const AnNoorKioskApp({super.key});
@@ -67,8 +68,21 @@ class AnNoorApp extends GetView<AppController> {
       DeviceOrientation.portraitDown,
     ]);
 
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.white,
+    //     statusBarIconBrightness: Brightness.dark,
+    //     systemNavigationBarColor: Colors.white,
+    //     systemNavigationBarIconBrightness: Brightness.dark,
+    //     statusBarBrightness: Brightness.light,
+
+    //   ),
+    // );
+
     // Trigger the app update check
     _checkForUpdate();
+
+
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -78,9 +92,12 @@ class AnNoorApp extends GetView<AppController> {
       minTextAdapt: true,
       builder: (_, child) => PopScope(
         canPop: false,
-        child: SafeArea(
+        // child: SafeArea(
+        // bottom: Platform.isIOS? false:true,
+        // top: Platform.isIOS? false:true,
           child: GetMaterialApp.router(
             initialBinding: InitialBindings(),
+            color: Colors.white,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.defaultTheme,
             routeInformationParser: goRouter.routeInformationParser,
@@ -111,7 +128,7 @@ class AnNoorApp extends GetView<AppController> {
             },
           ),
         ),
-      ),
+      // ),
     );
   }
 

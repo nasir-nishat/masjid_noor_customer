@@ -16,52 +16,62 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.h),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 5.w,
+    return Container(
+      color:Colors.white,
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top,
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          extendBody: true,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60.h),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 5.w,
+              ),
+              child: Header(currentRoute: getCurrentRoute(context)),
+            ),
           ),
-          child: Header(currentRoute: getCurrentRoute(context)),
+          body: Padding(
+              padding: EdgeInsets.only(
+                right: 10.w,
+                left: 10.w,
+                bottom: 10.h,
+                top: 0.h,
+              ),
+              child: widget.child),
+          bottomNavigationBar: showBottomNav(context)
+              ? BottomNavigationBar(
+                  selectedFontSize: 0,
+                  currentIndex: getCurrentIndex(context),
+                  useLegacyColorScheme: false,
+                  onTap: (index) {
+                    _onItemTapped(index, context);
+                  },
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: HeroIcon(HeroIcons.home),
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: HeroIcon(HeroIcons.shoppingBag),
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: HeroIcon(HeroIcons.magnifyingGlass),
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: HeroIcon(HeroIcons.user),
+                      label: '',
+                    ),
+                  ],
+                )
+              : null,
         ),
       ),
-      body: Padding(
-          padding: EdgeInsets.only(
-            right: 10.w,
-            left: 10.w,
-            bottom: 10.h,
-            top: 0.h,
-          ),
-          child: widget.child),
-      bottomNavigationBar: showBottomNav(context)
-          ? BottomNavigationBar(
-              selectedFontSize: 0,
-              currentIndex: getCurrentIndex(context),
-              useLegacyColorScheme: false,
-              onTap: (index) {
-                _onItemTapped(index, context);
-              },
-              items: const [
-                BottomNavigationBarItem(
-                  icon: HeroIcon(HeroIcons.home),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: HeroIcon(HeroIcons.shoppingBag),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: HeroIcon(HeroIcons.magnifyingGlass),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: HeroIcon(HeroIcons.user),
-                  label: '',
-                ),
-              ],
-            )
-          : null,
     );
   }
 
