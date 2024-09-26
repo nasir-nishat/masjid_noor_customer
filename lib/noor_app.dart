@@ -68,67 +68,68 @@ class AnNoorApp extends GetView<AppController> {
       DeviceOrientation.portraitDown,
     ]);
 
-    // SystemChrome.setSystemUIOverlayStyle(
-    //   const SystemUiOverlayStyle(
-    //     statusBarColor: Colors.white,
-    //     statusBarIconBrightness: Brightness.dark,
-    //     systemNavigationBarColor: Colors.white,
-    //     systemNavigationBarIconBrightness: Brightness.dark,
-    //     statusBarBrightness: Brightness.light,
-
-    //   ),
-    // );
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light,
+        systemNavigationBarDividerColor: Colors.white,
+        systemNavigationBarContrastEnforced: true,
+        systemStatusBarContrastEnforced: false,
+      ),
+    );
 
     // Trigger the app update check
     _checkForUpdate();
 
-
-
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      enableScaleText: () {
-        return true;
-      },
-      minTextAdapt: true,
-      builder: (_, child) => PopScope(
-        canPop: false,
-        // child: SafeArea(
-        // bottom: Platform.isIOS? false:true,
-        // top: Platform.isIOS? false:true,
-          child: GetMaterialApp.router(
-            initialBinding: InitialBindings(),
-            color: Colors.white,
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.defaultTheme,
-            routeInformationParser: goRouter.routeInformationParser,
-            routeInformationProvider: goRouter.routeInformationProvider,
-            routerDelegate: goRouter.routerDelegate,
-            backButtonDispatcher: goRouter.backButtonDispatcher,
-            builder: (context, child) {
-              child = botToastBuilder(context, child);
-              return NetworkAwareWidget(
-                networkService: NetworkService(),
-                child: Stack(
-                  children: [
-                    ErrorBoundary(child: child),
-                    Obx(() {
-                      if (AppController.to.globalLoading.value) {
-                        return Container(
-                          color: Colors.black.withOpacity(0.5),
-                          child: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    }),
-                  ],
-                ),
-              );
-            },
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: ScreenUtilInit(
+          designSize: const Size(375, 812),
+          enableScaleText: () {
+            return true;
+          },
+          minTextAdapt: true,
+          builder: (_, child) => PopScope(
+            canPop: false,
+            child: GetMaterialApp.router(
+              initialBinding: InitialBindings(),
+              color: Colors.white,
+              debugShowCheckedModeBanner: false,
+              theme: AppTheme.defaultTheme,
+              routeInformationParser: goRouter.routeInformationParser,
+              routeInformationProvider: goRouter.routeInformationProvider,
+              routerDelegate: goRouter.routerDelegate,
+              backButtonDispatcher: goRouter.backButtonDispatcher,
+              builder: (context, child) {
+                child = botToastBuilder(context, child);
+                return NetworkAwareWidget(
+                  networkService: NetworkService(),
+                  child: Stack(
+                    children: [
+                      ErrorBoundary(child: child),
+                      Obx(() {
+                        if (AppController.to.globalLoading.value) {
+                          return Container(
+                            color: Colors.black.withOpacity(0.5),
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      }),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
-      // ),
+      ),
     );
   }
 
