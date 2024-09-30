@@ -5,17 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/product_md.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // CreateGO supabase
-const _SUPABASE_URL = "https://nsyflgowjqaunfbechqh.supabase.co";
-const _SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zeWZsZ293anFhdW5mYmVjaHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk5OTU5MjEsImV4cCI6MjAzNTU3MTkyMX0.7DBJ7mEdcvxzGI1qj4OwbpugWUc_kcVCv3AVIXjdfag";
-
-const GOOGLE_WEB_CLIENT_ID =
-    '1075918505837-tnct2975klvr12qbf58p4jhro7lf8s61.apps.googleusercontent.com';
-
-const IOS_CLIENT_ID =
-    "1075918505837-rdm1ma1d8g9m04phep0u8odregdui781.apps.googleusercontent.com";
+var _SUPABASE_URL = dotenv.env['CLIENT_SP_URL'];
+var _SUPABASE_ANON_KEY = dotenv.env['CLIENT_SP_ANON_KEY'];
+var GOOGLE_WEB_CLIENT_ID = dotenv.env['GOOGLE_WEB_CLIENT_ID'];
+var IOS_CLIENT_ID = dotenv.env['IOS_CLIENT_ID'];
 
 class SupabaseDep {
   //create a singleton
@@ -54,8 +50,8 @@ class SupabaseDep {
   Future<void> initialize() async {
     EquatableConfig.stringify = true;
 
-    const String url = _SUPABASE_URL;
-    const String anonKey = _SUPABASE_ANON_KEY;
+    String url = _SUPABASE_URL ?? "";
+    String anonKey = _SUPABASE_ANON_KEY ?? "";
 
     if (url.isEmpty || anonKey.isEmpty) {
       throw Exception(

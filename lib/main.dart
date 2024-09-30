@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -10,10 +10,11 @@ import 'noor_app.dart';
 import 'mgr/dependency/supabase_dep.dart';
 import 'mgr/models/user_md.dart';
 import 'navigation/router.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:in_app_update/in_app_update.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   if (kIsWeb) {
@@ -38,6 +39,7 @@ void main() async {
 //This is for KIOSK app
 void mainKioskRunner() async {
   debugPrint('Running Kiosk App');
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(UserMdAdapter());
@@ -53,6 +55,7 @@ void mainKioskRunner() async {
 //This is for Customer's Retail app
 void mainRunner() async {
   debugPrint('Running Regular App');
+  await dotenv.load(fileName: ".env");
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FlutterError.onError = (details) {
@@ -62,9 +65,9 @@ void mainRunner() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserMdAdapter());
   await Hive.openBox<UserMd>('user_box');
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.android,
-  // );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.android,
+  );
   setPathUrlStrategy();
   GoRouter.optionURLReflectsImperativeAPIs = true;
 

@@ -22,7 +22,15 @@
           }
         },
         {
-          "client_id": "1075918505837-tnct2975klvr12qbf58p4jhro7lf8s61.apps.googleusercontent.com",
+          "client_id": "1075918505837-b371fjvdvdud1gvo3bs3ufucutn73fqk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mehenot.noormart",
+            "certificate_hash": "4035946ae6ee5ab03b561e36aca2819b63676a1d"
+          }
+        },
+        {
+          "client_id": "1075918505837-phtk8c7fqnq8jjct7uqn7v8v62dgdfu0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,8 +43,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1075918505837-tnct2975klvr12qbf58p4jhro7lf8s61.apps.googleusercontent.com",
+              "client_id": "1075918505837-phtk8c7fqnq8jjct7uqn7v8v62dgdfu0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1075918505837-aplmu6c140t0dj1gn4oe3m1k18i1i1f7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mehenot.noormart"
+              }
             }
           ]
         }

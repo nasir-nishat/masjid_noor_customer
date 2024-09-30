@@ -51,8 +51,8 @@ class AuthenticationNotifier {
     AppController.to.showGlobalLoading();
 
     try {
-      const webClientId = GOOGLE_WEB_CLIENT_ID;
-      const iosClientId = IOS_CLIENT_ID;
+      String webClientId = GOOGLE_WEB_CLIENT_ID ?? '';
+      String iosClientId = IOS_CLIENT_ID ?? '';
       _logger.info('Initiating Google Sign-In');
 
       final GoogleSignIn googleSignIn = GoogleSignIn(
