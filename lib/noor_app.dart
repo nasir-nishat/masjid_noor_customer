@@ -70,9 +70,9 @@ class AnNoorApp extends GetView<AppController> {
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
+        statusBarColor: Colors.black,
         statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: Colors.white,
+        systemNavigationBarColor: Colors.black,
         systemNavigationBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.light,
         systemNavigationBarDividerColor: Colors.white,

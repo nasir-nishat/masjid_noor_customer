@@ -6,7 +6,7 @@ class Constants {
   static const phoneNoFormat = isKorea ? '(000) 0000-0000' : '(000) 000-00-00';
 
   //-----------------------------------------
-  static const version = "1.0.5";
+  static const version = "1.0.9";
   static const isKiosk = false;
   static const noorMartEmail = "noormart@mart.com";
   static const noorMartId = "36a2f430-1f03-4c7f-bf67-8a44c70fb413";
