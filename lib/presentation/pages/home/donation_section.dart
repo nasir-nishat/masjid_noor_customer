@@ -12,7 +12,7 @@ class DonationSection extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 16.h),
       child: GestureDetector(
         onTap: () {
-          showBankDetailsDialog(context);
+          showBankDetailsDialog(context: context, isDonation: true);
         },
         child: Container(
           padding: EdgeInsets.all(8.r),

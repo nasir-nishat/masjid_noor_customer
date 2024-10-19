@@ -33,7 +33,8 @@ class PrayerTimesController extends GetxController {
   RxList<JamahMd> jamahs = <JamahMd>[].obs;
 
   // Rx<Position?> currentPosition = Rx<Position?>(null);
-  Rx<BankMd?> bankDetails = Rx<BankMd?>(null);
+  Rx<BankMd?> donateBankDetails = Rx<BankMd?>(null);
+  Rx<BankMd?> martBankDetails = Rx<BankMd?>(null);
 
   // Future<bool> getCurrentLocation(BuildContext context) async {
   //   isLoading.value = true;
@@ -151,6 +152,7 @@ class PrayerTimesController extends GetxController {
   }
 
   Future getBankDetails() async {
-    bankDetails.value = await ApiService().getBank(7);
+    donateBankDetails.value = await ApiService().getBank(7);
+    martBankDetails.value = await ApiService().getBank(8);
   }
 }

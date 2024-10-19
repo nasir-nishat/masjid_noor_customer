@@ -325,7 +325,7 @@ class OrderSection extends GetView<CartController> {
   }
 
   Future<void> _handleBankTransfer(BuildContext context) async {
-    BankMd? bankDetails = PrayerTimesController.to.bankDetails.value;
+    BankMd? bankDetails = PrayerTimesController.to.martBankDetails.value;
     bool orderDone = await _processOrder(context);
     if (orderDone && context.mounted) {
       showDialog(
