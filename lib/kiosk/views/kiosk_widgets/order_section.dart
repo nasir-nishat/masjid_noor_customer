@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:masjid_noor_customer/kiosk/routes/app_pages.dart';
 import 'package:masjid_noor_customer/mgr/models/bank_md.dart';
+import 'package:masjid_noor_customer/mgr/models/product_md.dart';
 import 'package:masjid_noor_customer/navigation/router.dart';
 import 'package:masjid_noor_customer/presentation/pages/cart/cart_controller.dart';
 import 'package:masjid_noor_customer/mgr/models/payment_md.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
+import 'package:masjid_noor_customer/presentation/pages/product/product_controller.dart';
 import 'package:masjid_noor_customer/presentation/pages/user/profile_page.dart';
 import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
 import 'package:masjid_noor_customer/presentation/widgets/cart_item.dart';
+import 'package:masjid_noor_customer/presentation/widgets/spaced_column.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import 'number_pad.dart';
@@ -98,6 +102,23 @@ class OrderSection extends GetView<CartController> {
                           ),
                         )),
                   ],
+                ),
+                InkWell(
+                  onTap: () {
+                    _addProduct(context);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    child: Text(
+                      "Can't find your product? Add it here Please",
+                      style: TextStyle(
+                          fontSize: 8.sp,
+                          decoration: TextDecoration.underline,
+                          color: Colors.deepOrange,
+                          decorationColor: Colors.deepOrange,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 ElevatedButton(
@@ -454,6 +475,99 @@ class OrderSection extends GetView<CartController> {
               }
             },
             child: const Text('Submit'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _addProduct(BuildContext context) {
+    ProductMd product = const ProductMd(
+      name: '',
+      sellPrice: 0,
+      description: '',
+      purchasePrice: 0.0,
+      stockQty: 10,
+      categoryId: 60,
+    );
+
+    // Create focus nodes for each TextFormField
+    final FocusNode nameFocusNode = FocusNode();
+    final FocusNode priceFocusNode = FocusNode();
+    final FocusNode descriptionFocusNode = FocusNode();
+
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Add Product'),
+        content: SingleChildScrollView(
+          child: SpacedColumn(
+            verticalSpace: 10,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Product Name',
+                ),
+                focusNode: nameFocusNode,
+                onChanged: (value) {
+                  product = product.copyWith(name: value);
+                },
+                style: TextStyle(fontSize: 10.sp),
+                onFieldSubmitted: (value) {
+                  FocusScope.of(context).requestFocus(priceFocusNode);
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Sell Price',
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                ],
+                focusNode: priceFocusNode,
+                onChanged: (value) {
+                  product = product.copyWith(sellPrice: double.parse(value));
+                },
+                keyboardType: TextInputType.number,
+                style: TextStyle(fontSize: 10.sp),
+                onFieldSubmitted: (value) {
+                  FocusScope.of(context).requestFocus(descriptionFocusNode);
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Product Description',
+                  contentPadding:
+                      EdgeInsets.only(top: 8.h, left: 8.w, right: 8.w),
+                ),
+                maxLines: 3,
+                focusNode: descriptionFocusNode,
+                onChanged: (value) {
+                  product = product.copyWith(description: value);
+                },
+                style: TextStyle(fontSize: 10.sp),
+                onFieldSubmitted: (value) {
+                  FocusScope.of(context)
+                      .unfocus(); // Remove focus on final field
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              ProductController.to.addProductToStock(product);
+              Navigator.of(context).pop();
+            },
+            child: const Text('Add'),
           ),
         ],
       ),

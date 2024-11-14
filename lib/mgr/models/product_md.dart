@@ -89,8 +89,7 @@ class ProductMd extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
+    final data = {
       'category_id': categoryId,
       'name': name,
       'description': description,
@@ -99,13 +98,55 @@ class ProductMd extends Equatable {
       'sell_price': sellPrice,
       'purchase_price': purchasePrice,
       'barcode': barcode,
-      // 'discount': discount,
-      // 'start_date': startDate,
-      // 'end_date': endDate,
       'is_new': isNew,
       'supp_id': suppId,
       'is_active': isActive,
       'is_popular': isPopular,
     };
+
+    // Only add 'id' if it is not null
+    if (id != null) {
+      data['id'] = id;
+    }
+    return data;
+  }
+
+  //copy with
+  ProductMd copyWith({
+    int? id,
+    int? categoryId,
+    String? name,
+    String? description,
+    int? stockQty,
+    List<String>? images,
+    double? sellPrice,
+    double? purchasePrice,
+    String? barcode,
+    // double? discount,
+    // DateTime? startDate,
+    // DateTime? endDate,
+    bool? isNew,
+    int? suppId,
+    bool? isActive,
+    bool? isPopular,
+  }) {
+    return ProductMd(
+      id: id ?? this.id,
+      categoryId: categoryId ?? this.categoryId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      stockQty: stockQty ?? this.stockQty,
+      images: images ?? this.images,
+      sellPrice: sellPrice ?? this.sellPrice,
+      purchasePrice: purchasePrice ?? this.purchasePrice,
+      barcode: barcode ?? this.barcode,
+      // discount: discount ?? this.discount,
+      // startDate: startDate ?? this.startDate,
+      // endDate: endDate ?? this.endDate,
+      isNew: isNew ?? this.isNew,
+      suppId: suppId ?? this.suppId,
+      isActive: isActive ?? this.isActive,
+      isPopular: isPopular ?? this.isPopular,
+    );
   }
 }

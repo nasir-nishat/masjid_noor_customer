@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:masjid_noor_customer/presentation/pages/all_export.dart';
 import 'package:masjid_noor_customer/presentation/pages/prayer/prayer_time_controller.dart';
+import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
 
 import '../cart/cart_controller.dart';
 
@@ -167,6 +168,21 @@ class ProductController extends GetxController {
       CartController.to.addToCart(product);
     } else {
       showToast('Product not found', isWarning: true);
+    }
+  }
+
+  // Add product
+  void addProductToStock(ProductMd product) async {
+    try {
+      await SupabaseDep.impl.supabase
+          .from(Tables.products)
+          .insert(product.toJson())
+          .then(
+            (value) => showToast('Product added successfully'),
+          );
+    } catch (e) {
+      showToast('Error adding product, please try again', isWarning: true);
+      print(e);
     }
   }
 }
