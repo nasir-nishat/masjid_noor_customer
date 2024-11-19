@@ -1,5 +1,4 @@
-# Noor Mart - App + KIOSK
-
+# Noor Mart - App
 ## TODO
 
 - DONE-`Can not exit the app`
