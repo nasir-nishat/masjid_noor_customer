@@ -39,7 +39,7 @@ class HomeView extends StatelessWidget {
                       TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Noor Mart',
+                  "Welcome to Noor Mart",
                   style:
                       TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold),
                 ),
