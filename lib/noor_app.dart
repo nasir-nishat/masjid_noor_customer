@@ -23,11 +23,11 @@ class AnNoorKioskApp extends StatefulWidget {
 
 class _AnNoorKioskAppState extends State<AnNoorKioskApp> {
 
-  @override
-  void initState() {
-    super.initState();
-    checkForAppUpdates(context);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   checkForAppUpdates(context);
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,0 +1,2 @@
+/Users/nasir/Documents/GitHub/masjid_noor_customer/android/app/.cxx/Debug/344e4j42/x86/CMakeFiles/edit_cache.dir
+/Users/nasir/Documents/GitHub/masjid_noor_customer/android/app/.cxx/Debug/344e4j42/x86/CMakeFiles/rebuild_cache.dir

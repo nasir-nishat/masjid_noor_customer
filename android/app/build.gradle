@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id "com.android.application"
     // START: FlutterFire Configuration
@@ -34,7 +37,6 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.mehenot.noormart"
-    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -45,6 +47,7 @@ android {
     defaultConfig {
         applicationId = "com.mehenot.noormart"
         minSdkVersion 23
+        compileSdkVersion 35
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -52,26 +55,16 @@ android {
 
     signingConfigs {
         release {
-//            keyAlias keystoreProperties['keyAlias']
-//            keyPassword keystoreProperties['keyPassword']
-//            storeFile file(keystoreProperties['storeFile'])
-//            storePassword keystoreProperties['storePassword']
-//
-            keyAlias="bingnotes"
-            keyPassword="Masjidnoor"
-            storeFile file("$projectDir/noor-mart-key/noor-mart-key.jks")
-            storePassword="Masjidnoor"
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
         debug {
-//            keyAlias keystoreProperties['keyAlias']
-//            keyPassword keystoreProperties['keyPassword']
-//            storeFile file(keystoreProperties['storeFile'])
-//            storePassword keystoreProperties['storePassword']
-            keyAlias = "bingnotes"
-            keyPassword = "Masjidnoor"
-            storeFile file("$projectDir/noor-mart-key/noor-mart-key.jks")
-            storePassword = "Masjidnoor"
-
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
 

@@ -78,6 +78,7 @@ flutter:
     - assets/fonts/
     - assets/prayer_times/
     - assets/
+    - .env
 
 
   fonts:
