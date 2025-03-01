@@ -59,7 +59,7 @@ android {
 //
             keyAlias="bingnotes"
             keyPassword="Masjidnoor"
-            storeFile="./noor-mart-key/noor-mart-key.jks"
+            storeFile file("$projectDir/noor-mart-key/noor-mart-key.jks")
             storePassword="Masjidnoor"
         }
         debug {
