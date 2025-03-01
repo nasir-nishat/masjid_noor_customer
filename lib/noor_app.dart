@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:masjid_noor_customer/app_updater.dart';
 import 'package:masjid_noor_customer/presentation/theme/app_theme.dart';
 import 'package:get/get.dart';
 import 'kiosk/routes/app_pages.dart';
@@ -13,8 +14,20 @@ import 'navigation/router.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'dart:io' show Platform;
 
-class AnNoorKioskApp extends StatelessWidget {
+class AnNoorKioskApp extends StatefulWidget {
   const AnNoorKioskApp({super.key});
+
+  @override
+  State<AnNoorKioskApp> createState() => _AnNoorKioskAppState();
+}
+
+class _AnNoorKioskAppState extends State<AnNoorKioskApp> {
+
+  @override
+  void initState() {
+    super.initState();
+    checkForAppUpdates(context);
+  }
 
   @override
   Widget build(BuildContext context) {

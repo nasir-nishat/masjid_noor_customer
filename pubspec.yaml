@@ -57,6 +57,7 @@ dependencies:
   in_app_update: ^4.2.3
   flutter_dotenv: ^5.1.0
   package_info_plus: ^8.3.0
+  shared_preferences: ^2.5.2
 
 
 dev_dependencies:
