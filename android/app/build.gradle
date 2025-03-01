@@ -52,10 +52,15 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+//            keyAlias keystoreProperties['keyAlias']
+//            keyPassword keystoreProperties['keyPassword']
+//            storeFile file(keystoreProperties['storeFile'])
+//            storePassword keystoreProperties['storePassword']
+//
+            keyAlias="bingnotes"
+            keyPassword="Masjidnoor"
+            storeFile="./noor-mart-key/noor-mart-key.jks"
+            storePassword="Masjidnoor"
         }
         debug {
             keyAlias keystoreProperties['keyAlias']
