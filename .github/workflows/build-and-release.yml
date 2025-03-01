@@ -77,7 +77,7 @@ jobs:
           asset_content_type: application/vnd.android.package-archive
 
       - name: Upload update manifest as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: update-manifest
           path: update_manifest.json
