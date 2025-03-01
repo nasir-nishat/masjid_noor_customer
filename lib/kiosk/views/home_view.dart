@@ -90,6 +90,7 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10.h),
+                const Text("Scan barcode to add product to cart"),
               ],
             ),
           ),
