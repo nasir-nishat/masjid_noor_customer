@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -73,25 +72,33 @@ class MultiImagesViewerState extends State<MultiImagesViewer> {
                 },
                 itemBuilder: (context, index) {
                   final imageUrl = widget.imageUrls[index];
-                  return CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    errorWidget: (context, url, error) {
-                      return Image.asset(
+                return imageUrl.isNotEmpty
+                    ? Image.network(
+                        imageUrl,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              width: w,
+                              height: h,
+                              decoration: BoxDecoration(color: Colors.grey[200]),
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/no_image.png',
+                            fit: BoxFit.cover,
+                          );
+                        },
+                        fit: BoxFit.fitHeight,
+                      )
+                    : Image.asset(
                         'assets/no_image.png',
                         fit: BoxFit.cover,
                       );
-                    },
-                    placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Container(
-                        width: w,
-                        height: h,
-                        decoration: BoxDecoration(color: Colors.grey[200]),
-                      ),
-                    ),
-                    fit: BoxFit.fitHeight,
-                  );
                 },
               ),
             ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -22,9 +21,21 @@ class SingleImagesViewer extends StatelessWidget {
       height: height ?? 100.h,
       child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          child: CachedNetworkImage(
-            imageUrl: imageUrl,
-            errorWidget: (context, url, error) {
+          child: Image.network(
+            imageUrl,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  width: width ?? 100.w,
+                  height: height ?? 100.h,
+                  decoration: BoxDecoration(color: Colors.grey[200]),
+                ),
+              );
+            },
+            errorBuilder: (context, error, stackTrace) {
               return Container(
                 width: width ?? 100.w,
                 height: height ?? 100.h,
@@ -37,15 +48,6 @@ class SingleImagesViewer extends StatelessWidget {
                 ),
               );
             },
-            placeholder: (context, url) => Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(
-                width: width ?? 100.w,
-                height: height ?? 100.h,
-                decoration: BoxDecoration(color: Colors.grey[200]),
-              ),
-            ),
             fit: BoxFit.fitHeight,
           )),
     );
