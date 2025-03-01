@@ -43,6 +43,18 @@ jobs:
             "url": "https://github.com/${{ github.repository }}/releases/download/v${{ steps.get_version.outputs.version }}/app-release.apk"
           }' > update_manifest.json
 
+      # NEW STEP: Upload update manifest to Supabase Storage
+      - name: Upload update manifest to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          curl -X PUT \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+            -H "Content-Type: application/json" \
+            --data-binary @update_manifest.json \
+            "$SUPABASE_URL/storage/v1/object/public/updates/update_manifest.json"
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
