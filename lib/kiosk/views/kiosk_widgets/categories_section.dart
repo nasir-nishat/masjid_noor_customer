@@ -12,66 +12,72 @@ class CategoriesSection extends GetView<ProductController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 10.h),
+        // Removed the top spacing to maximize vertical space
         Expanded(
-          child: Obx(() => ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(height: 2.h),
-                itemCount: controller.categories.length,
-                itemBuilder: (context, index) {
-                  final category = controller.categories[index];
-                  return Obx(() => Container(
-                        decoration: BoxDecoration(
-                          color: controller.selectedCategory.value == category
-                              ? Colors.blue.withOpacity(0.1)
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(4.r),
-                            bottomRight: Radius.circular(4.r),
-                          ),
-                        ),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(4.r),
-                              bottomRight: Radius.circular(4.r),
-                            ),
-                          ),
-                          title: Text(
+          child: Obx(() => ListView.builder( // Changed to ListView.builder (no separator needed)
+            padding: EdgeInsets.zero, // Remove default padding
+            itemCount: controller.categories.length,
+            itemBuilder: (context, index) {
+              final category = controller.categories[index];
+              return Obx(() => Container(
+                decoration: BoxDecoration(
+                  color: controller.selectedCategory.value == category
+                      ? Colors.blue.withOpacity(0.1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(4.r),
+                    bottomRight: Radius.circular(4.r),
+                  ),
+                ),
+                child: InkWell( // Replaced ListTile with more compact InkWell
+                  onTap: () {
+                    controller.selectedCategory.value = category;
+                    controller.fetchProductsByCategory();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 8.h, // Reduced vertical padding
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
                             category.name,
                             style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight:
-                                  controller.selectedCategory.value == category
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
+                              fontSize: 11.sp, // Slightly smaller font
+                              fontWeight: controller.selectedCategory.value == category
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                             ),
                           ),
-                          onTap: () {
-                            controller.selectedCategory.value = category;
-                            controller.fetchProductsByCategory();
-                          },
-                          trailing: Icon(
-                            Icons.chevron_right,
-                            color: controller.selectedCategory.value == category
-                                ? Colors.blue
-                                : Colors.grey,
-                          ),
                         ),
-                      ));
-                },
-              )),
+                        if (controller.selectedCategory.value == category)
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 12.sp,
+                            color: Colors.blue,
+                          )
+                      ],
+                    ),
+                  ),
+                ),
+              ));
+            },
+          )),
         ),
         Padding(
-          padding: EdgeInsets.all(8.w),
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h), // Reduced padding
           child: ElevatedButton.icon(
             onPressed: () {
               _navigateToHome(context);
             },
-            icon: Icon(Icons.home, size: 20.sp),
-            label: Text('Home', style: TextStyle(fontSize: 14.sp)),
+            icon: Icon(Icons.home, size: 18.sp), // Slightly smaller icon
+            label: Text('Home', style: TextStyle(fontSize: 13.sp)), // Smaller text
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
-              minimumSize: Size(double.infinity, 34.h), // Adjust button height
+              minimumSize: Size(double.infinity, 30.h), // Reduced button height
+              padding: EdgeInsets.symmetric(vertical: 0), // Minimum padding
             ),
           ),
         ),
@@ -94,7 +100,7 @@ class CategoriesSection extends GetView<ProductController> {
                   Navigator.of(context).pop();
                 },
                 child:
-                    const Text('Cancel', style: TextStyle(color: Colors.black)),
+                const Text('Cancel', style: TextStyle(color: Colors.black)),
               ),
               OutlinedButton(
                 onPressed: () {

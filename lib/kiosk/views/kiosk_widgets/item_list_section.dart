@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:masjid_noor_customer/kiosk/views/kiosk_widgets/image_preview_widget.dart';
 import 'package:masjid_noor_customer/mgr/models/jamah_md.dart';
 import 'package:masjid_noor_customer/mgr/models/product_md.dart';
 import 'package:masjid_noor_customer/presentation/utills/extensions.dart';
@@ -94,15 +95,18 @@ class ItemsListSection extends GetView<ProductController> {
         children: [
           Expanded(
             flex: 3,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(8.r)),
-                image: DecorationImage(
-                  image: product.images?.isNotEmpty == true
-                      ? NetworkImage(product.images!.first)
-                      : const AssetImage('assets/no_image.png')
-                          as ImageProvider,
-                  fit: BoxFit.fitHeight,
+            child: GestureDetector(
+              onTap: () => _showImageGallery(context, product),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(8.r)),
+                  image: DecorationImage(
+                    image: product.images?.isNotEmpty == true
+                        ? NetworkImage(product.images!.first)
+                        : const AssetImage('assets/no_image.png')
+                    as ImageProvider,
+                    fit: BoxFit.fitHeight,
+                  ),
                 ),
               ),
             ),
@@ -150,7 +154,7 @@ class ItemsListSection extends GetView<ProductController> {
                     ),
                     child: Text('Add to Order',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 9.sp)),
+                        style: TextStyle(fontSize: 12.sp)),
                   ),
                   SizedBox(height: 4.h),
                 ],
@@ -239,4 +243,45 @@ class ItemsListSection extends GetView<ProductController> {
       ),
     );
   }
+
+
+  void _showImageGallery(BuildContext context, ProductMd product) {
+    if (product.images == null || product.images!.isEmpty) {
+      // If no images, just show the placeholder in fullscreen
+      showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          insetPadding: EdgeInsets.zero,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                'assets/no_image.png',
+                fit: BoxFit.contain,
+              ),
+              Positioned(
+                top: 10,
+                right: 10,
+                child: IconButton(
+                  icon: Icon(Icons.close, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      return;
+    }
+
+    // If there are images, show them in a gallery
+    showDialog(
+      context: context,
+      builder: (context) => ProductImageGallery(
+        images: product.images!,
+        initialIndex: 0,
+      ),
+    );
+  }
+
 }

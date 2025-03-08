@@ -20,6 +20,7 @@ class ProductMd extends Equatable {
   final int? suppId;
   final bool? isActive;
   final bool? isPopular;
+  final bool? unknownProduct;
 
   const ProductMd({
     this.id,
@@ -38,6 +39,7 @@ class ProductMd extends Equatable {
     this.suppId,
     this.isActive,
     this.isPopular,
+    this.unknownProduct,
   });
 
   @override
@@ -58,6 +60,7 @@ class ProductMd extends Equatable {
         suppId,
         isActive,
         isPopular,
+        unknownProduct,
       ];
 
   factory ProductMd.fromJson(Map<String, dynamic> json) {
@@ -81,6 +84,7 @@ class ProductMd extends Equatable {
         suppId: json['supp_id'],
         isActive: json['is_active'],
         isPopular: json['is_popular'],
+        unknownProduct: json['unknown_product'],
       );
     } on TypeError catch (e, st) {
       debugPrint("Error: $e, $st");
@@ -102,6 +106,7 @@ class ProductMd extends Equatable {
       'supp_id': suppId,
       'is_active': isActive,
       'is_popular': isPopular,
+      'unknown_product': unknownProduct,
     };
 
     // Only add 'id' if it is not null
@@ -129,6 +134,7 @@ class ProductMd extends Equatable {
     int? suppId,
     bool? isActive,
     bool? isPopular,
+    bool? unknownProduct,
   }) {
     return ProductMd(
       id: id ?? this.id,
@@ -147,6 +153,7 @@ class ProductMd extends Equatable {
       suppId: suppId ?? this.suppId,
       isActive: isActive ?? this.isActive,
       isPopular: isPopular ?? this.isPopular,
+      unknownProduct: unknownProduct ?? this.unknownProduct,
     );
   }
 }

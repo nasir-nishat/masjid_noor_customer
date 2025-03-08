@@ -18,13 +18,13 @@ final class AppTheme {
       400: Color(0xFF4D7FFF),
       500: Color(0xFF2664FF),
       600: Color(0xFF0049FF),
-      700: Color(0xFF0036E6),
+      700: Color(0xFF0049FF),
       800: Color(0xFF0029B4),
       900: Color(0xFF001C80),
     }),
     // colorScheme: brightness == Brightness.light ? lightTheme : darkTheme,
     colorScheme: const ColorScheme.light(
-      primary: Color(0xFF0036E6),
+      primary: Color(0xFF0049FF),
       onPrimary: Colors.white,
       secondary: Color(0xFF4A4754),
       onSecondary: Colors.white,
@@ -43,7 +43,7 @@ final class AppTheme {
     dropdownMenuTheme: _dropdownMenuThemeData(),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
-      selectedItemColor: const Color(0xFF0036E6),
+      selectedItemColor: const Color(0xFF0049FF),
       unselectedItemColor: const Color(0xFFA19EAD),
       elevation: 5,
       selectedIconTheme: IconThemeData(size: 30.h),
@@ -58,7 +58,7 @@ final class AppTheme {
 }
 
 ColorScheme darkTheme = const ColorScheme(
-  primary: Color(0xFF0036E6),
+  primary: Color(0xFF0049FF),
   secondary: Color(0xFF4A4754),
   surface: Color(0xFF111827),
   error: Color(0xFFD32F2F),
@@ -70,7 +70,7 @@ ColorScheme darkTheme = const ColorScheme(
 );
 
 ColorScheme lightTheme = const ColorScheme(
-  primary: Color(0xFF0036E6),
+  primary: Color(0xFF0049FF),
   secondary: Color(0xFF4A4754),
   surface: Color(0xFFE5E5E5),
   error: Color(0xFFD32F2F),
@@ -137,7 +137,7 @@ SliderThemeData _getSliderTheme() {
   return SliderThemeData(
     inactiveTrackColor: const Color(0xFFE4E3E8),
     trackHeight: 4.h,
-    activeTrackColor: const Color(0xFF0036E6),
+    activeTrackColor: const Color(0xFF0049FF),
     thumbColor: Colors.white,
     overlayShape: RoundSliderOverlayShape(overlayRadius: 32.r),
     thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.r, elevation: 5),
@@ -152,7 +152,7 @@ SwitchThemeData _getSwitchTheme() {
     thumbColor: const WidgetStatePropertyAll(Colors.white),
     trackColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
-        return const Color(0xFF0036E6);
+        return const Color(0xFF0049FF);
       }
       return const Color(0xFFA19EAD);
     }),
@@ -164,10 +164,10 @@ CheckboxThemeData _getCheckboxTheme() {
     side: BorderSide(color: const Color(0xFFD1D5DB), width: .5.w),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
     fillColor: WidgetStateProperty.resolveWith((states) {
-      //value true => Color(0xFF0036E6)
+      //value true => Color(0xFF0049FF)
       //value false => Color(0xFFA19EAD)
       if (states.contains(WidgetState.selected)) {
-        return const Color(0xFF0036E6);
+        return const Color(0xFF0049FF);
       }
       if (states.contains(WidgetState.disabled)) {
         return const Color(0xFFE4E3E8);
@@ -192,7 +192,7 @@ InputDecorationTheme _getInputDecorationTheme() {
     focusedBorder: OutlineInputBorder(
       // borderRadius: BorderRadius.circular(8),
       borderRadius: BorderRadius.circular(4.r),
-      borderSide: const BorderSide(color: Color(0xFF0036E6)),
+      borderSide: const BorderSide(color: Color(0xFF0049FF)),
     ),
     errorBorder: OutlineInputBorder(
       // borderRadius: BorderRadius.circular(8),
@@ -202,7 +202,7 @@ InputDecorationTheme _getInputDecorationTheme() {
     focusedErrorBorder: OutlineInputBorder(
       // borderRadius: BorderRadius.circular(8),
       borderRadius: BorderRadius.circular(4.r),
-      borderSide: const BorderSide(color: Color(0xFF0036E6)),
+      borderSide: const BorderSide(color: Color(0xFF0049FF)),
     ),
     errorStyle: const TextStyle(color: Colors.red),
     hintStyle:
@@ -237,7 +237,7 @@ DropdownMenuThemeData _dropdownMenuThemeData() {
       focusedBorder: OutlineInputBorder(
         // borderRadius: BorderRadius.circular(12),
         borderRadius: BorderRadius.circular(4.r),
-        borderSide: const BorderSide(color: Color(0xFF0036E6)),
+        borderSide: const BorderSide(color: Color(0xFF0049FF)),
       ),
       errorBorder: OutlineInputBorder(
         // borderRadius: BorderRadius.circular(12),
@@ -247,7 +247,7 @@ DropdownMenuThemeData _dropdownMenuThemeData() {
       focusedErrorBorder: OutlineInputBorder(
         // borderRadius: BorderRadius.circular(12),
         borderRadius: BorderRadius.circular(4.r),
-        borderSide: const BorderSide(color: Color(0xFF0036E6)),
+        borderSide: const BorderSide(color: Color(0xFF0049FF)),
       ),
       errorStyle: const TextStyle(color: Color(0xFFD1D5DB)),
       hintStyle: const TextStyle(color: Color(0xFFA19EAD)),
@@ -261,7 +261,7 @@ ElevatedButtonThemeData _getElevatedButtonTheme() {
   return ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: Colors.white,
-      backgroundColor: const Color(0xFF0036E6),
+      backgroundColor: const Color(0xFF0049FF),
       // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       elevation: 0,

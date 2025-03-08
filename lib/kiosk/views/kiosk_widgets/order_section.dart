@@ -520,7 +520,7 @@ class OrderSection extends GetView<CartController> {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  labelText: 'Sell Price',
+                  labelText: 'Price',
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
@@ -564,6 +564,8 @@ class OrderSection extends GetView<CartController> {
           ),
           TextButton(
             onPressed: () {
+              product = product.copyWith(unknownProduct: true);
+              CartController.to.addToCart(product);
               ProductController.to.addProductToStock(product);
               Navigator.of(context).pop();
             },

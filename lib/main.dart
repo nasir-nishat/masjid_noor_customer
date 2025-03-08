@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -11,10 +10,7 @@ import 'noor_app.dart';
 import 'mgr/dependency/supabase_dep.dart';
 import 'mgr/models/user_md.dart';
 import 'navigation/router.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:in_app_update/in_app_update.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
@@ -66,9 +62,6 @@ void mainRunner() async {
   await Hive.initFlutter();
   Hive.registerAdapter(UserMdAdapter());
   await Hive.openBox<UserMd>('user_box');
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.android,
-  );
   setPathUrlStrategy();
   GoRouter.optionURLReflectsImperativeAPIs = true;
 

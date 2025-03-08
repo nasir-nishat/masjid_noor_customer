@@ -90,7 +90,17 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10.h),
-                const Text("Scan barcode to add product to cart"),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                       Text("Powered by saasventur.com", style: TextStyle(fontSize: 10.sp)),
+                      Image.asset('assets/saasventur.png', width: 50.w),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
