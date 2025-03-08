@@ -85,7 +85,7 @@ class ItemsListSection extends GetView<ProductController> {
 
   Widget _buildProductCard(ProductMd product, BuildContext context) {
     return Card(
-      elevation: 3,
+      elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
